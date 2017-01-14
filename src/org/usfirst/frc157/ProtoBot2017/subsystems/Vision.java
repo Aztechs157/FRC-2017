@@ -28,6 +28,7 @@ public class Vision extends Subsystem {
 	public Vision()
 	{
 		InitializeVision();
+		System.out.println("Starting Vision");
 	}
 	
 	private void InitializeVision() {

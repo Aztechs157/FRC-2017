@@ -5,6 +5,7 @@
 /build/
 sysProps.xml
 *.class
+.classpath
 
 # Package Files #
 *.jar
