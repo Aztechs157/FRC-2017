@@ -47,7 +47,7 @@ public class OperatorDrive extends Command {
     	double y = Robot.oi.getDriver().getY(GenericHID.Hand.kRight);
 
     	// Left hand stick controls rotation
-    	double rot = Robot.oi.getDriver().getY(GenericHID.Hand.kLeft);
+    	double rot = Robot.oi.getDriver().getX(GenericHID.Hand.kLeft);
     	    	
     	Robot.drive.driveBot(x, y, rot);
     }
