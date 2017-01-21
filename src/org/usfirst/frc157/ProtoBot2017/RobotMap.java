@@ -53,7 +53,7 @@ public class RobotMap {
               driveFR_Motor, driveRR_Motor);
         
         driveMechDrive.setSafetyEnabled(true);
-        driveMechDrive.setExpiration(0.1);
+        driveMechDrive.setExpiration(0.5);
         driveMechDrive.setSensitivity(0.5);
         driveMechDrive.setMaxOutput(1.0);
 
