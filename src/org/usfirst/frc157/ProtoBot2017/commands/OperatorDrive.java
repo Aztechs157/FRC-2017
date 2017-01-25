@@ -12,6 +12,8 @@
 package org.usfirst.frc157.ProtoBot2017.commands;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import org.usfirst.frc157.ProtoBot2017.Robot;
 
 /**
@@ -42,7 +44,8 @@ public class OperatorDrive extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	// Right hand stick controls translation
+		SmartDashboard.putData("DRIVE-IMU", Robot.drive.getImu());
+		// Right hand stick controls translation
     	double x = Robot.oi.getDriver().getX(GenericHID.Hand.kRight);
     	double y = Robot.oi.getDriver().getY(GenericHID.Hand.kRight);
 
