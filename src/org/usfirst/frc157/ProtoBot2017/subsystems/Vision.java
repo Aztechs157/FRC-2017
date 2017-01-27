@@ -116,7 +116,7 @@ public class Vision extends Subsystem {
 	public Vision()
 	{
 		setCamera(CameraSelection.SHOT_CAMERA);
-		setVisionMode(VisionMode.PASSTHROUGH);
+		setVisionMode(VisionMode.FIND_BOILER);
 		shotCamera.setResolution(CAM_WIDTH, CAM_HEIGHT);
 //		gearCamera.setResolution(CAM_WIDTH, CAM_HEIGHT);
 		
@@ -138,6 +138,7 @@ public class Vision extends Subsystem {
 		
 		if(visionInitialized == false)
 		{
+			visionInitialized = true;
 			visionThread = new Thread(() -> {
 				System.out.println("Starting Vision Thread");
 				

@@ -45,6 +45,8 @@ public class Drive extends Subsystem {
 	private static ADIS16448_IMU imu;
 	private double initialHeading;
     
+	public double gyro = 37.5;
+	
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
     
@@ -99,7 +101,7 @@ public class Drive extends Subsystem {
     	// set up controllers
     	configureControllers();
     	setDriveMode(DriveMode.ROBOT_RELATIVE);
-    	
+    	updateHeading();
    }
     
     private void configureControllers()
@@ -130,6 +132,12 @@ public class Drive extends Subsystem {
     public double getZeroedHeading()
     {
     	return imu.getYaw() - initialHeading;
+    }
+    
+    public void updateHeading()
+    {
+		SmartDashboard.putData("DRIVE-IMU", imu);
+		gyro = imu.getYaw();
     }
 
 	public Sendable getImu() {

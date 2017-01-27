@@ -44,7 +44,7 @@ public class OperatorDrive extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-		SmartDashboard.putData("DRIVE-IMU", Robot.drive.getImu());
+    	Robot.drive.updateHeading();
 		// Right hand stick controls translation
     	double x = Robot.oi.getDriver().getX(GenericHID.Hand.kRight);
     	double y = Robot.oi.getDriver().getY(GenericHID.Hand.kRight);
