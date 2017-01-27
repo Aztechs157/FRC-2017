@@ -45,14 +45,24 @@ public class OperatorDrive extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	Robot.drive.updateHeading();
-		// Right hand stick controls translation
-    	double x = Robot.oi.getDriver().getX(GenericHID.Hand.kRight);
-    	double y = Robot.oi.getDriver().getY(GenericHID.Hand.kRight);
+        // edited by JAmieson Dunne on 1/25/17 
+		SmartDashboard.putData("DRIVE-IMU", Robot.drive.getImu());
+		// Gets x and y values from joystick to pass as arguments
+    	double x = Robot.oi.getDriver().getX(GenericHID.Hand.kLeft);
+    	double y = Robot.oi.getDriver().getY(GenericHID.Hand.kLeft);
+    	
+    	// reverse direction so that translation to be consistent with operators expectations
+    	x = -x;
 
-    	// Left hand stick controls rotation
-    	double rot = Robot.oi.getDriver().getX(GenericHID.Hand.kLeft);
-    	    	
-    	Robot.drive.driveBot(x, y, rot);
+
+    	
+    	// gets x value from the joystick to use as argument
+    	double rot = Robot.oi.getDriver().getX(GenericHID.Hand.kRight);
+    	
+    	// reverse direction of rotation to be consistent with operators expectation
+    	rot = -rot; 	
+    	
+        Robot.drive.driveBot(x, y, rot);
     }
 
     // Make this return true when this Command no longer needs to run execute()
