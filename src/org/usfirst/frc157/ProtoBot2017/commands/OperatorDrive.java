@@ -53,8 +53,6 @@ public class OperatorDrive extends Command {
     	
     	// reverse direction so that translation to be consistent with operators expectations
     	x = -x;
-
-
     	
     	// gets x value from the joystick to use as argument
     	double rot = Robot.oi.getDriver().getX(GenericHID.Hand.kRight);
