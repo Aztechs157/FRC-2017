@@ -32,10 +32,6 @@ public class Vision extends Subsystem {
 
 	private static final int CAM_WIDTH = 640;
 	private static final int CAM_HEIGHT = 480;
-//	private static final int CAM_WIDTH = 320;
-//	private static final int CAM_HEIGHT = 240;
-//	private static final int CAM_WIDTH = 160;
-//	private static final int CAM_HEIGHT = 120;
 	
 	private static final int CAM_EXPOSURE = 25;
 		                                                        // B,   G,   R
@@ -62,6 +58,13 @@ public class Vision extends Subsystem {
 		PASSTHROUGH,
 		FIND_BOILER,
 		FIND_GEAR
+	}
+	
+	public enum TargetID
+	{
+		BOILER,
+		GEAR,
+		NONE
 	}
 	
 	public enum CameraSelection
@@ -115,6 +118,47 @@ public class Vision extends Subsystem {
 		return cameraSelection;
 	}
 	
+	
+	public class VisionTarget
+	{
+		double x;
+		double y;
+		int loopCount;
+		boolean recentTarget;
+		TargetID target;
+		VisionTarget(){
+			x = 0;
+			y = 0;
+			loopCount = 0;
+			recentTarget = false;
+			target = TargetID.NONE;
+		}
+	}
+	
+	VisionTarget visionResults = new VisionTarget();
+	
+	public VisionTarget getTarget()
+	{
+		VisionTarget result = new VisionTarget();
+		
+		// 
+		synchronized(visionResults)
+		{
+			result.x = visionResults.x;
+			result.y = visionResults.y;
+			result.target = visionResults.target;
+			result.loopCount = visionResults.loopCount;
+			result.recentTarget = false;
+		}		
+		synchronized(syncLoopCount)
+		{
+			if (Math.abs(loopCount - result.loopCount) < 3)
+			{
+				result.recentTarget = true;
+			}
+		}
+		return result;
+	}
 	
 	boolean visionInitialized = false;
 	Thread visionThread;
@@ -228,7 +272,7 @@ public class Vision extends Subsystem {
 						{
 //							oneshot = true;
 							Imgcodecs.imwrite("/home/lvuser/images/image" + loopCount + ".jpg", mat);
-							System.out.println("Printed Image");
+							System.out.println("Saved Image");
 						}
 					}				
 					
@@ -325,12 +369,22 @@ public class Vision extends Subsystem {
 							    				SmartDashboard.putDouble("TargetX", candidate.center.x);
 							    				SmartDashboard.putDouble("TargetY", candidate.center.y);
 
+							    				// save target info
+							    				// x,y,loopCount
+							    				synchronized(visionResults)
+							    				{
+							    					visionResults.x = candidate.center.x;
+							    					visionResults.y = candidate.center.y;
+							    					visionResults.loopCount = loopCount;
+							    					visionResults.target = TargetID.BOILER;
+							    					
+							    				}
 							    				synchronized(oneshotSync)
 												{
 													if(oneshot == false)
 													{
 														Imgcodecs.imwrite("/home/lvuser/images/pimage" + loopCount + ".jpg", mat);
-														System.out.println("Printed Image");
+														System.out.println("Saved Image");
 													}
 												}				
 
