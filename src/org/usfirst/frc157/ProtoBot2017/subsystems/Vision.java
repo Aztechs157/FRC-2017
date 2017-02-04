@@ -42,7 +42,8 @@ public class Vision extends Subsystem {
 	private static final Scalar BLUE = new Scalar(new double[]    {255, 0,   0});
 	private static final Scalar MAGENTA = new Scalar(new double[] {255, 0,   255});
 	private static final Scalar BLACK = new Scalar(new double[]   {0,   0,   0});
-
+	private static final Scalar CYAN = new Scalar(new double[]    {255, 255, 0});
+	
 	private static final double BOILER_UPPER_TARGET_AR = 0;
 	private static final double BOILER_LOWER_TARGET_AR = 0;
 
@@ -56,15 +57,18 @@ public class Vision extends Subsystem {
     private static final int BOILER_TARGET_WIDTH = 120;
     private static final int BOILER_TARGET_HEIGHT = 40;
 
-    private static final int GEAR_TARGET_CENTER_X = 320;
-    private static final int GEAR_TARGET_CENTER_Y = 80;
+    private static final int GEAR_TARGET_CENTER_X = 440;
+    private static final int GEAR_TARGET_CENTER_Y = 440;
 
-    private static final int GEAR_TARGET_WIDTH = 120;
-    private static final int GEAR_TARGET_HEIGHT = 40;
+    private static final int GEAR_TARGET_WIDTH = 80;
+    private static final int GEAR_TARGET_HEIGHT = 80;
 
     private static final Rect BOILER_TARGET = new Rect(new Point(BOILER_TARGET_CENTER_X - BOILER_TARGET_WIDTH/2, BOILER_TARGET_CENTER_Y - BOILER_TARGET_HEIGHT/2), 
     		                                           new Point(BOILER_TARGET_CENTER_X + BOILER_TARGET_WIDTH/2, BOILER_TARGET_CENTER_Y + BOILER_TARGET_HEIGHT/2));
-    
+
+    private static final Rect GEAR_TARGET = new Rect(new Point(GEAR_TARGET_CENTER_X - GEAR_TARGET_WIDTH/2, GEAR_TARGET_CENTER_Y - GEAR_TARGET_HEIGHT/2), 
+                                                     new Point(GEAR_TARGET_CENTER_X + GEAR_TARGET_WIDTH/2, GEAR_TARGET_CENTER_Y + GEAR_TARGET_HEIGHT/2));
+
     private Object pictureSync = new Object();
     private boolean takePicture = false;
 	int loopCount = 0;
@@ -113,6 +117,14 @@ public class Vision extends Subsystem {
 		return visionMode;
 	}
 
+	public void StorePictures()
+	{
+		synchronized(pictureSync)
+		{
+			takePicture = true;
+		}		
+	}
+	
 	public void setCamera(CameraSelection newCamera)
 	{
 		synchronized(VisionSetup)
@@ -123,10 +135,6 @@ public class Vision extends Subsystem {
 		synchronized(syncLoopCount)
 		{
 			SmartDashboard.putDouble("VisionLoopCount", loopCount);
-		}
-		synchronized(pictureSync)
-		{
-			takePicture = true;
 		}
 	}
 	
@@ -210,7 +218,7 @@ public class Vision extends Subsystem {
 	public Vision()
 	{
 		setCamera(CameraSelection.SHOT_CAMERA);
-		setVisionMode(VisionMode.FIND_BOILER);
+		setVisionMode(VisionMode.FIND_GEAR);
 		shotCamera.setResolution(CAM_WIDTH, CAM_HEIGHT);
 //		gearCamera.setResolution(CAM_WIDTH, CAM_HEIGHT);
 		
@@ -319,7 +327,7 @@ public class Vision extends Subsystem {
 					//  LOOK FOR BOILER TARGET
 					////////////////////////////////////////////////////////////////////////////////////////
 					////////////////////////////////////////////////////////////////////////////////////////
-					
+					// BOILER BOILER BOILER BOILER BOILER BOILER BOILER BOILER BOILER BOILER BOILER BOILER 
 					if(threadVisionMode == VisionMode.FIND_BOILER)
 					{
 						targetCenter.x= CAM_WIDTH/2;
@@ -440,37 +448,151 @@ public class Vision extends Subsystem {
 			    					Imgcodecs.imwrite("/home/lvuser/images/img_" + loopCount + "_boiler_final.jpg", mat);
 			    					System.out.println("Saved Image");
 			    				}
-
 							});
 							
 						}
 						
 //						drawBoilerTargetReticle(mat, targetCenter, CAM_HEIGHT/3, CAM_WIDTH/3, Vision.MAGENTA);
 					}
+					////////////////////////////////////////////////////////////////////////////////////////
+					////////////////////////////////////////////////////////////////////////////////////////
+					//  LOOK FOR GEAR TARGET
+					////////////////////////////////////////////////////////////////////////////////////////
+					////////////////////////////////////////////////////////////////////////////////////////
+					// GEAR GEAR GEAR GEAR GEAR GEAR GEAR GEAR GEAR GEAR GEAR GEAR GEAR GEAR GEAR GEAR GEAR GEAR 
 					else if(threadVisionMode == VisionMode.FIND_GEAR)
 					{
 						targetCenter.x= CAM_WIDTH/2;
 						targetCenter.y= CAM_HEIGHT/2;
 						
 						findGear.process(mat);
-						
-						ArrayList<MatOfPoint>  targetList = findGear.filterContoursOutput();
+
+						ArrayList<MatOfPoint> targetList = findGear.convexHullsOutput();
+
+					    drawTargetCrosshair(mat, GEAR_TARGET, Vision.CYAN);
 
 						if(targetList.isEmpty())
 						{
-							drawGearTargetReticle(mat, targetCenter, CAM_WIDTH, CAM_HEIGHT, Vision.RED);
+//							drawGearTargetReticle(mat, targetCenter, CAM_HEIGHT, CAM_WIDTH, Vision.RED);
 						}
 						else
 						{
-							// Do stuff similar to boiler
-		    				if(takePicture == true)
-		    				{
-		    					Imgcodecs.imwrite("/home/lvuser/images/img_" + loopCount + "_gear.jpg", mat);
-		    					System.out.println("Saved Image");
-		    				}
-						}						
-//						drawGearTargetReticle( mat,  targetCenter,  CAM_HEIGHT/3, CAM_WIDTH/3,  Vision.MAGENTA);						
+							// Show the detected contours
+							Imgproc.drawContours(mat, targetList, -1, Vision.BLACK, 1);
+							
+							ArrayList<RotatedRect> candidateList = new ArrayList<RotatedRect>();							
+							// Preprocess the contours
+							targetList.forEach(contour -> {
+								// convert contour to rect compatible change
+								MatOfPoint2f contourMat = new MatOfPoint2f();
+								contour.convertTo(contourMat, CvType.CV_32F);								
+								candidateList.add(Imgproc.minAreaRect(contourMat));
+							});
+
+							// Walk the candidate rectangles and sort out if they are nice
+							candidateList.forEach(candidate -> {
+							    
+							    // show candidate target aligined rectangle info
+							    drawRotRectangle(mat, candidate, Vision.CYAN);
+
+							    // figure out which target is the Boiler Upper Stripe
+							    double aspectRatio = candidate.size.width / candidate.size.height;
+							    if(aspectRatio < 1) {aspectRatio = 1/aspectRatio;}
+							    
+							    double fixedCAngle = 0;
+							    
+							    if(candidate.size.width < candidate.size.height){
+							    	fixedCAngle = (90 - candidate.angle);
+							    }else{
+							    	fixedCAngle = 0  - candidate.angle;
+							    }
+							    SmartDashboard.putDouble("TargetAngle", fixedCAngle);
+
+							    if(     ((2 < aspectRatio) && (aspectRatio < 3)) 
+//							    		&&
+//							    		(((90-ANGLE_TOLERANCE) < fixedCAngle) && (fixedCAngle < (90+ANGLE_TOLERANCE)))
+							    		)
+							    {
+//				    				drawGearTargetReticle(mat, candidate.center, candidate.size.height, candidate.size.width,  Vision.BLUE);
+
+							    	candidateList.forEach(secondary -> {
+							    		// Check Aspect Ratio & Orientation
+
+							    		double aspectRatioSecondary = secondary.size.width / secondary.size.height;
+									    if(aspectRatioSecondary < 1) {aspectRatioSecondary = 1/aspectRatioSecondary;}
+
+									    double fixedSAngle = 0;
+									    
+									    if(secondary.size.width < secondary.size.height){
+									    	fixedSAngle = (90 - secondary.angle) - 180;
+									    }else{
+									    	fixedSAngle = -secondary.angle;
+									    }
+									    // basic OKness of secondary
+									    if(     ((2 < aspectRatioSecondary) && (aspectRatioSecondary < 3)) 
+//									    		&&
+//							    				(((90-ANGLE_TOLERANCE) < fixedSAngle) && (fixedSAngle < (90+ANGLE_TOLERANCE)))
+									    		)
+							    		{
+
+						    				// draw a yellow box
+						    				drawGearTargetReticle(mat, candidate.center,  candidate.size.width,  candidate.size.height, Vision.YELLOW);
+						    				
+						    				double candidateHeight = (candidate.size.height < candidate.size.width) ? candidate.size.height : candidate.size.width;
+						    				double candidateWidth = (candidate.size.height < candidate.size.width) ? candidate.size.width : candidate.size.height;
+						    				
+						    				// OKness of secondary with respect to target
+							    			if(((candidate.center.x - secondary.center.x) < (candidateWidth * 4))
+							    					&&
+							    					(secondary.center.x != candidate.center.x)
+							    					)
+							    			{
+											    drawCandidateCrosshair(mat, candidate, secondary, Vision.YELLOW);
+							    				Imgproc.line(mat, candidate.center, secondary.center,  Vision.YELLOW, 2);
+							    				// output target info to smart dashboard
+							    				SmartDashboard.putDouble("TargetWidth", candidate.size.width);
+							    				SmartDashboard.putDouble("TargetHeight", candidate.size.height);
+							    				SmartDashboard.putDouble("TargetX", candidate.center.x);
+							    				SmartDashboard.putDouble("TargetY", candidate.center.y);
+							    				// save target info
+							    				// x,y,loopCount
+							    				synchronized(visionResults)
+							    				{
+							    					visionResults.x = candidate.center.x;
+							    					visionResults.y = candidate.center.y;
+							    					visionResults.loopCount = loopCount;
+							    					visionResults.target = TargetID.GEAR;							    					
+							    				}
+							    				if(takePicture == true)
+							    				{
+							    					Imgcodecs.imwrite("/home/lvuser/images/img_" + loopCount + "_gear.jpg", mat);
+							    					System.out.println("Saved Image");
+							    				}
+
+							    			}
+							    		}
+
+							    	});
+							    }
+							    
+//								drawBoilerTargetReticle(mat, candidate.center, candidate.size.height, candidate.size.width,  Vision.YELLOW);
+			    				if(takePicture == true)
+			    				{
+			    					Imgcodecs.imwrite("/home/lvuser/images/img_" + loopCount + "_gear_final.jpg", mat);
+			    					System.out.println("Saved Image");
+			    				}
+
+							});
+							
+						}
+											
 					}
+					////////////////////////////////////////////////////////////////////////////////////////
+					////////////////////////////////////////////////////////////////////////////////////////
+					//  PASSTHROUGH
+					////////////////////////////////////////////////////////////////////////////////////////
+					////////////////////////////////////////////////////////////////////////////////////////
+					// PASSTHROUGH PASSTHROUGH PASSTHROUGH PASSTHROUGH PASSTHROUGH PASSTHROUGH PASSTHROUGH  
 					else  // VisionMode.PASSTHROUGH
 					{
 						// do no image processing, 
@@ -532,8 +654,8 @@ public class Vision extends Subsystem {
 	
 	private void drawGearTargetReticle(Mat mat, Point center, double in_height, double in_width, Scalar color)
 	{
-		double width = (in_width > in_height) ? in_width :in_height;
-		double height = (in_width > in_height) ? in_height : in_width;
+		double width = (in_width < in_height) ? in_width :in_height;
+		double height = (in_width < in_height) ? in_height : in_width;
 		
 		double hheight = height/2;
 		double hwidth = width/2;
@@ -640,7 +762,47 @@ public class Vision extends Subsystem {
 		                  new Point(CAM_WIDTH, candidate.center.y + hheight), 
 		                  candidateColor, 2);  	
     }
+    private void drawCandidateCrosshair(Mat mat, RotatedRect candidate, RotatedRect secondary, Scalar candidateColor)
+    {
+    	
+    	// Draw Candidate Lines
+		double candidateHeight = Math.max(candidate.size.width, candidate.size.height);
+		double secondaryHeight = Math.max(secondary.size.width, secondary.size.height);
+    	
+		double hheight = Math.max(candidateHeight, secondaryHeight)/2;
+
+		double candidateWidth = Math.min(candidate.size.width, candidate.size.height);
+		double secondaryWidth = Math.min(secondary.size.width, secondary.size.height);
+		
+		double left = Math.min(candidate.center.x - candidateWidth/2, secondary.center.x - secondaryWidth/2);
+		double right = Math.max(candidate.center.x + candidateWidth/2, secondary.center.x + secondaryWidth/2);
+		
+		double hwidth = Math.abs(right-left)/2;
+		
+		Point center = new Point((candidate.center.x + secondary.center.x)/2,(candidate.center.y + secondary.center.y)/2);
+		// Target Lines
+		// vertical lines
+    	// left
+    	Imgproc.line(mat, new Point(center.x - hwidth, 0), 
+    			          new Point(center.x - hwidth, CAM_HEIGHT), 
+    			          candidateColor, 2);
+    	// right
+    	Imgproc.line(mat, new Point(center.x + hwidth, 0), 
+    			          new Point(center.x + hwidth, CAM_HEIGHT), 
+    			          candidateColor, 2);
+    	
+    	// horizontal lines
+    	// upper
+    	Imgproc.line(mat, new Point(0,         center.y - hheight), 
+		                  new Point(CAM_WIDTH, center.y - hheight), 
+		                  candidateColor, 2);
+    	//lower
+    	Imgproc.line(mat, new Point(0,         center.y + hheight), 
+		                  new Point(CAM_WIDTH, center.y + hheight), 
+		                  candidateColor, 2);  	
+    }
     
+   
 	private double scoreBoilerTarget(MatOfPoint target)
 	{
 		double aspectRatio = target.height()/target.width();
