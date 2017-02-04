@@ -508,9 +508,9 @@ public class Vision extends Subsystem {
 							    }
 							    SmartDashboard.putDouble("TargetAngle", fixedCAngle);
 
-							    if(     ((2 < aspectRatio) && (aspectRatio < 3)) 
-//							    		&&
-//							    		(((90-ANGLE_TOLERANCE) < fixedCAngle) && (fixedCAngle < (90+ANGLE_TOLERANCE)))
+							    if(     ((1 < aspectRatio) && (aspectRatio < 4)) 
+							    		&&
+							    		(((90-ANGLE_TOLERANCE) < fixedCAngle) && (fixedCAngle < (90+ANGLE_TOLERANCE)))
 							    		)
 							    {
 //				    				drawGearTargetReticle(mat, candidate.center, candidate.size.height, candidate.size.width,  Vision.BLUE);
@@ -524,14 +524,14 @@ public class Vision extends Subsystem {
 									    double fixedSAngle = 0;
 									    
 									    if(secondary.size.width < secondary.size.height){
-									    	fixedSAngle = (90 - secondary.angle) - 180;
+									    	fixedSAngle = (90 - secondary.angle);
 									    }else{
-									    	fixedSAngle = -secondary.angle;
+									    	fixedSAngle = 0 - secondary.angle;
 									    }
 									    // basic OKness of secondary
-									    if(     ((2 < aspectRatioSecondary) && (aspectRatioSecondary < 3)) 
-//									    		&&
-//							    				(((90-ANGLE_TOLERANCE) < fixedSAngle) && (fixedSAngle < (90+ANGLE_TOLERANCE)))
+									    if(     ((1 < aspectRatioSecondary) && (aspectRatioSecondary < 4)) 
+									    		&&
+							    				(((90-ANGLE_TOLERANCE) < fixedSAngle) && (fixedSAngle < (90+ANGLE_TOLERANCE)))
 									    		)
 							    		{
 
@@ -545,6 +545,7 @@ public class Vision extends Subsystem {
 							    			if(((candidate.center.x - secondary.center.x) < (candidateWidth * 4))
 							    					&&
 							    					(secondary.center.x != candidate.center.x)
+							    					&& (Math.abs(candidate.center.y - secondary.center.y) < (Math.min(candidate.size.height, candidate.size.width) * 0.25))
 							    					)
 							    			{
 											    drawCandidateCrosshair(mat, candidate, secondary, Vision.YELLOW);

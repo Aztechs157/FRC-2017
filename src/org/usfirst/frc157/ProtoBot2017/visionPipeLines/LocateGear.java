@@ -75,10 +75,10 @@ public class LocateGear {
 		ArrayList<MatOfPoint> filterContoursContours = findContoursOutput;
 		double filterContoursMinArea = 20.0;
 		double filterContoursMinPerimeter = 0.0;
-		double filterContoursMinWidth = 20.0;
-		double filterContoursMaxWidth = 300.0;
+		double filterContoursMinWidth = 10.0;
+		double filterContoursMaxWidth = 150.0;
 		double filterContoursMinHeight = 0.0;
-		double filterContoursMaxHeight = 1000.0;
+		double filterContoursMaxHeight = 300.0;
 		double[] filterContoursSolidity = {0.0, 100.0};
 		double filterContoursMaxVertices = 1000000.0;
 		double filterContoursMinVertices = 0.0;
