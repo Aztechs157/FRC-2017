@@ -491,8 +491,8 @@ public class Vision extends Subsystem {
 								//								drawBoilerTargetReticle(mat, candidate.center, candidate.size.height, candidate.size.width,  Vision.YELLOW);
 								if(takePicture == true)
 								{
-									Imgcodecs.imwrite(NameBase +  loopCount + "_boiler_not_found.jpg", mat);
-									System.out.println("Saved Boiler Not Found Image");
+									Imgcodecs.imwrite(NameBase +  loopCount + "_boiler_final.jpg", mat);
+									System.out.println("Saved Boiler final Image");
 								}
 							}
 							//							});
@@ -663,12 +663,11 @@ public class Vision extends Subsystem {
 									//									});
 								}
 
-								//								drawBoilerTargetReticle(mat, candidate.center, candidate.size.height, candidate.size.width,  Vision.YELLOW);
-								if(takePicture == true)
-								{
-									Imgcodecs.imwrite(NameBase + loopCount + "_gear_not_found.jpg", mat);
-									System.out.println("Saved Gear Not Found Image");
-								}
+							}
+							if(takePicture == true)
+							{
+								Imgcodecs.imwrite(NameBase + loopCount + "_gear_final.jpg", mat);
+								System.out.println("Saved Gear final Image");
 							}
 							//							});
 
