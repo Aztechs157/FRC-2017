@@ -183,6 +183,7 @@ public class Vision extends Subsystem {
 			result.crossTrack = visionResults.crossTrack;
 			result.target = visionResults.target;
 			result.loopCount = visionResults.loopCount;
+			result.inRange = visionResults.inRange;
 			result.recentTarget = false;
 		}		
 		synchronized(syncLoopCount)
@@ -201,7 +202,6 @@ public class Vision extends Subsystem {
 		{
 			result.x_delta = result.y  - GEAR_TARGET_CENTER_X;
 			result.y_delta = result.y  - GEAR_TARGET_CENTER_Y;
-
 		}
 		else
 		{
@@ -237,17 +237,13 @@ public class Vision extends Subsystem {
 
 	private void InitializeVision() {
 
-
 		Point targetCenter = new Point(CAM_WIDTH/2, CAM_HEIGHT/2);
-
 
 		if(visionInitialized == false)
 		{
 			visionInitialized = true;
 			visionThread = new Thread(() -> {
 				System.out.println("Starting Vision Thread");
-
-				Scalar targetColor;
 
 				// Setup the Shot Cam
 				CameraServer.getInstance().addCamera(shotCamera);
@@ -274,10 +270,9 @@ public class Vision extends Subsystem {
 				// lets the robot stop this thread when restarting robot code or
 				// deploying.
 
-
 				/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 				/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-				//  Begining of vision thread loop
+				//  Beginning of vision thread loop
 				/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 				/////////////////////////////////////////////////////////////////////////////////////////////////////////////////				
 				while (!Thread.interrupted()) {
@@ -656,14 +651,12 @@ public class Vision extends Subsystem {
 						// Circular Target, Centered in Blue
 						targetCenter.x= CAM_WIDTH/2;
 						targetCenter.y= CAM_HEIGHT/2;						
-						targetColor = Vision.BLUE; // Blue for no target
 						if(takePicture == true)
 						{
 							Imgcodecs.imwrite("/home/lvuser/images/img_" + loopCount + "_passthru.jpg", mat);
 							System.out.println("Saved Image");
 						}
-
-						drawPassthroughTargetReticle(mat, targetCenter, CAM_HEIGHT/3, CAM_WIDTH/3, targetColor);
+						drawPassthroughTargetReticle(mat, targetCenter, CAM_HEIGHT/3, CAM_WIDTH/3, Vision.BLUE);
 					}
 
 					// Put a rectangle on the image
