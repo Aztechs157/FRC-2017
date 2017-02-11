@@ -21,9 +21,11 @@ import edu.wpi.first.wpilibj.DigitalInput;
 /**
  *
  */
-public class Collect extends Subsystem {
+public class Helix extends Subsystem {
 
-    private final CANTalon collectMotor = RobotMap.collectMotor;
+    private final CANTalon helixMotorRight = RobotMap.helixMotorRight;
+    private final CANTalon helixMotorLeft = RobotMap.helixMotorLeft;
+    private final double motorSpeed = 0.3;
 
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
@@ -31,28 +33,42 @@ public class Collect extends Subsystem {
 
 
         
-    public Collect()
+    public Helix()
     {
-        System.out.println("Collect: Collect()");
+        System.out.println("helix");
         
-        collectMotor.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
+        helixMotorRight.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
+        helixMotorLeft.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
+        
+        
     }        
-   
+   // Right Motor+
     
-    public void unload()
+    public void loadRight()
     {
-        collectMotor.set(-0.3);
-    }
-
-    public void load()
-    {
-        collectMotor.set(0.3);
+        System.out.println("going up right");
         
+        helixMotorRight.set(motorSpeed);
     }
-
-    public void idle()
+    public void loadLeft()
     {
-        collectMotor.set(0.0);        
+        helixMotorLeft.set(-motorSpeed);
+    }
+    public void unloadRight()
+    {
+        helixMotorRight.set(-motorSpeed);
+    }
+    public void unloadLeft()
+    {
+        helixMotorLeft.set(motorSpeed);
+    }
+    public void idleRight()
+    {
+        helixMotorRight.set(0.0);        
+    }
+    public void idleLeft()
+    {
+        helixMotorRight.set(0.0);
     }
     
     
