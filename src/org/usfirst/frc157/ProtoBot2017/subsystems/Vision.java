@@ -1,4 +1,4 @@
-	package org.usfirst.frc157.ProtoBot2017.subsystems;
+package org.usfirst.frc157.ProtoBot2017.subsystems;
 
 import java.util.ArrayList;
 
@@ -28,14 +28,14 @@ import org.usfirst.frc157.ProtoBot2017.visionPipeLines.*;
  */
 public class Vision extends Subsystem {
 
-    // Put methods for controlling this subsystem
-    // here. Call these from Commands.
+	// Put methods for controlling this subsystem
+	// here. Call these from Commands.
 
 	private static final int CAM_WIDTH = 640;
 	private static final int CAM_HEIGHT = 480;
-	
+
 	private static final int CAM_EXPOSURE = 25;
-		                                                        // B,   G,   R
+	// B,   G,   R
 	private static final Scalar RED = new Scalar(new double[]     {0,   0,   255});
 	private static final Scalar YELLOW = new Scalar(new double[]  {0,   255, 255});
 	private static final Scalar GREEN = new Scalar(new double[]   {0,   255, 0});
@@ -43,51 +43,51 @@ public class Vision extends Subsystem {
 	private static final Scalar MAGENTA = new Scalar(new double[] {255, 0,   255});
 	private static final Scalar BLACK = new Scalar(new double[]   {0,   0,   0});
 	private static final Scalar CYAN = new Scalar(new double[]    {255, 255, 0});
-	
+
 	private static final double BOILER_UPPER_TARGET_AR = 0;
 	private static final double BOILER_LOWER_TARGET_AR = 0;
 
 	private static final double GEAR_TARGET_AR = 0;
-	
-    private static final double ANGLE_TOLERANCE = 20;
-	
-    private static final int BOILER_TARGET_CENTER_X = 320;
-    private static final int BOILER_TARGET_CENTER_Y = 80;
 
-    private static final int BOILER_TARGET_WIDTH = 120;
-    private static final int BOILER_TARGET_HEIGHT = 40;
+	private static final double ANGLE_TOLERANCE = 20;
 
-    private static final int GEAR_TARGET_CENTER_X = 440;
-    private static final int GEAR_TARGET_CENTER_Y = 440;
+	private static final int BOILER_TARGET_CENTER_X = 320;
+	private static final int BOILER_TARGET_CENTER_Y = 80;
 
-    private static final int GEAR_TARGET_WIDTH = 80;
-    private static final int GEAR_TARGET_HEIGHT = 80;
+	private static final int BOILER_TARGET_WIDTH = 120;
+	private static final int BOILER_TARGET_HEIGHT = 40;
 
-    private static final Rect BOILER_TARGET = new Rect(new Point(BOILER_TARGET_CENTER_X - BOILER_TARGET_WIDTH/2, BOILER_TARGET_CENTER_Y - BOILER_TARGET_HEIGHT/2), 
-    		                                           new Point(BOILER_TARGET_CENTER_X + BOILER_TARGET_WIDTH/2, BOILER_TARGET_CENTER_Y + BOILER_TARGET_HEIGHT/2));
+	private static final int GEAR_TARGET_CENTER_X = 440;
+	private static final int GEAR_TARGET_CENTER_Y = 440;
 
-    private static final Rect GEAR_TARGET = new Rect(new Point(GEAR_TARGET_CENTER_X - GEAR_TARGET_WIDTH/2, GEAR_TARGET_CENTER_Y - GEAR_TARGET_HEIGHT/2), 
-                                                     new Point(GEAR_TARGET_CENTER_X + GEAR_TARGET_WIDTH/2, GEAR_TARGET_CENTER_Y + GEAR_TARGET_HEIGHT/2));
+	private static final int GEAR_TARGET_WIDTH = 80;
+	private static final int GEAR_TARGET_HEIGHT = 80;
 
-    private Object pictureSync = new Object();
-    private boolean takePicture = false;
+	private static final Rect BOILER_TARGET = new Rect(new Point(BOILER_TARGET_CENTER_X - BOILER_TARGET_WIDTH/2, BOILER_TARGET_CENTER_Y - BOILER_TARGET_HEIGHT/2), 
+			new Point(BOILER_TARGET_CENTER_X + BOILER_TARGET_WIDTH/2, BOILER_TARGET_CENTER_Y + BOILER_TARGET_HEIGHT/2));
+
+	private static final Rect GEAR_TARGET = new Rect(new Point(GEAR_TARGET_CENTER_X - GEAR_TARGET_WIDTH/2, GEAR_TARGET_CENTER_Y - GEAR_TARGET_HEIGHT/2), 
+			new Point(GEAR_TARGET_CENTER_X + GEAR_TARGET_WIDTH/2, GEAR_TARGET_CENTER_Y + GEAR_TARGET_HEIGHT/2));
+
+	private Object pictureSync = new Object();
+	private boolean takePicture = false;
 	int loopCount = 0;
-	
-  
+
+
 	public enum VisionMode
 	{
 		PASSTHROUGH,
 		FIND_BOILER,
 		FIND_GEAR
 	}
-	
+
 	public enum TargetID
 	{
 		BOILER,
 		GEAR,
 		NONE
 	}
-	
+
 	public enum CameraSelection
 	{
 		SHOT_CAMERA,
@@ -98,20 +98,20 @@ public class Vision extends Subsystem {
 	private Object syncLoopCount = new Object();
 	private VisionMode visionMode = VisionMode.PASSTHROUGH;
 	private CameraSelection cameraSelection = CameraSelection.SHOT_CAMERA;
-	
+
 	public void setVisionMode(VisionMode newMode)
 	{
 		synchronized(VisionSetup)
 		{
 			visionMode = newMode;
 		}
-    	SmartDashboard.putString("VisionMode", visionMode.name());
+		SmartDashboard.putString("VisionMode", visionMode.name());
 		synchronized(syncLoopCount)
 		{
 			SmartDashboard.putDouble("VisionLoopCount", loopCount);
 		}
 	}
-	
+
 	public VisionMode getVisionMode()
 	{
 		return visionMode;
@@ -124,26 +124,26 @@ public class Vision extends Subsystem {
 			takePicture = true;
 		}		
 	}
-	
+
 	public void setCamera(CameraSelection newCamera)
 	{
 		synchronized(VisionSetup)
 		{
 			cameraSelection = newCamera;
 		}
-    	SmartDashboard.putString("Camera", cameraSelection.name());
+		SmartDashboard.putString("Camera", cameraSelection.name());
 		synchronized(syncLoopCount)
 		{
 			SmartDashboard.putDouble("VisionLoopCount", loopCount);
 		}
 	}
-	
+
 	public CameraSelection getCamera()
 	{
 		return cameraSelection;
 	}
-	
-	
+
+
 	public class VisionTarget
 	{
 		double x;
@@ -154,27 +154,36 @@ public class Vision extends Subsystem {
 		VisionTarget(){
 			x = 0;
 			y = 0;
+			x_delta = 0;
+			y_delta = 0;
+			crossTrack = 0;
+			inRange = false;
+
 			loopCount = 0;
 			recentTarget = false;
 			target = TargetID.NONE;
 		}
 		double x_delta;
 		double y_delta;
+		double crossTrack;
+		boolean inRange;
 	}
-	
+
 	VisionTarget visionResults = new VisionTarget();
-	
+
 	public VisionTarget getTarget()
 	{
 		VisionTarget result = new VisionTarget();
-		
+
 		// 
 		synchronized(visionResults)
 		{
 			result.x = visionResults.x;
 			result.y = visionResults.y;
+			result.crossTrack = visionResults.crossTrack;
 			result.target = visionResults.target;
 			result.loopCount = visionResults.loopCount;
+			result.inRange = visionResults.inRange;
 			result.recentTarget = false;
 		}		
 		synchronized(syncLoopCount)
@@ -193,7 +202,6 @@ public class Vision extends Subsystem {
 		{
 			result.x_delta = result.y  - GEAR_TARGET_CENTER_X;
 			result.y_delta = result.y  - GEAR_TARGET_CENTER_Y;
-			
 		}
 		else
 		{
@@ -202,60 +210,56 @@ public class Vision extends Subsystem {
 		}
 		return result;
 	}
-	
+
 	boolean visionInitialized = false;
 	Thread visionThread;
-	
+
 	private static final LocateBoiler findBoiler = new LocateBoiler();
 	private static final LocateGear findGear = new LocateGear();
 
 	private static final String SHOT_CAM_NAME = new String("cam1");
 	private static final String GEAR_CAM_NAME = new String("cam2"); //cam2
-	
+
 	private UsbCamera shotCamera = new UsbCamera(SHOT_CAM_NAME, 0);		// Shot Camera		
-//	private UsbCamera gearCamera = new UsbCamera(GEAR_CAM_NAME, 0);		// Gear Camera		
+	//	private UsbCamera gearCamera = new UsbCamera(GEAR_CAM_NAME, 0);		// Gear Camera		
 
 	public Vision()
 	{
 		setCamera(CameraSelection.SHOT_CAMERA);
 		setVisionMode(VisionMode.FIND_GEAR);
 		shotCamera.setResolution(CAM_WIDTH, CAM_HEIGHT);
-//		gearCamera.setResolution(CAM_WIDTH, CAM_HEIGHT);
-		
+		//		gearCamera.setResolution(CAM_WIDTH, CAM_HEIGHT);
+
 		InitializeVision();
 		System.out.println("Starting Vision");
 	}
-	
+
 
 	private void InitializeVision() {
-		
-	
+
 		Point targetCenter = new Point(CAM_WIDTH/2, CAM_HEIGHT/2);
 
-		
 		if(visionInitialized == false)
 		{
 			visionInitialized = true;
 			visionThread = new Thread(() -> {
 				System.out.println("Starting Vision Thread");
-				
-				Scalar targetColor;
-				
+
 				// Setup the Shot Cam
 				CameraServer.getInstance().addCamera(shotCamera);
 				shotCamera.setResolution(CAM_WIDTH, CAM_HEIGHT);
 				shotCamera.setExposureManual(CAM_EXPOSURE);
 				CvSink shotSink = CameraServer.getInstance().getVideo(SHOT_CAM_NAME);
-				
+
 				// Setup the Gear Cam
-//				CameraServer.getInstance().addCamera(gearCamera);
-//				gearCamera.setResolution(CAM_WIDTH, CAM_HEIGHT);
-//				CvSink gearSink = CameraServer.getInstance().getVideo(GEAR_CAM_NAME);
+				//				CameraServer.getInstance().addCamera(gearCamera);
+				//				gearCamera.setResolution(CAM_WIDTH, CAM_HEIGHT);
+				//				CvSink gearSink = CameraServer.getInstance().getVideo(GEAR_CAM_NAME);
 				CvSink gearSink = shotSink;
 
 				// set up a variable to hold the selected sink
 				CvSink theSink = shotSink;  // initialize to something, we will be set before use
-								
+
 				// Setup a CvSource. This will send images back to the Dashboard
 				CvSource outputStream = CameraServer.getInstance().putVideo("Processed", CAM_WIDTH, CAM_HEIGHT);
 
@@ -265,11 +269,10 @@ public class Vision extends Subsystem {
 				// This cannot be 'true'. The program will never exit if it is. This
 				// lets the robot stop this thread when restarting robot code or
 				// deploying.
-				
-				
+
 				/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 				/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-				//  Begining of vision thread loop
+				//  Beginning of vision thread loop
 				/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 				/////////////////////////////////////////////////////////////////////////////////////////////////////////////////				
 				while (!Thread.interrupted()) {
@@ -278,7 +281,7 @@ public class Vision extends Subsystem {
 					{
 						loopCount ++;
 					}
-    				synchronized(pictureSync)
+					synchronized(pictureSync)
 					{
 						if(takePicture == true)
 						{
@@ -297,31 +300,31 @@ public class Vision extends Subsystem {
 					}				
 					// Tell the CvSink to grab a frame from the camera and put it
 					// in the source mat.  If there is an error notify the output.
-					
+
 					if(threadCameraSelection == CameraSelection.SHOT_CAMERA)
 					{
-					   	SmartDashboard.putString("Camera In Use", "Shot");
+						SmartDashboard.putString("Camera In Use", "Shot");
 						theSink = shotSink;
 					}
 					else
 					{
-					   	SmartDashboard.putString("Camera In Use", "Gear");
+						SmartDashboard.putString("Camera In Use", "Gear");
 						theSink = gearSink;
 					}
-					
+
 					if (theSink.grabFrame(mat) == 0) {
 						// Send the output the error.
 						outputStream.notifyError(theSink.getError());
 						// skip the rest of the current iteration
 						continue;
 					}
-					
+
 					if(loopTakePicture == true)
 					{
 						Imgcodecs.imwrite("/home/lvuser/images/img_" + loopCount + "_base.jpg", mat);
 						System.out.println("Saved Image");
 					}
-					
+
 					////////////////////////////////////////////////////////////////////////////////////////
 					////////////////////////////////////////////////////////////////////////////////////////
 					//  LOOK FOR BOILER TARGET
@@ -332,12 +335,12 @@ public class Vision extends Subsystem {
 					{
 						targetCenter.x= CAM_WIDTH/2;
 						targetCenter.y= CAM_HEIGHT/2;
-						
+
 						findBoiler.process(mat);
 
 						ArrayList<MatOfPoint>  targetList = findBoiler.convexHullsOutput();
 
-					    drawTargetCrosshair(mat, BOILER_TARGET, Vision.MAGENTA);
+						drawTargetCrosshair(mat, BOILER_TARGET, Vision.MAGENTA);
 
 						if(targetList.isEmpty())
 						{
@@ -347,7 +350,7 @@ public class Vision extends Subsystem {
 						{
 							// Show the detected contours
 							Imgproc.drawContours(mat, targetList, -1, Vision.BLACK, 1);
-							
+
 							ArrayList<RotatedRect> candidateList = new ArrayList<RotatedRect>();							
 							// Preprocess the contours
 							targetList.forEach(contour -> {
@@ -358,101 +361,108 @@ public class Vision extends Subsystem {
 							});
 
 							// Walk the candidate rectangles and sort out if they are nice
-							candidateList.forEach(candidate -> {
-							    
-							    // show candidate target aligined rectangle info
-							    drawRotRectangle(mat, candidate, Vision.MAGENTA);
+							CandidateLoop:
+							for(RotatedRect candidate : candidateList) {
+								//							candidateList.forEach(candidate -> {
 
-							    // figure out which target is the Boiler Upper Stripe
-							    double aspectRatio = candidate.size.width / candidate.size.height;
-							    if(aspectRatio < 1) {aspectRatio = 1/aspectRatio;}
-							    
-							    double fixedCAngle = 0;
-							    
-							    if(candidate.size.width < candidate.size.height){
-							    	fixedCAngle = (90 - candidate.angle) - 180;
-							    }else{
-							    	fixedCAngle = 0  - candidate.angle;
-							    }
+								// show candidate target aligined rectangle info
+								drawRotRectangle(mat, candidate, Vision.MAGENTA);
 
-							    if(     ((2 < aspectRatio) && (aspectRatio < 5)) &&
-							    		((-ANGLE_TOLERANCE < fixedCAngle) && (fixedCAngle < ANGLE_TOLERANCE))
-							    		)
-							    {
-//				    				drawGearTargetReticle(mat, candidate.center, candidate.size.height, candidate.size.width,  Vision.BLUE);
+								// figure out which target is the Boiler Upper Stripe
+								double aspectRatio = candidate.size.width / candidate.size.height;
+								if(aspectRatio < 1) {aspectRatio = 1/aspectRatio;}
 
-							    	candidateList.forEach(secondary -> {
-							    		// Check Aspect Ratio & Orientation
+								double fixedCAngle = 0;
 
-							    		double aspectRatioSecondary = secondary.size.width / secondary.size.height;
-									    if(aspectRatioSecondary < 1) {aspectRatioSecondary = 1/aspectRatioSecondary;}
+								if(candidate.size.width < candidate.size.height){
+									fixedCAngle = (90 - candidate.angle) - 180;
+								}else{
+									fixedCAngle = 0  - candidate.angle;
+								}
 
-									    double fixedSAngle = 0;
-									    
-									    if(secondary.size.width < secondary.size.height){
-									    	fixedSAngle = (90 - secondary.angle) - 180;
-									    }else{
-									    	fixedSAngle = -secondary.angle;
-									    }
-									    // basic OKness of secondary
-									    if(     ((3 < aspectRatioSecondary) && (aspectRatioSecondary < 12)) &&
-							    				((-ANGLE_TOLERANCE < fixedSAngle) && (fixedSAngle < ANGLE_TOLERANCE))
-									    		)
-							    		{
+								if(     ((2 < aspectRatio) && (aspectRatio < 5)) &&
+										((-ANGLE_TOLERANCE < fixedCAngle) && (fixedCAngle < ANGLE_TOLERANCE))
+										)
+								{
+									//				    				drawGearTargetReticle(mat, candidate.center, candidate.size.height, candidate.size.width,  Vision.BLUE);
 
-						    				// draw a yellow box
-						    				drawBoilerTargetReticle(mat, candidate.center, candidate.size.height, candidate.size.width,  Vision.YELLOW);
-						    				
-						    				double candidateHeight = (candidate.size.height < candidate.size.width) ? candidate.size.height : candidate.size.width;
-						    				double candidateWidth = (candidate.size.height < candidate.size.width) ? candidate.size.width : candidate.size.height;
-						    				
-						    				// OKness of secondary with respect to target
-							    			if(((candidate.center.y - secondary.center.y) < (candidateHeight * 2.5))
-							    					&&
-							    					(secondary.center.x != candidate.center.x) &&
-							    					(secondary.center.y != candidate.center.y) &&
-							    					Math.abs(candidate.center.x - secondary.center.x) < (candidateWidth * 1.5) 
-							    					)
-							    			{
-											    drawCandidateCrosshair(mat, candidate, Vision.YELLOW);
-							    				Imgproc.line(mat, candidate.center, secondary.center,  Vision.YELLOW, 2);
-							    				// output target info to smart dashboard
-							    				SmartDashboard.putDouble("TargetWidth", candidate.size.width);
-							    				SmartDashboard.putDouble("TargetHeight", candidate.size.height);
-							    				SmartDashboard.putDouble("TargetX", candidate.center.x);
-							    				SmartDashboard.putDouble("TargetY", candidate.center.y);
-							    				// save target info
-							    				// x,y,loopCount
-							    				synchronized(visionResults)
-							    				{
-							    					visionResults.x = candidate.center.x;
-							    					visionResults.y = candidate.center.y;
-							    					visionResults.loopCount = loopCount;
-							    					visionResults.target = TargetID.BOILER;							    					
-							    				}
-							    				if(takePicture == true)
-							    				{
-							    					Imgcodecs.imwrite("/home/lvuser/images/img_" + loopCount + "_boiler.jpg", mat);
-							    					System.out.println("Saved Image");
-							    				}
+									// look at the targets and see if any are a good seconodary verification for the candidate
+									for(RotatedRect secondary : candidateList) {
+										//											candidateList.forEach(secondary -> {
+										// Check Aspect Ratio & Orientation
 
-							    			}
-							    		}
+										double aspectRatioSecondary = secondary.size.width / secondary.size.height;
+										if(aspectRatioSecondary < 1) {aspectRatioSecondary = 1/aspectRatioSecondary;}
 
-							    	});
-							    }
-							    
-//								drawBoilerTargetReticle(mat, candidate.center, candidate.size.height, candidate.size.width,  Vision.YELLOW);
-			    				if(takePicture == true)
-			    				{
-			    					Imgcodecs.imwrite("/home/lvuser/images/img_" + loopCount + "_boiler_final.jpg", mat);
-			    					System.out.println("Saved Image");
-			    				}
-							});
-							
+										double fixedSAngle = 0;
+
+										if(secondary.size.width < secondary.size.height){
+											fixedSAngle = (90 - secondary.angle) - 180;
+										}else{
+											fixedSAngle = -secondary.angle;
+										}
+										// basic OKness of secondary
+										if(     ((3 < aspectRatioSecondary) && (aspectRatioSecondary < 12)) &&
+												((-ANGLE_TOLERANCE < fixedSAngle) && (fixedSAngle < ANGLE_TOLERANCE))
+												)
+										{
+
+											// draw a yellow box
+											drawBoilerTargetReticle(mat, candidate.center, candidate.size.height, candidate.size.width,  Vision.YELLOW);
+
+											double candidateHeight = (candidate.size.height < candidate.size.width) ? candidate.size.height : candidate.size.width;
+											double candidateWidth = (candidate.size.height < candidate.size.width) ? candidate.size.width : candidate.size.height;
+
+											// OKness of secondary with respect to target
+											if(((candidate.center.y - secondary.center.y) < (candidateHeight * 2.5))
+													&&
+													(secondary.center.x != candidate.center.x) &&
+													(secondary.center.y != candidate.center.y) &&
+													(candidate.center.x - secondary.center.x) < (candidateWidth * 1.5) 
+													)
+											{
+												drawCandidateCrosshair(mat, candidate, Vision.YELLOW);
+												Imgproc.line(mat, candidate.center, secondary.center,  Vision.YELLOW, 2);
+												// output target info to smart dashboard
+												SmartDashboard.putDouble("TargetWidth", candidate.size.width);
+												SmartDashboard.putDouble("TargetHeight", candidate.size.height);
+												SmartDashboard.putDouble("TargetX", candidate.center.x);
+												SmartDashboard.putDouble("TargetY", candidate.center.y);
+												// save target info
+												// x,y,loopCount
+												synchronized(visionResults)
+												{
+													visionResults.x = candidate.center.x;
+													visionResults.y = candidate.center.y;
+													visionResults.inRange = true;
+													visionResults.crossTrack = 0;
+													visionResults.loopCount = loopCount;
+													visionResults.target = TargetID.BOILER;							    					
+												}
+												if(takePicture == true)
+												{
+													Imgcodecs.imwrite("/home/lvuser/images/img_" + loopCount + "_boiler.jpg", mat);
+													System.out.println("Saved Image");
+												}
+												break CandidateLoop;
+											}
+										}
+										//											} );
+									}
+								}
+
+								//								drawBoilerTargetReticle(mat, candidate.center, candidate.size.height, candidate.size.width,  Vision.YELLOW);
+								if(takePicture == true)
+								{
+									Imgcodecs.imwrite("/home/lvuser/images/img_" + loopCount + "_boiler_final.jpg", mat);
+									System.out.println("Saved Image");
+								}
+							}
+							//							});
+
 						}
-						
-//						drawBoilerTargetReticle(mat, targetCenter, CAM_HEIGHT/3, CAM_WIDTH/3, Vision.MAGENTA);
+
+						//						drawBoilerTargetReticle(mat, targetCenter, CAM_HEIGHT/3, CAM_WIDTH/3, Vision.MAGENTA);
 					}
 					////////////////////////////////////////////////////////////////////////////////////////
 					////////////////////////////////////////////////////////////////////////////////////////
@@ -464,22 +474,24 @@ public class Vision extends Subsystem {
 					{
 						targetCenter.x= CAM_WIDTH/2;
 						targetCenter.y= CAM_HEIGHT/2;
-						
+
 						findGear.process(mat);
 
 						ArrayList<MatOfPoint> targetList = findGear.convexHullsOutput();
 
-					    drawTargetCrosshair(mat, GEAR_TARGET, Vision.CYAN);
+						drawTargetCrosshair(mat, GEAR_TARGET, Vision.CYAN);
 
 						if(targetList.isEmpty())
 						{
-//							drawGearTargetReticle(mat, targetCenter, CAM_HEIGHT, CAM_WIDTH, Vision.RED);
+							//							drawGearTargetReticle(mat, targetCenter, CAM_HEIGHT, CAM_WIDTH, Vision.RED);
 						}
 						else
 						{
+							boolean inRange = false;
+							
 							// Show the detected contours
 							Imgproc.drawContours(mat, targetList, -1, Vision.BLACK, 1);
-							
+
 							ArrayList<RotatedRect> candidateList = new ArrayList<RotatedRect>();							
 							// Preprocess the contours
 							targetList.forEach(contour -> {
@@ -490,103 +502,142 @@ public class Vision extends Subsystem {
 							});
 
 							// Walk the candidate rectangles and sort out if they are nice
-							candidateList.forEach(candidate -> {
-							    
-							    // show candidate target aligined rectangle info
-							    drawRotRectangle(mat, candidate, Vision.CYAN);
+							CandidateLoop:
+							for(RotatedRect candidate : candidateList) {
+								//							candidateList.forEach(candidate -> {
 
-							    // figure out which target is the Boiler Upper Stripe
-							    double aspectRatio = candidate.size.width / candidate.size.height;
-							    if(aspectRatio < 1) {aspectRatio = 1/aspectRatio;}
-							    
-							    double fixedCAngle = 0;
-							    
-							    if(candidate.size.width < candidate.size.height){
-							    	fixedCAngle = (90 - candidate.angle);
-							    }else{
-							    	fixedCAngle = 0  - candidate.angle;
-							    }
-							    SmartDashboard.putDouble("TargetAngle", fixedCAngle);
+								// show candidate target aligined rectangle info
+								drawRotRectangle(mat, candidate, Vision.CYAN);
 
-							    if(     ((1 < aspectRatio) && (aspectRatio < 4)) 
-							    		&&
-							    		(((90-ANGLE_TOLERANCE) < fixedCAngle) && (fixedCAngle < (90+ANGLE_TOLERANCE)))
-							    		)
-							    {
-//				    				drawGearTargetReticle(mat, candidate.center, candidate.size.height, candidate.size.width,  Vision.BLUE);
+								// figure out which target is the Boiler Upper Stripe
+								double aspectRatio = candidate.size.width / candidate.size.height;
+								if(aspectRatio < 1) {aspectRatio = 1/aspectRatio;}
 
-							    	candidateList.forEach(secondary -> {
-							    		// Check Aspect Ratio & Orientation
+								double fixedCAngle = 0;
 
-							    		double aspectRatioSecondary = secondary.size.width / secondary.size.height;
-									    if(aspectRatioSecondary < 1) {aspectRatioSecondary = 1/aspectRatioSecondary;}
+								if(candidate.size.width < candidate.size.height){
+									fixedCAngle = (90 - candidate.angle);
+								}else{
+									fixedCAngle = 0  - candidate.angle;
+								}
+								SmartDashboard.putDouble("TargetAngle", fixedCAngle);
 
-									    double fixedSAngle = 0;
-									    
-									    if(secondary.size.width < secondary.size.height){
-									    	fixedSAngle = (90 - secondary.angle);
-									    }else{
-									    	fixedSAngle = 0 - secondary.angle;
-									    }
-									    // basic OKness of secondary
-									    if(     ((1 < aspectRatioSecondary) && (aspectRatioSecondary < 4)) 
-									    		&&
-							    				(((90-ANGLE_TOLERANCE) < fixedSAngle) && (fixedSAngle < (90+ANGLE_TOLERANCE)))
-									    		)
-							    		{
+								if(     ((1 < aspectRatio) && (aspectRatio < 3)) 
+										&&
+										(((90-ANGLE_TOLERANCE) < fixedCAngle) && (fixedCAngle < (90+ANGLE_TOLERANCE)))
+										)
+								{
+									//				    				drawGearTargetReticle(mat, candidate.center, candidate.size.height, candidate.size.width,  Vision.BLUE);
 
-						    				// draw a yellow box
-						    				drawGearTargetReticle(mat, candidate.center,  candidate.size.width,  candidate.size.height, Vision.YELLOW);
-						    				
-						    				double candidateHeight = (candidate.size.height < candidate.size.width) ? candidate.size.height : candidate.size.width;
-						    				double candidateWidth = (candidate.size.height < candidate.size.width) ? candidate.size.width : candidate.size.height;
-						    				
-						    				// OKness of secondary with respect to target
-							    			if(((candidate.center.x - secondary.center.x) < (candidateWidth * 4))
-							    					&&
-							    					(secondary.center.x != candidate.center.x)
-							    					&& (Math.abs(candidate.center.y - secondary.center.y) < (Math.min(candidate.size.height, candidate.size.width) * 0.25))
-							    					)
-							    			{
-											    drawCandidateCrosshair(mat, candidate, secondary, Vision.YELLOW);
-							    				Imgproc.line(mat, candidate.center, secondary.center,  Vision.YELLOW, 2);
-							    				// output target info to smart dashboard
-							    				SmartDashboard.putDouble("TargetWidth", candidate.size.width);
-							    				SmartDashboard.putDouble("TargetHeight", candidate.size.height);
-							    				SmartDashboard.putDouble("TargetX", candidate.center.x);
-							    				SmartDashboard.putDouble("TargetY", candidate.center.y);
-							    				// save target info
-							    				// x,y,loopCount
-							    				synchronized(visionResults)
-							    				{
-							    					visionResults.x = candidate.center.x;
-							    					visionResults.y = candidate.center.y;
-							    					visionResults.loopCount = loopCount;
-							    					visionResults.target = TargetID.GEAR;							    					
-							    				}
-							    				if(takePicture == true)
-							    				{
-							    					Imgcodecs.imwrite("/home/lvuser/images/img_" + loopCount + "_gear.jpg", mat);
-							    					System.out.println("Saved Image");
-							    				}
+									for(RotatedRect secondary : candidateList) {
+										//									candidateList.forEach(secondary -> {
+										// Check Aspect Ratio & Orientation
 
-							    			}
-							    		}
+										double aspectRatioSecondary = secondary.size.width / secondary.size.height;
+										if(aspectRatioSecondary < 1) {aspectRatioSecondary = 1/aspectRatioSecondary;}
 
-							    	});
-							    }
-							    
-//								drawBoilerTargetReticle(mat, candidate.center, candidate.size.height, candidate.size.width,  Vision.YELLOW);
-			    				if(takePicture == true)
-			    				{
-			    					Imgcodecs.imwrite("/home/lvuser/images/img_" + loopCount + "_gear_final.jpg", mat);
-			    					System.out.println("Saved Image");
-			    				}
+										double fixedSAngle = 0;
 
-							});
-							
+										if(secondary.size.width < secondary.size.height){
+											fixedSAngle = (90 - secondary.angle);
+										}else{
+											fixedSAngle = 0 - secondary.angle;
+										}
+										// basic OKness of secondary
+										if(     //((1 < aspectRatioSecondary) && (aspectRatioSecondary < 4)) 
+												//&&
+												(((90-ANGLE_TOLERANCE) < fixedSAngle) && (fixedSAngle < (90+ANGLE_TOLERANCE)))
+												)
+										{
+
+											// draw a yellow box
+											drawGearTargetReticle(mat, candidate.center,  candidate.size.width,  candidate.size.height, Vision.YELLOW);
+
+											double candidateHeight = (candidate.size.height > candidate.size.width) ? candidate.size.height : candidate.size.width;
+											double candidateWidth = (candidate.size.height > candidate.size.width) ? candidate.size.width : candidate.size.height;
+
+											// OKness of secondary with respect to target
+											if(((candidate.center.x - secondary.center.x) < (candidateWidth * 4))
+													&&
+													(secondary.center.x != candidate.center.x)
+													&& (Math.abs(candidate.center.y - secondary.center.y) < (Math.max(candidate.size.height, candidate.size.width) * 0.5))
+													)
+											{
+												drawCandidateCrosshair(mat, candidate, secondary, Vision.YELLOW);
+
+												
+												// compute crosstrack & apect
+												double secondaryHeight = (secondary.size.height > secondary.size.width) ? secondary.size.height : secondary.size.width;
+												double secondaryWidth = (secondary.size.height > secondary.size.width) ? secondary.size.width : secondary.size.height;
+												double hheight = Math.max(candidateHeight, secondaryHeight)/2;
+												double left = Math.min(candidate.center.x - candidateWidth/2, secondary.center.x - secondaryWidth/2);
+												double right = Math.max(candidate.center.x + candidateWidth/2, secondary.center.x + secondaryWidth/2);
+
+												double aspect = (right-left)/hheight;
+
+												
+												double crossTrack = candidateHeight - secondaryHeight;
+												if(candidate.center.x > secondary.center.x)
+												{
+													crossTrack = -crossTrack;
+												}
+												if(aspect > 3.8)
+												{
+													crossTrack = 0;
+												}
+												
+												if(Math.max(candidateHeight, secondaryHeight) > 25)
+												{
+													inRange = true;
+												}
+												
+//												SmartDashboard.putDouble("TargetCross", crossTrack);
+//												SmartDashboard.putDouble("TargetAspect", aspect);
+
+												Imgproc.line(mat, candidate.center, secondary.center,  Vision.YELLOW, 2);
+												// output target info to smart dashboard
+//												SmartDashboard.putDouble("TargetWidth", candidateWidth);
+//												SmartDashboard.putDouble("TargetHeight", candidateHeight);
+//												SmartDashboard.putDouble("ConfirmWidth", secondaryWidth);
+//												SmartDashboard.putDouble("ConfirmHeight", secondaryHeight);
+												
+//												SmartDashboard.putDouble("TargetCross", crossTrack);
+//												SmartDashboard.putDouble("TargetX", candidate.center.x);
+//												SmartDashboard.putDouble("TargetY", candidate.center.y);
+												// save target info
+												// x,y,loopCount
+												synchronized(visionResults)
+												{
+													visionResults.x = candidate.center.x;
+													visionResults.y = candidate.center.y;
+													visionResults.crossTrack = crossTrack;
+													visionResults.loopCount = loopCount;
+													visionResults.target = TargetID.GEAR;
+													visionResults.inRange = inRange;
+												}
+												if(takePicture == true)
+												{
+													Imgcodecs.imwrite("/home/lvuser/images/img_" + loopCount + "_gear.jpg", mat);
+													System.out.println("Saved Image");
+												}
+												break CandidateLoop;
+											}
+										}
+									}
+									//									});
+								}
+
+								//								drawBoilerTargetReticle(mat, candidate.center, candidate.size.height, candidate.size.width,  Vision.YELLOW);
+								if(takePicture == true)
+								{
+									Imgcodecs.imwrite("/home/lvuser/images/img_" + loopCount + "_gear_final.jpg", mat);
+									System.out.println("Saved Image");
+								}
+							}
+							//							});
+
 						}
-											
+
 					}
 					////////////////////////////////////////////////////////////////////////////////////////
 					////////////////////////////////////////////////////////////////////////////////////////
@@ -600,26 +651,24 @@ public class Vision extends Subsystem {
 						// Circular Target, Centered in Blue
 						targetCenter.x= CAM_WIDTH/2;
 						targetCenter.y= CAM_HEIGHT/2;						
-						targetColor = Vision.BLUE; // Blue for no target
-	    				if(takePicture == true)
-	    				{
-	    					Imgcodecs.imwrite("/home/lvuser/images/img_" + loopCount + "_passthru.jpg", mat);
-	    					System.out.println("Saved Image");
-	    				}
-
-						drawPassthroughTargetReticle(mat, targetCenter, CAM_HEIGHT/3, CAM_WIDTH/3, targetColor);
+						if(takePicture == true)
+						{
+							Imgcodecs.imwrite("/home/lvuser/images/img_" + loopCount + "_passthru.jpg", mat);
+							System.out.println("Saved Image");
+						}
+						drawPassthroughTargetReticle(mat, targetCenter, CAM_HEIGHT/3, CAM_WIDTH/3, Vision.BLUE);
 					}
-					
+
 					// Put a rectangle on the image
-//					// TODO - Put Rectangle on TARGET
-//					Imgproc.rectangle(mat, new Point(100, 100), new Point(400, 400),
-//							targetColor, 5);
+					//					// TODO - Put Rectangle on TARGET
+					//					Imgproc.rectangle(mat, new Point(100, 100), new Point(400, 400),
+					//							targetColor, 5);
 					// Give the output stream a new image to display
 					outputStream.putFrame(mat);
 					if(loopTakePicture == true)
 					{
 						loopTakePicture = false;
-    					Imgcodecs.imwrite("/home/lvuser/images/img_" + loopCount + "_final.jpg", mat);
+						Imgcodecs.imwrite("/home/lvuser/images/img_" + loopCount + "_final.jpg", mat);
 					}
 					//
 				}
@@ -627,17 +676,18 @@ public class Vision extends Subsystem {
 			visionThread.setDaemon(true);
 			visionThread.start();
 		}
+		System.out.println("Vision Initialized & Started");
 	}
 
 
 	public void initDefaultCommand() {
-        // Set the default command for a subsystem here.
-        //setDefaultCommand(new MySpecialCommand());
-    }
-	
+		// Set the default command for a subsystem here.
+		//setDefaultCommand(new MySpecialCommand());
+	}
+
 
 	private void drawRotRectangle(Mat mat, RotatedRect rect, Scalar color) {
-		
+
 		double width = (rect.size.width > rect.size.height) ? rect.size.width :rect.size.height;
 		double height = (rect.size.width > rect.size.height) ? rect.size.height : rect.size.width;
 
@@ -645,30 +695,30 @@ public class Vision extends Subsystem {
 		double hwidth = width/2;	
 		// Vertical Extent
 		Imgproc.line(mat, new Point(rect.center.x, rect.center.y - hheight),
-				          new Point(rect.center.x, rect.center.y + hheight),
-				          color, 2);
+				new Point(rect.center.x, rect.center.y + hheight),
+				color, 2);
 		// Horizontal Extent
 		Imgproc.line(mat, new Point(rect.center.x - hwidth, rect.center.y),
-        		          new Point(rect.center.x + hwidth, rect.center.y),
-		                  color, 2);
+				new Point(rect.center.x + hwidth, rect.center.y),
+				color, 2);
 	}
-	
+
 	private void drawGearTargetReticle(Mat mat, Point center, double in_height, double in_width, Scalar color)
 	{
 		double width = (in_width < in_height) ? in_width :in_height;
 		double height = (in_width < in_height) ? in_height : in_width;
-		
+
 		double hheight = height/2;
 		double hwidth = width/2;
 		Imgproc.rectangle(mat, new Point(center.x-hwidth, center.y+hheight), new Point(center.x+hwidth, center.y-hheight),
 				color, 5);
 		Imgproc.line(mat, new Point(center.x-hwidth, center.y+hheight), 
-		                  new Point(center.x+hwidth, center.y-hheight), 
-		                  color, 3);
+				new Point(center.x+hwidth, center.y-hheight), 
+				color, 3);
 		Imgproc.line(mat, new Point(center.x+hwidth, center.y+hheight), 
-                          new Point(center.x-hwidth, center.y-hheight), 
-                          color, 3);
-		
+				new Point(center.x-hwidth, center.y-hheight), 
+				color, 3);
+
 
 	}
 	private void drawBoilerTargetReticle(Mat mat, Point center, double in_height, double in_width, Scalar color)
@@ -681,12 +731,12 @@ public class Vision extends Subsystem {
 		Imgproc.rectangle(mat, new Point(center.x-hwidth, center.y+hheight), new Point(center.x+hwidth, center.y-hheight),
 				color, 2);
 		Imgproc.line(mat, new Point(center.x, center.y), 
-				          new Point(center.x+hwidth, center.y-hheight), 
-				          color, 2);
+				new Point(center.x+hwidth, center.y-hheight), 
+				color, 2);
 		Imgproc.line(mat, new Point(center.x, center.y), 
-		                  new Point(center.x-hwidth, center.y-hheight), 
-		                  color, 2);
-		
+				new Point(center.x-hwidth, center.y-hheight), 
+				color, 2);
+
 	}
 	private void drawPassthroughTargetReticle(Mat mat, Point center, double height, double width, Scalar color)
 	{
@@ -694,14 +744,14 @@ public class Vision extends Subsystem {
 		double hwidth = width/2;
 		int targetRadius = (int)(hheight/4);
 		Imgproc.circle(mat, new Point(center.x, center.y), targetRadius, color);
-		
-//		Imgproc.rectangle(mat, new Point(center.x-hwidth, center.y+hheight), new Point(center.x+hwidth, center.y-hheight),
-//				color, 10);
+
+		//		Imgproc.rectangle(mat, new Point(center.x-hwidth, center.y+hheight), new Point(center.x+hwidth, center.y-hheight),
+		//				color, 10);
 	}
 
-    private void drawTargetCrosshair(Mat mat, Rect target, Scalar targetColor)
-    {
-    	// Draw Target Lines
+	private void drawTargetCrosshair(Mat mat, Rect target, Scalar targetColor)
+	{
+		// Draw Target Lines
 		double hheight = target.height/2;
 		double hwidth = target.width/2;
 		if(hheight > hwidth)
@@ -711,104 +761,104 @@ public class Vision extends Subsystem {
 		}
 		// Target Lines
 		// vertical lines
-    	// left
-    	Imgproc.line(mat, new Point(target.x - hwidth, 0), 
-    			          new Point(target.x - hwidth, CAM_HEIGHT), 
-    			          targetColor, 3);
-    	// right
-    	Imgproc.line(mat, new Point(target.x + hwidth, 0), 
-    			          new Point(target.x + hwidth, CAM_HEIGHT), 
-    			          targetColor, 3);
-    	
-    	// horizontal lines
-    	// upper
-    	Imgproc.line(mat, new Point(0,         target.y - hheight), 
-		                  new Point(CAM_WIDTH, target.y - hheight), 
-		                  targetColor, 3);
-    	//lower
-    	Imgproc.line(mat, new Point(0,         target.y + hheight), 
-		                  new Point(CAM_WIDTH, target.y + hheight), 
-		                  targetColor, 3);
-    }
-    
-    private void drawCandidateCrosshair(Mat mat, RotatedRect candidate, Scalar candidateColor)
-    {
-    	// Draw Candidate Lines
+		// left
+		Imgproc.line(mat, new Point(target.x - hwidth, 0), 
+				new Point(target.x - hwidth, CAM_HEIGHT), 
+				targetColor, 3);
+		// right
+		Imgproc.line(mat, new Point(target.x + hwidth, 0), 
+				new Point(target.x + hwidth, CAM_HEIGHT), 
+				targetColor, 3);
+
+		// horizontal lines
+		// upper
+		Imgproc.line(mat, new Point(0,         target.y - hheight), 
+				new Point(CAM_WIDTH, target.y - hheight), 
+				targetColor, 3);
+		//lower
+		Imgproc.line(mat, new Point(0,         target.y + hheight), 
+				new Point(CAM_WIDTH, target.y + hheight), 
+				targetColor, 3);
+	}
+
+	private void drawCandidateCrosshair(Mat mat, RotatedRect candidate, Scalar candidateColor)
+	{
+		// Draw Candidate Lines
 		double hheight = candidate.size.height/2;
 		double hwidth = candidate.size.width/2;
 		if(hheight > hwidth)
 		{
 			hheight = candidate.size.width/2;
 			hwidth = candidate.size.height/2;
-			
+
 		}
 		// Target Lines
 		// vertical lines
-    	// left
-    	Imgproc.line(mat, new Point(candidate.center.x - hwidth, 0), 
-    			          new Point(candidate.center.x - hwidth, CAM_HEIGHT), 
-    			          candidateColor, 2);
-    	// right
-    	Imgproc.line(mat, new Point(candidate.center.x + hwidth, 0), 
-    			          new Point(candidate.center.x + hwidth, CAM_HEIGHT), 
-    			          candidateColor, 2);
-    	
-    	// horizontal lines
-    	// upper
-    	Imgproc.line(mat, new Point(0,         candidate.center.y - hheight), 
-		                  new Point(CAM_WIDTH, candidate.center.y - hheight), 
-		                  candidateColor, 2);
-    	//lower
-    	Imgproc.line(mat, new Point(0,         candidate.center.y + hheight), 
-		                  new Point(CAM_WIDTH, candidate.center.y + hheight), 
-		                  candidateColor, 2);  	
-    }
-    private void drawCandidateCrosshair(Mat mat, RotatedRect candidate, RotatedRect secondary, Scalar candidateColor)
-    {
-    	
-    	// Draw Candidate Lines
+		// left
+		Imgproc.line(mat, new Point(candidate.center.x - hwidth, 0), 
+				new Point(candidate.center.x - hwidth, CAM_HEIGHT), 
+				candidateColor, 2);
+		// right
+		Imgproc.line(mat, new Point(candidate.center.x + hwidth, 0), 
+				new Point(candidate.center.x + hwidth, CAM_HEIGHT), 
+				candidateColor, 2);
+
+		// horizontal lines
+		// upper
+		Imgproc.line(mat, new Point(0,         candidate.center.y - hheight), 
+				new Point(CAM_WIDTH, candidate.center.y - hheight), 
+				candidateColor, 2);
+		//lower
+		Imgproc.line(mat, new Point(0,         candidate.center.y + hheight), 
+				new Point(CAM_WIDTH, candidate.center.y + hheight), 
+				candidateColor, 2);  	
+	}
+	private void drawCandidateCrosshair(Mat mat, RotatedRect candidate, RotatedRect secondary, Scalar candidateColor)
+	{
+
+		// Draw Candidate Lines
 		double candidateHeight = Math.max(candidate.size.width, candidate.size.height);
 		double secondaryHeight = Math.max(secondary.size.width, secondary.size.height);
-    	
+
 		double hheight = Math.max(candidateHeight, secondaryHeight)/2;
 
 		double candidateWidth = Math.min(candidate.size.width, candidate.size.height);
 		double secondaryWidth = Math.min(secondary.size.width, secondary.size.height);
-		
+
 		double left = Math.min(candidate.center.x - candidateWidth/2, secondary.center.x - secondaryWidth/2);
 		double right = Math.max(candidate.center.x + candidateWidth/2, secondary.center.x + secondaryWidth/2);
-		
+
 		double hwidth = Math.abs(right-left)/2;
-		
+
 		Point center = new Point((candidate.center.x + secondary.center.x)/2,(candidate.center.y + secondary.center.y)/2);
 		// Target Lines
 		// vertical lines
-    	// left
-    	Imgproc.line(mat, new Point(center.x - hwidth, 0), 
-    			          new Point(center.x - hwidth, CAM_HEIGHT), 
-    			          candidateColor, 2);
-    	// right
-    	Imgproc.line(mat, new Point(center.x + hwidth, 0), 
-    			          new Point(center.x + hwidth, CAM_HEIGHT), 
-    			          candidateColor, 2);
-    	
-    	// horizontal lines
-    	// upper
-    	Imgproc.line(mat, new Point(0,         center.y - hheight), 
-		                  new Point(CAM_WIDTH, center.y - hheight), 
-		                  candidateColor, 2);
-    	//lower
-    	Imgproc.line(mat, new Point(0,         center.y + hheight), 
-		                  new Point(CAM_WIDTH, center.y + hheight), 
-		                  candidateColor, 2);  	
-    }
-    
-   
+		// left
+		Imgproc.line(mat, new Point(center.x - hwidth, 0), 
+				new Point(center.x - hwidth, CAM_HEIGHT), 
+				candidateColor, 2);
+		// right
+		Imgproc.line(mat, new Point(center.x + hwidth, 0), 
+				new Point(center.x + hwidth, CAM_HEIGHT), 
+				candidateColor, 2);
+
+		// horizontal lines
+		// upper
+		Imgproc.line(mat, new Point(0,         center.y - hheight), 
+				new Point(CAM_WIDTH, center.y - hheight), 
+				candidateColor, 2);
+		//lower
+		Imgproc.line(mat, new Point(0,         center.y + hheight), 
+				new Point(CAM_WIDTH, center.y + hheight), 
+				candidateColor, 2);  	
+	}
+
+
 	private double scoreBoilerTarget(MatOfPoint target)
 	{
 		double aspectRatio = target.height()/target.width();
-		
+
 		return 1;
 	}
-	
+
 }
