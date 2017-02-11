@@ -1,5 +1,7 @@
 package org.usfirst.frc157.ProtoBot2017.subsystems;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 import org.opencv.core.CvType;
@@ -223,6 +225,8 @@ public class Vision extends Subsystem {
 	private UsbCamera shotCamera = new UsbCamera(SHOT_CAM_NAME, 0);		// Shot Camera		
 	//	private UsbCamera gearCamera = new UsbCamera(GEAR_CAM_NAME, 0);		// Gear Camera		
 
+	private String NameBase = "NoTime";
+	
 	public Vision()
 	{
 		setCamera(CameraSelection.SHOT_CAMERA);
@@ -238,7 +242,8 @@ public class Vision extends Subsystem {
 	private void InitializeVision() {
 
 		Point targetCenter = new Point(CAM_WIDTH/2, CAM_HEIGHT/2);
-
+		NameBase = "/home/lvuser/images/"+ LocalDateTime.now() + "-";
+		
 		if(visionInitialized == false)
 		{
 			visionInitialized = true;
@@ -321,8 +326,8 @@ public class Vision extends Subsystem {
 
 					if(loopTakePicture == true)
 					{
-						Imgcodecs.imwrite("/home/lvuser/images/img_" + loopCount + "_base.jpg", mat);
-						System.out.println("Saved Image");
+						Imgcodecs.imwrite(NameBase + loopCount + "_base.jpg", mat);
+						System.out.println("Saved Base Image");
 					}
 
 					////////////////////////////////////////////////////////////////////////////////////////
@@ -441,8 +446,8 @@ public class Vision extends Subsystem {
 												}
 												if(takePicture == true)
 												{
-													Imgcodecs.imwrite("/home/lvuser/images/img_" + loopCount + "_boiler.jpg", mat);
-													System.out.println("Saved Image");
+													Imgcodecs.imwrite(NameBase + loopCount + "_boiler.jpg", mat);
+													System.out.println("Saved Boiler Image");
 												}
 												break CandidateLoop;
 											}
@@ -454,8 +459,8 @@ public class Vision extends Subsystem {
 								//								drawBoilerTargetReticle(mat, candidate.center, candidate.size.height, candidate.size.width,  Vision.YELLOW);
 								if(takePicture == true)
 								{
-									Imgcodecs.imwrite("/home/lvuser/images/img_" + loopCount + "_boiler_final.jpg", mat);
-									System.out.println("Saved Image");
+									Imgcodecs.imwrite(NameBase +  loopCount + "_boiler_not_found.jpg", mat);
+									System.out.println("Saved Boiler Not Found Image");
 								}
 							}
 							//							});
@@ -591,19 +596,18 @@ public class Vision extends Subsystem {
 													inRange = true;
 												}
 												
-//												SmartDashboard.putDouble("TargetCross", crossTrack);
-//												SmartDashboard.putDouble("TargetAspect", aspect);
 
 												Imgproc.line(mat, candidate.center, secondary.center,  Vision.YELLOW, 2);
 												// output target info to smart dashboard
-//												SmartDashboard.putDouble("TargetWidth", candidateWidth);
-//												SmartDashboard.putDouble("TargetHeight", candidateHeight);
-//												SmartDashboard.putDouble("ConfirmWidth", secondaryWidth);
-//												SmartDashboard.putDouble("ConfirmHeight", secondaryHeight);
+												SmartDashboard.putDouble("TargetWidth", candidateWidth);
+												SmartDashboard.putDouble("TargetHeight", candidateHeight);
+												SmartDashboard.putDouble("ConfirmWidth", secondaryWidth);
+												SmartDashboard.putDouble("ConfirmHeight", secondaryHeight);
+												SmartDashboard.putDouble("TargetX", candidate.center.x);
+												SmartDashboard.putDouble("TargetY", candidate.center.y);
 												
-//												SmartDashboard.putDouble("TargetCross", crossTrack);
-//												SmartDashboard.putDouble("TargetX", candidate.center.x);
-//												SmartDashboard.putDouble("TargetY", candidate.center.y);
+												SmartDashboard.putDouble("GTargetAspect", aspect);
+												SmartDashboard.putDouble("GTargetCross", crossTrack);
 												// save target info
 												// x,y,loopCount
 												synchronized(visionResults)
@@ -617,8 +621,8 @@ public class Vision extends Subsystem {
 												}
 												if(takePicture == true)
 												{
-													Imgcodecs.imwrite("/home/lvuser/images/img_" + loopCount + "_gear.jpg", mat);
-													System.out.println("Saved Image");
+													Imgcodecs.imwrite(NameBase + loopCount + "_gear.jpg", mat);
+													System.out.println("Saved Gear Image");
 												}
 												break CandidateLoop;
 											}
@@ -630,8 +634,8 @@ public class Vision extends Subsystem {
 								//								drawBoilerTargetReticle(mat, candidate.center, candidate.size.height, candidate.size.width,  Vision.YELLOW);
 								if(takePicture == true)
 								{
-									Imgcodecs.imwrite("/home/lvuser/images/img_" + loopCount + "_gear_final.jpg", mat);
-									System.out.println("Saved Image");
+									Imgcodecs.imwrite(NameBase + loopCount + "_gear_not_found.jpg", mat);
+									System.out.println("Saved Gear Not Found Image");
 								}
 							}
 							//							});
@@ -653,8 +657,8 @@ public class Vision extends Subsystem {
 						targetCenter.y= CAM_HEIGHT/2;						
 						if(takePicture == true)
 						{
-							Imgcodecs.imwrite("/home/lvuser/images/img_" + loopCount + "_passthru.jpg", mat);
-							System.out.println("Saved Image");
+							Imgcodecs.imwrite(NameBase +  loopCount + "_passthru.jpg", mat);
+							System.out.println("Saved Passthrough Image");
 						}
 						drawPassthroughTargetReticle(mat, targetCenter, CAM_HEIGHT/3, CAM_WIDTH/3, Vision.BLUE);
 					}
@@ -668,7 +672,7 @@ public class Vision extends Subsystem {
 					if(loopTakePicture == true)
 					{
 						loopTakePicture = false;
-						Imgcodecs.imwrite("/home/lvuser/images/img_" + loopCount + "_final.jpg", mat);
+						Imgcodecs.imwrite(NameBase +  loopCount + "_passthru_final.jpg", mat);
 					}
 					//
 				}

@@ -76,6 +76,9 @@ public class Robot extends IterativeRobot {
     }
 
     public void autonomousInit() {
+    	// At the start of autonomous define the robot orientation as the 0 heading
+    	Robot.drive.resetZeroHeading();
+    	
         // schedule the autonomous command (example)
         if (autonomousCommand != null) autonomousCommand.start();
     }
