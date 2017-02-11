@@ -596,19 +596,19 @@ public class Vision extends Subsystem {
 													inRange = true;
 												}
 												
-												SmartDashboard.putDouble("TargetCross", crossTrack);
-												SmartDashboard.putDouble("TargetAspect", aspect);
+//												SmartDashboard.putDouble("TargetCross", crossTrack);
+//												SmartDashboard.putDouble("TargetAspect", aspect);
 
 												Imgproc.line(mat, candidate.center, secondary.center,  Vision.YELLOW, 2);
 												// output target info to smart dashboard
-												SmartDashboard.putDouble("TargetWidth", candidateWidth);
-												SmartDashboard.putDouble("TargetHeight", candidateHeight);
-												SmartDashboard.putDouble("ConfirmWidth", secondaryWidth);
-												SmartDashboard.putDouble("ConfirmHeight", secondaryHeight);
+//												SmartDashboard.putDouble("TargetWidth", candidateWidth);
+//												SmartDashboard.putDouble("TargetHeight", candidateHeight);
+//												SmartDashboard.putDouble("ConfirmWidth", secondaryWidth);
+//												SmartDashboard.putDouble("ConfirmHeight", secondaryHeight);
 												
-												SmartDashboard.putDouble("TargetCross", crossTrack);
-												SmartDashboard.putDouble("TargetX", candidate.center.x);
-												SmartDashboard.putDouble("TargetY", candidate.center.y);
+//												SmartDashboard.putDouble("TargetCross", crossTrack);
+//												SmartDashboard.putDouble("TargetX", candidate.center.x);
+//												SmartDashboard.putDouble("TargetY", candidate.center.y);
 												// save target info
 												// x,y,loopCount
 												synchronized(visionResults)
@@ -683,6 +683,7 @@ public class Vision extends Subsystem {
 			visionThread.setDaemon(true);
 			visionThread.start();
 		}
+		System.out.println("Vision Initialized & Started");
 	}
 
 
