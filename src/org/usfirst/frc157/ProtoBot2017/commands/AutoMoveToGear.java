@@ -11,7 +11,8 @@ public class AutoMoveToGear extends Command {
 	{
 		MOVE_TO_DROPOFF,
 		ALIGN_ON_DROPOFF,
-		ELIMINATE_CROSSTRACK
+		ELIMINATE_CROSSTRACK,
+		COMPLETE
 	}
 	
 	State state;
@@ -44,6 +45,10 @@ public class AutoMoveToGear extends Command {
     	case MOVE_TO_DROPOFF:
     		state = State.ELIMINATE_CROSSTRACK;   // if crosstrack error gets high enough
     		state = State.ALIGN_ON_DROPOFF;       // if alignment goes off
+    		state = State.COMPLETE;               // if reach the dropoff point
+    		break;
+    	case COMPLETE:
+    		// Stop the motors and do nothing while the pilots lift the gear
     		break;
     	default:
     		break;
