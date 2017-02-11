@@ -21,7 +21,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 /**
  *
  */
-public class collect extends Subsystem {
+public class Collect extends Subsystem {
 
     private final CANTalon collectMotor = RobotMap.collectMotor;
 
@@ -31,7 +31,7 @@ public class collect extends Subsystem {
 
 
         
-    public collect()
+    public Collect()
     {
         System.out.println("Collect: Collect()");
         
