@@ -53,8 +53,11 @@ public class Vision extends Subsystem {
 
 	private static final double ANGLE_TOLERANCE = 20;
 
-	private static final int BOILER_TARGET_CENTER_X = 320;
-	private static final int BOILER_TARGET_CENTER_Y = 80;
+	private static final int BOILER_NEAR_TARGET_CENTER_X = 320;
+	private static final int BOILER_NEAR_TARGET_CENTER_Y = 120;
+
+	private static final int BOILER_FAR_TARGET_CENTER_X = 320;
+	private static final int BOILER_FAR_TARGET_CENTER_Y = 80;
 
 	private static final int BOILER_TARGET_WIDTH = 120;
 	private static final int BOILER_TARGET_HEIGHT = 40;
@@ -65,9 +68,13 @@ public class Vision extends Subsystem {
 	private static final int GEAR_TARGET_WIDTH = 80;
 	private static final int GEAR_TARGET_HEIGHT = 80;
 
-	private static final Rect BOILER_TARGET = new Rect(new Point(BOILER_TARGET_CENTER_X - BOILER_TARGET_WIDTH/2, BOILER_TARGET_CENTER_Y - BOILER_TARGET_HEIGHT/2), 
-			new Point(BOILER_TARGET_CENTER_X + BOILER_TARGET_WIDTH/2, BOILER_TARGET_CENTER_Y + BOILER_TARGET_HEIGHT/2));
+	private static final Rect NEAR_BOILER_TARGET = new Rect(new Point(BOILER_NEAR_TARGET_CENTER_X - BOILER_TARGET_WIDTH/2, BOILER_NEAR_TARGET_CENTER_Y - BOILER_TARGET_HEIGHT/2), 
+			new Point(BOILER_NEAR_TARGET_CENTER_X + BOILER_TARGET_WIDTH/2, BOILER_NEAR_TARGET_CENTER_Y + BOILER_TARGET_HEIGHT/2));
 
+	private static final Rect FAR_BOILER_TARGET = new Rect(new Point(BOILER_FAR_TARGET_CENTER_X - BOILER_TARGET_WIDTH/2, BOILER_NEAR_TARGET_CENTER_Y - BOILER_TARGET_HEIGHT/2), 
+			new Point(BOILER_FAR_TARGET_CENTER_X + BOILER_TARGET_WIDTH/2, BOILER_FAR_TARGET_CENTER_Y + BOILER_TARGET_HEIGHT/2));
+
+	
 	private static final Rect GEAR_TARGET = new Rect(new Point(GEAR_TARGET_CENTER_X - GEAR_TARGET_WIDTH/2, GEAR_TARGET_CENTER_Y - GEAR_TARGET_HEIGHT/2), 
 			new Point(GEAR_TARGET_CENTER_X + GEAR_TARGET_WIDTH/2, GEAR_TARGET_CENTER_Y + GEAR_TARGET_HEIGHT/2));
 
@@ -75,6 +82,12 @@ public class Vision extends Subsystem {
 	private boolean takePicture = false;
 	int loopCount = 0;
 
+
+	public enum BoilerRange
+	{
+		NEAR,
+		FAR
+	}
 
 	public enum VisionMode
 	{
@@ -101,6 +114,23 @@ public class Vision extends Subsystem {
 	private VisionMode visionMode = VisionMode.PASSTHROUGH;
 	private CameraSelection cameraSelection = CameraSelection.SHOT_CAMERA;
 
+	public Point getBoilerTargetCenter(BoilerRange range)
+	{
+		switch(range)
+		{
+		case NEAR:
+			return new Point(BOILER_NEAR_TARGET_CENTER_X, BOILER_NEAR_TARGET_CENTER_Y);
+		case FAR:
+			return new Point(BOILER_FAR_TARGET_CENTER_X, BOILER_FAR_TARGET_CENTER_Y);
+		default:
+			return new Point(BOILER_NEAR_TARGET_CENTER_X, BOILER_NEAR_TARGET_CENTER_Y);
+		}
+	}
+
+	public Point getGearTargetCenter()
+	{
+		return new Point(GEAR_TARGET_CENTER_X, GEAR_TARGET_CENTER_Y);
+	}
 	public void setVisionMode(VisionMode newMode)
 	{
 		synchronized(VisionSetup)
@@ -148,11 +178,16 @@ public class Vision extends Subsystem {
 
 	public class VisionTarget
 	{
-		double x;
-		double y;
-		int loopCount;
-		boolean recentTarget;
-		TargetID target;
+		public double x;
+		public double y;
+		public int loopCount;
+		public boolean recentTarget;
+		public TargetID target;
+		public double x_delta;
+		public double y_delta;
+		public double crossTrack;
+		public boolean inRange;
+
 		VisionTarget(){
 			x = 0;
 			y = 0;
@@ -165,10 +200,6 @@ public class Vision extends Subsystem {
 			recentTarget = false;
 			target = TargetID.NONE;
 		}
-		double x_delta;
-		double y_delta;
-		double crossTrack;
-		boolean inRange;
 	}
 
 	VisionTarget visionResults = new VisionTarget();
@@ -197,8 +228,8 @@ public class Vision extends Subsystem {
 		}
 		if(getVisionMode() == VisionMode.FIND_BOILER)
 		{
-			result.x_delta = result.y  - BOILER_TARGET_CENTER_X;
-			result.y_delta = result.y  - BOILER_TARGET_CENTER_Y;
+			result.x_delta = result.y  - BOILER_NEAR_TARGET_CENTER_X;
+			result.y_delta = result.y  - BOILER_NEAR_TARGET_CENTER_Y;
 		}
 		else if(getVisionMode() == VisionMode.FIND_GEAR)
 		{
@@ -345,7 +376,7 @@ public class Vision extends Subsystem {
 
 						ArrayList<MatOfPoint>  targetList = findBoiler.convexHullsOutput();
 
-						drawTargetCrosshair(mat, BOILER_TARGET, Vision.MAGENTA);
+						drawTargetCrosshair(mat, NEAR_BOILER_TARGET, Vision.MAGENTA);
 
 						if(targetList.isEmpty())
 						{
