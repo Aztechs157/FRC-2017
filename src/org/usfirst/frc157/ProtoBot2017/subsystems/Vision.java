@@ -33,8 +33,8 @@ public class Vision extends Subsystem {
 	// Put methods for controlling this subsystem
 	// here. Call these from Commands.
 
-	private static final int CAM_WIDTH = 640;
-	private static final int CAM_HEIGHT = 480;
+	public static final int CAM_WIDTH = 640;
+	public static final int CAM_HEIGHT = 480;
 
 	private static final int CAM_EXPOSURE = 25;
 	// B,   G,   R
@@ -57,7 +57,7 @@ public class Vision extends Subsystem {
 	private static final int BOILER_NEAR_TARGET_CENTER_Y = 120;
 
 	private static final int BOILER_FAR_TARGET_CENTER_X = 320;
-	private static final int BOILER_FAR_TARGET_CENTER_Y = 80;
+	private static final int BOILER_FAR_TARGET_CENTER_Y = 60;
 
 	private static final int BOILER_TARGET_WIDTH = 120;
 	private static final int BOILER_TARGET_HEIGHT = 40;
@@ -68,12 +68,8 @@ public class Vision extends Subsystem {
 	private static final int GEAR_TARGET_WIDTH = 80;
 	private static final int GEAR_TARGET_HEIGHT = 80;
 
-	private static final Rect NEAR_BOILER_TARGET = new Rect(new Point(BOILER_NEAR_TARGET_CENTER_X - BOILER_TARGET_WIDTH/2, BOILER_NEAR_TARGET_CENTER_Y - BOILER_TARGET_HEIGHT/2), 
-			new Point(BOILER_NEAR_TARGET_CENTER_X + BOILER_TARGET_WIDTH/2, BOILER_NEAR_TARGET_CENTER_Y + BOILER_TARGET_HEIGHT/2));
-
-	private static final Rect FAR_BOILER_TARGET = new Rect(new Point(BOILER_FAR_TARGET_CENTER_X - BOILER_TARGET_WIDTH/2, BOILER_NEAR_TARGET_CENTER_Y - BOILER_TARGET_HEIGHT/2), 
-			new Point(BOILER_FAR_TARGET_CENTER_X + BOILER_TARGET_WIDTH/2, BOILER_FAR_TARGET_CENTER_Y + BOILER_TARGET_HEIGHT/2));
-
+	private static final Rect NEAR_BOILER_TARGET = new Rect(BOILER_NEAR_TARGET_CENTER_X, BOILER_NEAR_TARGET_CENTER_Y, BOILER_TARGET_WIDTH, BOILER_TARGET_HEIGHT);
+	private static final Rect FAR_BOILER_TARGET = new Rect(BOILER_FAR_TARGET_CENTER_X, BOILER_FAR_TARGET_CENTER_Y, BOILER_TARGET_WIDTH, BOILER_TARGET_HEIGHT);
 	
 	private static final Rect GEAR_TARGET = new Rect(new Point(GEAR_TARGET_CENTER_X - GEAR_TARGET_WIDTH/2, GEAR_TARGET_CENTER_Y - GEAR_TARGET_HEIGHT/2), 
 			new Point(GEAR_TARGET_CENTER_X + GEAR_TARGET_WIDTH/2, GEAR_TARGET_CENTER_Y + GEAR_TARGET_HEIGHT/2));
@@ -112,8 +108,23 @@ public class Vision extends Subsystem {
 	private Object VisionSetup = new Object();
 	private Object syncLoopCount = new Object();
 	private VisionMode visionMode = VisionMode.PASSTHROUGH;
+	private BoilerRange boilerRange = BoilerRange.NEAR;
 	private CameraSelection cameraSelection = CameraSelection.SHOT_CAMERA;
 
+	public Rect getBoilerTargetRect(BoilerRange range)
+	{
+		switch(range)
+		{
+		case NEAR:
+			return NEAR_BOILER_TARGET;
+		case FAR:
+			return FAR_BOILER_TARGET;
+		default:
+			return NEAR_BOILER_TARGET;
+		}
+	
+	}
+	
 	public Point getBoilerTargetCenter(BoilerRange range)
 	{
 		switch(range)
@@ -131,11 +142,12 @@ public class Vision extends Subsystem {
 	{
 		return new Point(GEAR_TARGET_CENTER_X, GEAR_TARGET_CENTER_Y);
 	}
-	public void setVisionMode(VisionMode newMode)
+	public void setVisionMode(VisionMode newMode, BoilerRange newRange)
 	{
 		synchronized(VisionSetup)
 		{
 			visionMode = newMode;
+			boilerRange = newRange;
 		}
 		SmartDashboard.putString("VisionMode", visionMode.name());
 		synchronized(syncLoopCount)
@@ -144,6 +156,14 @@ public class Vision extends Subsystem {
 		}
 	}
 
+	public BoilerRange getBoilerTargetRange()
+	{
+		synchronized(VisionSetup)
+		{
+			return boilerRange;
+		}
+	}
+	
 	public VisionMode getVisionMode()
 	{
 		return visionMode;
@@ -183,16 +203,12 @@ public class Vision extends Subsystem {
 		public int loopCount;
 		public boolean recentTarget;
 		public TargetID target;
-		public double x_delta;
-		public double y_delta;
 		public double crossTrack;
 		public boolean inRange;
 
 		VisionTarget(){
 			x = 0;
 			y = 0;
-			x_delta = 0;
-			y_delta = 0;
 			crossTrack = 0;
 			inRange = false;
 
@@ -226,21 +242,6 @@ public class Vision extends Subsystem {
 				result.recentTarget = true;
 			}
 		}
-		if(getVisionMode() == VisionMode.FIND_BOILER)
-		{
-			result.x_delta = result.y  - BOILER_NEAR_TARGET_CENTER_X;
-			result.y_delta = result.y  - BOILER_NEAR_TARGET_CENTER_Y;
-		}
-		else if(getVisionMode() == VisionMode.FIND_GEAR)
-		{
-			result.x_delta = result.y  - GEAR_TARGET_CENTER_X;
-			result.y_delta = result.y  - GEAR_TARGET_CENTER_Y;
-		}
-		else
-		{
-			result.x_delta = 0;
-			result.y_delta = 0;
-		}
 		return result;
 	}
 
@@ -261,7 +262,7 @@ public class Vision extends Subsystem {
 	public Vision()
 	{
 		setCamera(CameraSelection.SHOT_CAMERA);
-		setVisionMode(VisionMode.FIND_GEAR);
+		setVisionMode(VisionMode.FIND_GEAR, BoilerRange.NEAR);
 		shotCamera.setResolution(CAM_WIDTH, CAM_HEIGHT);
 		//		gearCamera.setResolution(CAM_WIDTH, CAM_HEIGHT);
 
@@ -376,7 +377,7 @@ public class Vision extends Subsystem {
 
 						ArrayList<MatOfPoint>  targetList = findBoiler.convexHullsOutput();
 
-						drawTargetCrosshair(mat, NEAR_BOILER_TARGET, Vision.MAGENTA);
+						drawTargetCrosshair(mat, getBoilerTargetRect(boilerRange), Vision.MAGENTA);
 
 						if(targetList.isEmpty())
 						{
@@ -786,70 +787,87 @@ public class Vision extends Subsystem {
 
 	private void drawTargetCrosshair(Mat mat, Rect target, Scalar targetColor)
 	{
-		// Draw Target Lines
-		double hheight = target.height/2;
-		double hwidth = target.width/2;
-		if(hheight > hwidth)
-		{
-			hheight = target.width/2;
-			hwidth = target.height/2;
-		}
-		// Target Lines
-		// vertical lines
-		// left
-		Imgproc.line(mat, new Point(target.x - hwidth, 0), 
-				new Point(target.x - hwidth, CAM_HEIGHT), 
-				targetColor, 3);
-		// right
-		Imgproc.line(mat, new Point(target.x + hwidth, 0), 
-				new Point(target.x + hwidth, CAM_HEIGHT), 
-				targetColor, 3);
-
-		// horizontal lines
-		// upper
-		Imgproc.line(mat, new Point(0,         target.y - hheight), 
-				new Point(CAM_WIDTH, target.y - hheight), 
-				targetColor, 3);
-		//lower
-		Imgproc.line(mat, new Point(0,         target.y + hheight), 
-				new Point(CAM_WIDTH, target.y + hheight), 
-				targetColor, 3);
+		
+		// V
+		Imgproc.line(mat, new Point(target.x, 0), new Point(target.x, CAM_HEIGHT), targetColor, 3);
+		// H
+		Imgproc.line(mat, new Point(0, target.y ), new Point(CAM_WIDTH, target.y), targetColor, 3);
+		
+//		// Draw Target Lines
+//		double hheight = target.height/2;
+//		double hwidth = target.width/2;
+//		if(hheight > hwidth)
+//		{
+//			hheight = target.width/2;
+//			hwidth = target.height/2;
+//		}
+//		// Target Lines
+//		// vertical lines
+//		// left
+//		Imgproc.line(mat, new Point(target.x - hwidth, 0), 
+//				          new Point(target.x - hwidth, CAM_HEIGHT), 
+//				targetColor, 3);
+//		// right
+//		Imgproc.line(mat, new Point(target.x + hwidth, 0), 
+//				          new Point(target.x + hwidth, CAM_HEIGHT), 
+//				targetColor, 3);
+//
+//		// horizontal lines
+//		// upper
+//		Imgproc.line(mat, new Point(0,         target.y - hheight), 
+//				new Point(CAM_WIDTH, target.y - hheight), 
+//				targetColor, 3);
+//		//lower
+//		Imgproc.line(mat, new Point(0,         target.y + hheight), 
+//				new Point(CAM_WIDTH, target.y + hheight), 
+//				targetColor, 3);
 	}
 
 	private void drawCandidateCrosshair(Mat mat, RotatedRect candidate, Scalar candidateColor)
 	{
-		// Draw Candidate Lines
-		double hheight = candidate.size.height/2;
-		double hwidth = candidate.size.width/2;
-		if(hheight > hwidth)
-		{
-			hheight = candidate.size.width/2;
-			hwidth = candidate.size.height/2;
-
-		}
-		// Target Lines
-		// vertical lines
-		// left
-		Imgproc.line(mat, new Point(candidate.center.x - hwidth, 0), 
-				new Point(candidate.center.x - hwidth, CAM_HEIGHT), 
+		//H
+		Imgproc.line(mat, new Point(0,         candidate.center.y), 
+				new Point(CAM_WIDTH, candidate.center.y), 
 				candidateColor, 2);
-		// right
-		Imgproc.line(mat, new Point(candidate.center.x + hwidth, 0), 
-				new Point(candidate.center.x + hwidth, CAM_HEIGHT), 
+		
+		//V
+		Imgproc.line(mat, new Point(candidate.center.x, 0), 
+				new Point(candidate.center.x, CAM_HEIGHT), 
 				candidateColor, 2);
-
-		// horizontal lines
-		// upper
-		Imgproc.line(mat, new Point(0,         candidate.center.y - hheight), 
-				new Point(CAM_WIDTH, candidate.center.y - hheight), 
-				candidateColor, 2);
-		//lower
-		Imgproc.line(mat, new Point(0,         candidate.center.y + hheight), 
-				new Point(CAM_WIDTH, candidate.center.y + hheight), 
-				candidateColor, 2);  	
+		
+//		// Draw Candidate Lines
+//		double hheight = candidate.size.height/2;
+//		double hwidth = candidate.size.width/2;
+//		if(hheight > hwidth)
+//		{
+//			hheight = candidate.size.width/2;
+//			hwidth = candidate.size.height/2;
+//
+//		}
+//		// Target Lines
+//		// vertical lines
+//		// left
+//		Imgproc.line(mat, new Point(candidate.center.x - hwidth, 0), 
+//				new Point(candidate.center.x - hwidth, CAM_HEIGHT), 
+//				candidateColor, 2);
+//		// right
+//		Imgproc.line(mat, new Point(candidate.center.x + hwidth, 0), 
+//				new Point(candidate.center.x + hwidth, CAM_HEIGHT), 
+//				candidateColor, 2);
+//
+//		// horizontal lines
+//		// upper
+//		Imgproc.line(mat, new Point(0,         candidate.center.y - hheight), 
+//				new Point(CAM_WIDTH, candidate.center.y - hheight), 
+//				candidateColor, 2);
+//		//lower
+//		Imgproc.line(mat, new Point(0,         candidate.center.y + hheight), 
+//				new Point(CAM_WIDTH, candidate.center.y + hheight), 
+//				candidateColor, 2);  	
 	}
 	private void drawCandidateCrosshair(Mat mat, RotatedRect candidate, RotatedRect secondary, Scalar candidateColor)
 	{
+
 
 		// Draw Candidate Lines
 		double candidateHeight = Math.max(candidate.size.width, candidate.size.height);
@@ -869,23 +887,34 @@ public class Vision extends Subsystem {
 		// Target Lines
 		// vertical lines
 		// left
-		Imgproc.line(mat, new Point(center.x - hwidth, 0), 
-				new Point(center.x - hwidth, CAM_HEIGHT), 
+//		Imgproc.line(mat, new Point(center.x - hwidth, 0), 
+//				new Point(center.x - hwidth, CAM_HEIGHT), 
+//				candidateColor, 2);
+//		// right
+//		Imgproc.line(mat, new Point(center.x + hwidth, 0), 
+//				new Point(center.x + hwidth, CAM_HEIGHT), 
+//				candidateColor, 2);
+//
+//		// horizontal lines
+//		// upper
+//		Imgproc.line(mat, new Point(0,         center.y - hheight), 
+//				new Point(CAM_WIDTH, center.y - hheight), 
+//				candidateColor, 2);
+//		//lower
+//		Imgproc.line(mat, new Point(0,         center.y + hheight), 
+//				new Point(CAM_WIDTH, center.y + hheight), 
+//				candidateColor, 2);  	
+
+		//H
+		Imgproc.line(mat, new Point(0,        center.y), 
+				new Point(CAM_WIDTH, center.y), 
 				candidateColor, 2);
-		// right
-		Imgproc.line(mat, new Point(center.x + hwidth, 0), 
-				new Point(center.x + hwidth, CAM_HEIGHT), 
+		
+		//V
+		Imgproc.line(mat, new Point(center.x, 0), 
+				new Point(center.x, CAM_HEIGHT), 
 				candidateColor, 2);
 
-		// horizontal lines
-		// upper
-		Imgproc.line(mat, new Point(0,         center.y - hheight), 
-				new Point(CAM_WIDTH, center.y - hheight), 
-				candidateColor, 2);
-		//lower
-		Imgproc.line(mat, new Point(0,         center.y + hheight), 
-				new Point(CAM_WIDTH, center.y + hheight), 
-				candidateColor, 2);  	
 	}
 
 

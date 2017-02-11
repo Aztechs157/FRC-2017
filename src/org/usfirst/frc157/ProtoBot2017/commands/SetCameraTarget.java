@@ -2,6 +2,7 @@ package org.usfirst.frc157.ProtoBot2017.commands;
 
 import org.usfirst.frc157.ProtoBot2017.Robot;
 import org.usfirst.frc157.ProtoBot2017.subsystems.Vision;
+import org.usfirst.frc157.ProtoBot2017.subsystems.Vision.BoilerRange;
 import org.usfirst.frc157.ProtoBot2017.subsystems.Vision.VisionMode;
 
 import edu.wpi.first.wpilibj.command.Command;
@@ -28,16 +29,28 @@ public class SetCameraTarget extends Command {
     	switch(mode)
     	{
     	case FIND_BOILER:
-    		Robot.vision.setVisionMode(VisionMode.FIND_GEAR);
+			System.out.println("Setting Target Gear");
+    		Robot.vision.setVisionMode(VisionMode.FIND_GEAR, Robot.vision.getBoilerTargetRange());
     		break;
     	case FIND_GEAR:
-    		Robot.vision.setVisionMode(VisionMode.PASSTHROUGH);
+			System.out.println("Setting Target Passthru");
+    		Robot.vision.setVisionMode(VisionMode.PASSTHROUGH, Robot.vision.getBoilerTargetRange());
     		break;
     	case PASSTHROUGH:
-    		Robot.vision.setVisionMode(VisionMode.FIND_BOILER);
+    		if (Robot.vision.getBoilerTargetRange() == BoilerRange.NEAR)
+    		{
+    			System.out.println("Setting Target Boiler Far");
+    			Robot.vision.setVisionMode(VisionMode.FIND_BOILER, BoilerRange.FAR);
+    		}
+    		else
+    		{
+    			System.out.println("Setting Target Boiler Near");
+    			Robot.vision.setVisionMode(VisionMode.FIND_BOILER, BoilerRange.NEAR);    			
+    		}
     		break;
     	default:
-    		Robot.vision.setVisionMode(VisionMode.PASSTHROUGH);
+			System.out.println("Setting Target Passthru");
+    		Robot.vision.setVisionMode(VisionMode.PASSTHROUGH, Robot.vision.getBoilerTargetRange());
     		break;
     	}
     }

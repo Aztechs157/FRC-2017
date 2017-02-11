@@ -28,7 +28,7 @@ public class AlignForShot extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	System.out.println("Starting AlignForShot(" + selectedRange.toString() + ")");
-    	Robot.vision.setVisionMode(Vision.VisionMode.FIND_BOILER);
+    	Robot.vision.setVisionMode(Vision.VisionMode.FIND_BOILER, selectedRange);
     	preCommandDriveMode = Robot.drive.getDriveMode();
     	Robot.drive.setDriveMode(DriveMode.ROBOT_RELATIVE);
     }
@@ -42,12 +42,14 @@ public class AlignForShot extends Command {
     	{
     		// Figure out Angle Change (X ~ Angle)
     		double dx = target.x - spot.x;    	
-    		double cmdRot = dx;
+    		double cmdRot = (dx/Vision.CAM_WIDTH) * 60;
+    		
     		SmartDashboard.putNumber("dx", dx);
     		SmartDashboard.putNumber("cmdRot", cmdRot);
     		// Figure out Range Change (Y ~ Range)
     		double dy = target.y - spot.y;
-    		double cmdY = dy;
+    		double cmdY = dy/Vision.CAM_HEIGHT;
+    		
       		SmartDashboard.putNumber("dy", dy);
       		SmartDashboard.putNumber("cmdY", cmdY);
       	    		// Apply Change to Drive
