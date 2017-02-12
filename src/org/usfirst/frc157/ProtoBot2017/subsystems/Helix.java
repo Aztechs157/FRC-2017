@@ -25,13 +25,19 @@ public class Helix extends Subsystem {
 
     private final CANTalon helixMotorRight = RobotMap.helixMotorRight;
     private final CANTalon helixMotorLeft = RobotMap.helixMotorLeft;
-    private final double motorSpeed = 0.3;
+    private final double motorSpeed = 0.5;
 
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
 
 
-
+    public enum helixCommand
+    {
+        LOADRIGHT,
+        LOADlEFT,
+        IDLERIGHT,
+        IDLELEFT
+    }
         
     public Helix()
     {
