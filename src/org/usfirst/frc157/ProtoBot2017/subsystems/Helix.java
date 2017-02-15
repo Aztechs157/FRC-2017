@@ -34,7 +34,7 @@ public class Helix extends Subsystem {
     public enum helixCommand
     {
         LOADRIGHT,
-        LOADlEFT,
+        LOADLEFT,
         IDLERIGHT,
         IDLELEFT
     }
@@ -74,7 +74,7 @@ public class Helix extends Subsystem {
     }
     public void idleLeft()
     {
-        helixMotorRight.set(0.0);
+        helixMotorLeft.set(0.0);
     }
     
     

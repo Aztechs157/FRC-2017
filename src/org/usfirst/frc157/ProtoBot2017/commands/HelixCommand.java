@@ -48,12 +48,25 @@ public class HelixCommand extends Command {
             finished=false ;
         }
  
-    /*    else if(helixCommand == Helix.helixCommand.IDLERIGHT);
+        else if(helixCommand == Helix.helixCommand.IDLERIGHT)
         {
             Robot.helix.idleRight();
-            finished=true; 
+            finished=true;
         }
-        */
+        
+        else if (helixCommand == Helix.helixCommand.LOADLEFT)
+        {
+            Robot.helix.loadLeft();
+            finished=false ;
+        }
+ 
+        else if(helixCommand == Helix.helixCommand.IDLELEFT)
+        {
+            Robot.helix.idleLeft();
+            finished=true;
+        }
+        
+        
         System.out.println(finished);
   
     }
