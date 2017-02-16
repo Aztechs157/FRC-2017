@@ -15,79 +15,72 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc157.ProtoBot2017.Robot;
-import org.usfirst.frc157.ProtoBot2017.subsystems.Helix;
+import org.usfirst.frc157.ProtoBot2017.subsystems.Collect;
+import org.usfirst.frc157.ProtoBot2017.subsystems.Gate;
 import org.usfirst.frc157.ProtoBot2017.subsystems.Shoot;
 
 /**
  *
  */
-public class HelixCommand extends Command {
+public class GateCommand extends Command {
     
-    private Helix.helixCommand helixCommand; 
+    private Gate.gateCommand gateCommand; 
 
     private boolean finished = false;
     
-    public HelixCommand(Helix.helixCommand command) {
-        helixCommand = command;
-        requires(Robot.helix);
+    public GateCommand(Gate.gateCommand command) {
+        gateCommand = command;
+        requires(Robot.gate);
         
     }
-    
+     
     // Called just before this Command runs the first time
     protected void initialize() {
-        System.out.println("Helix: initialize()");
+        System.out.println("Gate: initialize()");
         finished = false;
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        System.out.println("Helix: execute()" + helixCommand + "finihed = " + finished);
-        if (helixCommand == Helix.helixCommand.LOADRIGHT )
+        System.out.println("Gate: execute()" + gateCommand);
+        if (gateCommand == Gate.gateCommand.OPEN);
         {
-            Robot.helix.loadRight();
+            Robot.gate.OPEN();
             finished=false ;
         }
- 
-        else if(helixCommand == Helix.helixCommand.IDLERIGHT)
+        if (gateCommand == Gate.gateCommand.CLOSED)
         {
-            Robot.helix.idleRight();
+            Robot.gate.CLOSE();
+            finished=false; 
+        }
+        else if(gateCommand == Gate.gateCommand.OFF)
+        {
+            Robot.gate.OFF();
+            finished=true; 
+        }
+        else
+        {  
             finished=true;
         }
-        
-        else if (helixCommand == Helix.helixCommand.LOADLEFT)
-        {
-            Robot.helix.loadLeft();
-            finished=false ;
-        }
- 
-        else if(helixCommand == Helix.helixCommand.IDLELEFT)
-        {
-            Robot.helix.idleLeft();
-            finished=true;
-        }
-        
-        
-        System.out.println(finished);
-  
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        System.out.println("Helix: isfinished()"+finished);
+        System.out.println("Gate: isfinished()"+finished);
         return  finished;
     }
 
     // Called once after isFinished returns true
     protected void end() {
-        System.out.println("Helix: end()");
-        Robot.helix.idleRight();
+        System.out.println("Gate: end()");
+        Robot.collect.idle();
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
-        System.out.println("Helix: interrupted()");
-        Robot.helix.idleRight();
+        System.out.println("Gate: interrupted()");
+        Robot.collect.idle();
     }
 }
 
