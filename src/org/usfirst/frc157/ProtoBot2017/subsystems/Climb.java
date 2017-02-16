@@ -21,45 +21,45 @@ import edu.wpi.first.wpilibj.DigitalInput;
 /**
  *
  */
-public class Shoot extends Subsystem {
+public class Climb extends Subsystem {
 
-    private final CANTalon shootMotor = RobotMap.shootMotor;
-    private double shootSpeed = 0.5;
+    private final CANTalon climbMotor = RobotMap.climbMotor;
+    private double climbSpeed = 0.5;
     
 
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
 
 
-    public enum ShootCommand
+    public enum ClimbCommand
     {
         IDLE,
-        NEAR,
-        FAR  
+        TEST,
+        MATCH  
     }
-    public Shoot()
+    public Climb()
     {
-        System.out.println("Shoot: Shoot()");
+        System.out.println("Climb: Climb()");
         
-        shootMotor.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
+        climbMotor.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
     }        
 
-    public void setShootSpeed()
+    public void setClimbSpeed()
     {
-        shootMotor.set(shootSpeed);
+        climbMotor.set(climbSpeed);
     }
  
     public void idle()
     {
-        shootMotor.set(0.0);        
+        climbMotor.set(0.0);        
     }
-    public void near()
+    public void test()
     {
-        shootMotor.set(0.2);
+        climbMotor.set(0.2);
     }
-    public void far()
+    public void match()
     {
-        shootMotor.set(0.6);
+        climbMotor.set(0.6);
     }
     
     @Override
