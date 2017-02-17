@@ -40,6 +40,7 @@ public class AlignForShot extends Command {
     	if((target.target == Vision.TargetID.BOILER) &&
     			(target.recentTarget == true))
     	{
+    		
     		// Figure out Angle Change (X ~ Angle)
     		double dx = target.x - spot.x;    	
     		double cmdRot = (dx/Vision.CAM_WIDTH) * 60;
@@ -55,6 +56,10 @@ public class AlignForShot extends Command {
       	    		// Apply Change to Drive
     		double cmdX = 0;
     		Robot.drive.driveBot(cmdX, cmdY, cmdRot);
+    	}
+    	else
+    	{
+    		Robot.drive.driveBot(0, 0, 0);  // if not good stop    		
     	}
      }
 

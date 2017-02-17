@@ -282,11 +282,29 @@ public class Vision extends Subsystem {
 			visionThread = new Thread(() -> {
 				System.out.println("Starting Vision Thread");
 
-				// Setup the Shot Cam
-				CameraServer.getInstance().addCamera(shotCamera);
+						
 				shotCamera.setResolution(CAM_WIDTH, CAM_HEIGHT);
 				shotCamera.setExposureManual(CAM_EXPOSURE);
-				CvSink shotSink = CameraServer.getInstance().getVideo(SHOT_CAM_NAME);
+
+				CvSink shotSink = null; 
+				try
+				{
+					// getting video will throw an exception if the camera has not been added
+					System.out.println("Getting USB Cam - " + SHOT_CAM_NAME);
+					shotSink = CameraServer.getInstance().getVideo(SHOT_CAM_NAME);
+				}
+				catch(Exception e)
+				{
+					// so if the camera has not been added, add it.
+					System.out.println("Needed to add camera before using - " + SHOT_CAM_NAME + " all set");
+					CameraServer.getInstance().addCamera(shotCamera);
+					shotSink = CameraServer.getInstance().getVideo(SHOT_CAM_NAME);
+				}
+				// Setup the Shot Cam
+//				CameraServer.getInstance().addCamera(shotCamera);
+//				shotCamera.setResolution(CAM_WIDTH, CAM_HEIGHT);
+//				shotCamera.setExposureManual(CAM_EXPOSURE);
+//				CvSink shotSink = CameraServer.getInstance().getVideo(SHOT_CAM_NAME);
 
 				// Setup the Gear Cam
 				//				CameraServer.getInstance().addCamera(gearCamera);
