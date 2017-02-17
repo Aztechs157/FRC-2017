@@ -47,7 +47,7 @@ public class Collect extends Subsystem {
     
     public void unload()
     {
-        collectMotor.set(Speed);
+        collectMotor.set(-Speed);
     }
 
     public void load()
