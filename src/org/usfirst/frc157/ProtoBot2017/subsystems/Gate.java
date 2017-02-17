@@ -49,18 +49,18 @@ public class Gate extends Subsystem {
     }        
    
     
-    public void OPEN()
+    public void open()
     {
         gateRelay.set(Relay.Value.kForward);
     }
 
-    public void CLOSE()
+    public void close()
     {
         
         gateRelay.set(Relay.Value.kReverse);
     }
 
-    public void OFF ()
+    public void off ()
     {
               gateRelay.set(Relay.Value.kOff);
     }
