@@ -100,7 +100,7 @@ public class OI {
 
         joystickButtonX = new JoystickButton(driver, 3);
 //        joystickButtonX.whileHeld(new AlignForShot(Vision.BoilerRange.FAR));
-        joystickButtonX.whileHeld(new ToggleCollection());
+        joystickButtonX.whenPressed(new ToggleCollection());
         
         joystickButtonY = new JoystickButton(driver, 4);
 		joystickButtonY.whenPressed(new StoreImages());
