@@ -40,7 +40,7 @@ public class ClimbCommand extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        System.out.println("Climb: execute()" + climbCommand + "finihed = " + finished);
+        System.out.println("Climb: execute(" + climbCommand + ") finihed = " + finished);
         if (climbCommand == Climb.ClimbCommand.MATCH )
         {
             Robot.climb.match();
