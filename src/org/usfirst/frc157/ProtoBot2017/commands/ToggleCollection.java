@@ -14,7 +14,7 @@ public class ToggleCollection extends Command {
 		INACTIVE
 	}
 
-	State state;
+	private static State state;
 
 	public ToggleCollection() {
 		// Use requires() here to declare subsystem dependencies
