@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
  */
 public class Gear extends Subsystem {
 
+    private final double SPEED = 0.6;
     private final CANTalon gearMotor = RobotMap.gearMotor;
 
     // Put methods for controlling this subsystem
@@ -44,14 +45,12 @@ public class Gear extends Subsystem {
         CLOSE,
         IDLE
     }
-
-
         
     public Gear()
     {
         System.out.println("Gear: Gear()");
         openLimitSwitch = new DigitalInput(6);
-        closeLimitSwitch = new DigitalInput(7);
+        closeLimitSwitch = new DigitalInput(7); 
         
         gearMotor.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
     }        
@@ -81,12 +80,12 @@ public class Gear extends Subsystem {
     
     public void close()
     {
-        gearMotor.set(-0.3);
+        gearMotor.set(-SPEED);
     }
 
     public void open()
     {
-        gearMotor.set(0.3);
+        gearMotor.set(SPEED);
         
     }
 

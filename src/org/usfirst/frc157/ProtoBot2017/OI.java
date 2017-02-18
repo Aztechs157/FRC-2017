@@ -11,14 +11,35 @@
 
 package org.usfirst.frc157.ProtoBot2017;
 
-import org.usfirst.frc157.ProtoBot2017.commands.*;
+import org.usfirst.frc157.ProtoBot2017.commands.AlignForShot;
+import org.usfirst.frc157.ProtoBot2017.commands.AlignToField;
+import org.usfirst.frc157.ProtoBot2017.commands.AutonomousCommand;
+import org.usfirst.frc157.ProtoBot2017.commands.ClimbCommand;
+import org.usfirst.frc157.ProtoBot2017.commands.CollectorCommand;
+import org.usfirst.frc157.ProtoBot2017.commands.DebugPrintInfo;
 import org.usfirst.frc157.ProtoBot2017.commands.DebugPrintInfo.DebugSelection;
+import org.usfirst.frc157.ProtoBot2017.commands.GateCommand;
+import org.usfirst.frc157.ProtoBot2017.commands.GearStateCommand;
+import org.usfirst.frc157.ProtoBot2017.commands.HelixCommand;
+import org.usfirst.frc157.ProtoBot2017.commands.OperatorGear;
+import org.usfirst.frc157.ProtoBot2017.commands.SetCamera;
+import org.usfirst.frc157.ProtoBot2017.commands.SetCameraTarget;
+import org.usfirst.frc157.ProtoBot2017.commands.ShootCommand;
+import org.usfirst.frc157.ProtoBot2017.commands.StoreImages;
+import org.usfirst.frc157.ProtoBot2017.commands.ToggleCollection;
+import org.usfirst.frc157.ProtoBot2017.subsystems.Climb;
+import org.usfirst.frc157.ProtoBot2017.subsystems.Collect;
+import org.usfirst.frc157.ProtoBot2017.subsystems.Gate;
+import org.usfirst.frc157.ProtoBot2017.subsystems.Gear;
+import org.usfirst.frc157.ProtoBot2017.subsystems.Helix;
+import org.usfirst.frc157.ProtoBot2017.subsystems.Shoot;
+import org.usfirst.frc157.ProtoBot2017.subsystems.Vision;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.buttons.*;
-import org.usfirst.frc157.ProtoBot2017.subsystems.*;
+import edu.wpi.first.wpilibj.buttons.Button;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 /**
@@ -106,12 +127,16 @@ public class OI {
         joystickButtonY = new JoystickButton(driver, 4);
 		joystickButtonY.whenPressed(new StoreImages());
        
+		joystickButton6 = new JoystickButton(driver, 6);
+        joystickButton6.whenPressed(new GearStateCommand());
+		
 		joystickButton7 = new JoystickButton(driver, 7);
         joystickButton7.whenPressed(new OperatorGear(Gear.GearCommand.CLOSE));
      
         joystickButton8 = new JoystickButton(driver, 8);
         joystickButton8.whenPressed(new OperatorGear(Gear.GearCommand.CLOSE));
      
+        
         joystickButtonRightStickPress = new JoystickButton(driver, 10);
         joystickButtonRightStickPress.whenPressed(new AlignToField());
 
