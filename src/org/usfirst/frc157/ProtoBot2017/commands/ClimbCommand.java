@@ -30,48 +30,36 @@ public class ClimbCommand extends Command {
 
     private ClimbCommandSpeed climbCommand; 
 
-    private boolean finished = false;
-    
     public ClimbCommand(ClimbCommandSpeed command) {
         climbCommand = command;
-        requires(Robot.climb);
-        
+        requires(Robot.climb);      
     }
     
     // Called just before this Command runs the first time
     protected void initialize() {
-        System.out.println("Climb: initialize()");
-        finished = false;
-    }
+        System.out.println("Climb: initialize(" + climbCommand + ")");
 
-    // Called repeatedly when this Command is scheduled to run
-    protected void execute() {
-        System.out.println("Climb: execute(" + climbCommand + ") finihed = " + finished);
         if (climbCommand == ClimbCommandSpeed.FAST )
         {
             Robot.climb.fast();
-            finished=false ;
         }
         else if (climbCommand == ClimbCommandSpeed.SLOW)
         {
             Robot.climb.slow();
-            finished=false; 
         }
         else if(climbCommand == ClimbCommandSpeed.IDLE)
         {
             Robot.climb.idle();
-            finished=true; 
-        }
-        else
-        { 
-            finished=true;
         }
     }
 
+    // Called repeatedly when this Command is scheduled to run
+    protected void execute() {
+     }
+
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        System.out.println("Climb: isfinished()"+finished);
-        return  finished;
+        return false;
     }
 
     // Called once after isFinished returns true
