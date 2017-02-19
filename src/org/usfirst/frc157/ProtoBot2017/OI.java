@@ -126,8 +126,11 @@ public class OI {
         
         joystickButtonY = new JoystickButton(driver, 4);
 		joystickButtonY.whenPressed(new StoreImages());
-       
-		joystickButton6 = new JoystickButton(driver, 6);
+		
+		joystickButton5 = new JoystickButton(driver, 5);
+        joystickButton5.whileHeld(new ShootCommand( Shoot.ShootCommand.FAR ));
+		
+        joystickButton6 = new JoystickButton(driver, 6);
         joystickButton6.whenPressed(new GearStateCommand());
 		
 		joystickButton7 = new JoystickButton(driver, 7);

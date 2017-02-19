@@ -9,7 +9,7 @@ public class GearStateCommand extends Command {
     
     private final Gear GEAR = Robot.gear;
     
-    private double waitSeconds = 3.0;
+    private double waitSeconds = 4.0;
     private double timeStart;
     
     private boolean finished = false;
