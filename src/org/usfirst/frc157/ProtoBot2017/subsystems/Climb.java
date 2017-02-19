@@ -20,11 +20,13 @@ import edu.wpi.first.wpilibj.DigitalInput;
 
 /**
  *
- */
+ */ 
 public class Climb extends Subsystem {
-
+    
+    private final double TEST_MOD = -1; // set to 1 for all positive, -1 for all negative
+ 
     private final CANTalon climbMotor = RobotMap.climbMotor;
-    private double climbSpeed = 0.5;
+    private double climbSpeed = 0.8 * TEST_MOD;
     
 
     // Put methods for controlling this subsystem
@@ -55,11 +57,11 @@ public class Climb extends Subsystem {
     }
     public void test()
     {
-        climbMotor.set(0.2);
+        climbMotor.set(0.5 * TEST_MOD);
     }
     public void match()
     {
-        climbMotor.set(0.6);
+        climbMotor.set(0.8 * TEST_MOD);
     }
     
     @Override

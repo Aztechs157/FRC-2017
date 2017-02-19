@@ -24,7 +24,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 public class Shoot extends Subsystem {
 
     private final CANTalon shootMotor = RobotMap.shootMotor;
-    private double shootSpeed = 0.5;
+    private double shootSpeed = -0.5;
     
 
     // Put methods for controlling this subsystem
@@ -55,11 +55,11 @@ public class Shoot extends Subsystem {
     }
     public void near()
     {
-        shootMotor.set(0.2);
+        shootMotor.set(-0.2);
     }
     public void far()
     {
-        shootMotor.set(0.6);
+        shootMotor.set(-0.6);
     }
     
     @Override

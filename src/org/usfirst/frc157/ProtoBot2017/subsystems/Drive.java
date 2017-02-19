@@ -113,6 +113,22 @@ public class Drive extends Subsystem {
     public void initDefaultCommand() {
          setDefaultCommand(new OperatorDrive());
     }
+    public void DriveForwardForTime(int t)
+    {
+        
+       for(int i=0;i<=t;i++)
+        {
+        fL_Motor.set(0.5); 
+        fR_Motor.set(0.5);
+        rL_Motor.set(0.5);
+        rR_Motor.set(0.5);
+        System.out.println("Driving for"+ i + "untill" +t);
+        } 
+       fL_Motor.set(0.0); 
+       fR_Motor.set(0.0);
+       rL_Motor.set(0.0);
+       rR_Motor.set(0.0);
+     }
     
     public void resetZeroHeading()
     {
