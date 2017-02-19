@@ -11,6 +11,9 @@
 
 package org.usfirst.frc157.ProtoBot2017;
 
+import org.usfirst.frc157.FRC2016.JoystickPOVButton;
+import org.usfirst.frc157.FRC2016.commands.ArmShoulderManual;
+import org.usfirst.frc157.FRC2016.commands.PrintButton;
 import org.usfirst.frc157.ProtoBot2017.commands.AlignForShot;
 import org.usfirst.frc157.ProtoBot2017.commands.AlignToField;
 import org.usfirst.frc157.ProtoBot2017.commands.AutonomousCommand;
@@ -27,6 +30,7 @@ import org.usfirst.frc157.ProtoBot2017.commands.SetCameraTarget;
 import org.usfirst.frc157.ProtoBot2017.commands.ShootCommand;
 import org.usfirst.frc157.ProtoBot2017.commands.StoreImages;
 import org.usfirst.frc157.ProtoBot2017.commands.ToggleCollection;
+import org.usfirst.frc157.ProtoBot2017.commands.ClimbCommand.ClimbCommandSpeed;
 import org.usfirst.frc157.ProtoBot2017.subsystems.Climb;
 import org.usfirst.frc157.ProtoBot2017.subsystems.Collect;
 import org.usfirst.frc157.ProtoBot2017.subsystems.Gate;
@@ -90,6 +94,14 @@ public class OI {
 
     public JoystickButton joystickButtonRightStickPress; // Press Right Stick
     
+    private JoystickPOVButton operatorStickHatFore;      // Hat Button Forward
+    private JoystickPOVButton operatorStickHatForeRight; // Hat Button Forward Right
+    private JoystickPOVButton operatorStickHatRight;     // Hat Button Right
+    private JoystickPOVButton operatorStickHatAftRight;  // Hat Button Aft Right
+    private JoystickPOVButton operatorStickHatAft;       // Hat Button Aft
+    private JoystickPOVButton operatorStickHatAftLeft;   // Hat Button Aft Left
+    private JoystickPOVButton operatorStickHatLeft;      // Hat Button Left
+    private JoystickPOVButton operatorStickHatForeLeft;  // Hat Button Forward Left
 
     public XboxController driver;
     public Joystick operatorJoystick = new Joystick(1);// instantiates thye operator joystick
@@ -175,7 +187,33 @@ public class OI {
         operatorButton11 = new JoystickButton(operatorJoystick, 11);
         operatorButton11.whenPressed(new GateCommand(Gate.gateCommand.CLOSED));
         
+        // using lefts and rights for mitigating operator eror during compotitions 
+      
+        operatorStickHatFore = new JoystickPOVButton(operatorJoystick, 0);
+        operatorStickHatFore.whileHeld(new ClimbCommand( ClimbCommandSpeed.FAST));
+       
+        operatorStickHatForeRight = new JoystickPOVButton(operatorJoystick, 45);
+        operatorStickHatForeRight.whenPressed(new ClimbCommand( ClimbCommandSpeed.FAST));
         
+        operatorStickHatForeLeft = new JoystickPOVButton(operatorJoystick, 315);
+        operatorStickHatForeLeft.whenPressed(new ClimbCommand( ClimbCommandSpeed.FAST));
+        
+//        operatorStickHatRight = new JoystickPOVButton(operatorJoystick, 90);
+//        operatorStickHatRight.whenPressed(new PrintButton("O  Hat Right"));
+        
+        operatorStickHatAftRight = new JoystickPOVButton(operatorJoystick, 135);
+        operatorStickHatAftRight.whenPressed(new ClimbCommand( ClimbCommandSpeed.SLOW));
+        
+        operatorStickHatAft = new JoystickPOVButton(operatorJoystick, 180);
+        operatorStickHatAft.whileHeld(new ClimbCommand( ClimbCommandSpeed.SLOW));
+        
+        operatorStickHatAftLeft = new JoystickPOVButton(operatorJoystick, 225);
+        operatorStickHatAft.whileHeld(new ClimbCommand( ClimbCommandSpeed.SLOW));
+ 
+//        operatorStickHatLeft = new JoystickPOVButton(operatorJoystick, 270);
+//        operatorStickHatLeft.whenPressed(new ClimbCommand("O  Hat Left"));
+        
+
                 // SmartDashboard Buttons
          SmartDashboard.putData("AlignToField", new AlignToField());
         SmartDashboard.putData("Toggle Camera Targeting", new SetCameraTarget());
