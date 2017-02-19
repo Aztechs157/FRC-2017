@@ -11,9 +11,7 @@
 
 package org.usfirst.frc157.ProtoBot2017;
 
-import org.usfirst.frc157.FRC2016.JoystickPOVButton;
-import org.usfirst.frc157.FRC2016.commands.ArmShoulderManual;
-import org.usfirst.frc157.FRC2016.commands.PrintButton;
+import org.usfirst.frc157.ProtoBot2017.JoystickPOVButton;
 import org.usfirst.frc157.ProtoBot2017.commands.AlignForShot;
 import org.usfirst.frc157.ProtoBot2017.commands.AlignToField;
 import org.usfirst.frc157.ProtoBot2017.commands.AutonomousCommand;
