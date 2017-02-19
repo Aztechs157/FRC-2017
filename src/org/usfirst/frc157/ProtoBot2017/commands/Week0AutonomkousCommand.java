@@ -43,6 +43,7 @@ public class Week0AutonomkousCommand extends Command
     // Called repeatedly when this Command is scheduled to run
     protected void execute() 
     {
+    	// once robat has been driving for driveTime, declare finished
     	if(Timer.getFPGATimestamp() > (autoDriveStartTime + driveTime))
     	{
     		finished=true;

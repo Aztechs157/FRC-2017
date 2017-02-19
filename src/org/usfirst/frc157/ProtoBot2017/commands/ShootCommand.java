@@ -23,6 +23,8 @@ import org.usfirst.frc157.ProtoBot2017.subsystems.Shoot;
  */
 public class ShootCommand extends Command {
     
+	private static int shotCounter = 0;
+	
     private Shoot.ShootCommand shotPower; 
 
     private boolean finished = false;
@@ -72,6 +74,9 @@ public class ShootCommand extends Command {
 		Robot.leftGate.close();
 		Robot.rightGate.close();
 		speedTimeoutTime = Timer.getFPGATimestamp() + INITIAL_SPINUP_TIMEOUT_SEC;
+		
+		// take a picture when starting shooting.
+		Robot.vision.storePictures();
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -133,6 +138,11 @@ public class ShootCommand extends Command {
     				state = ShotCommandState.PULSING_RIGHT_GATE;
     				pulseState = PulseState.WAIT_OPENED;
     				pulseStartTime = Timer.getFPGATimestamp();
+    				shotCounter ++;
+    				if(shotCounter %10 == 0) // store camera data every 10 shots
+    				{
+    					Robot.vision.storePictures();
+    				}
         			System.out.println("ShootCommand.execute(" + shotPower + ") - " + Timer.getFPGATimestamp() + state + " " + pulseState);
     			} break;
     		}
@@ -177,6 +187,11 @@ public class ShootCommand extends Command {
     				state = ShotCommandState.PULSING_LEFT_GATE;
     				pulseState = PulseState.WAIT_OPENED;
     				pulseStartTime = Timer.getFPGATimestamp();
+    				shotCounter ++;
+    				if(shotCounter %10 == 0) // store camera data every 10 shots
+    				{
+    					Robot.vision.storePictures();
+    				}
         			System.out.println("ShootCommand.execute(" + shotPower + ") - " + Timer.getFPGATimestamp() + state + " " + pulseState);
     			} break;
     		}

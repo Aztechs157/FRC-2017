@@ -43,7 +43,7 @@ public class Gate extends Subsystem {
         
     public Gate(Relay gateRelay)
     {
-        System.out.println("Gate:GATE()");
+        System.out.println("Gate:GATE(ch." + gateRelay.getChannel() + ")");
         this.gateRelay = gateRelay;
         gateRelay.set(Relay.Value.kOn);
     }        

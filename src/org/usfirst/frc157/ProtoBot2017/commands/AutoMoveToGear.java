@@ -1,5 +1,7 @@
 package org.usfirst.frc157.ProtoBot2017.commands;
 
+import org.usfirst.frc157.ProtoBot2017.Robot;
+
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
@@ -24,6 +26,7 @@ public class AutoMoveToGear extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	Robot.vision.storePictures();
     	state = State.ELIMINATE_CROSSTRACK;
     }
 

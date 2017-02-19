@@ -83,10 +83,10 @@ public class Drive extends Subsystem {
     	XY remapped = remapControlMagnitude(new XY(x,y));
     	
     	
-    	SmartDashboard.putNumber("Raw X", x);
-    	SmartDashboard.putNumber("Remapped X", remapped.x);
-    	SmartDashboard.putNumber("Raw Y", y);
-    	SmartDashboard.putNumber("Remapped Y", remapped.y);
+//    	SmartDashboard.putNumber("Raw X", x);
+//    	SmartDashboard.putNumber("Remapped X", remapped.x);
+//    	SmartDashboard.putNumber("Raw Y", y);
+//    	SmartDashboard.putNumber("Remapped Y", remapped.y);
 
     	driveBot(remapped.x,remapped.y,rotation);
     }
@@ -130,6 +130,7 @@ public class Drive extends Subsystem {
     {
     	// Set Drive Control Mode ...
     	CANTalon.TalonControlMode controlMode = CANTalon.TalonControlMode.PercentVbus;
+    	System.out.println("Drive - set Control Mode = " + controlMode);
     	fL_Motor.changeControlMode(controlMode);
     	fR_Motor.changeControlMode(controlMode);
     	rL_Motor.changeControlMode(controlMode);
@@ -137,6 +138,7 @@ public class Drive extends Subsystem {
     	
     	// Set Break Mode ...
     	boolean brakeMode = false;   // false is coast
+    	System.out.println("Drive - set Brake Mode = " + (brakeMode ? "Brake" : "Coast"));
     	fL_Motor.enableBrakeMode(brakeMode);
     	fR_Motor.enableBrakeMode(brakeMode);
     	rL_Motor.enableBrakeMode(brakeMode);
@@ -149,6 +151,7 @@ public class Drive extends Subsystem {
     	// 24.0 -> 0 to full speed in 0.5s
     	// 48.0 -> 0 to full speed in 0.25s
     	// 96.0 -> 0 to full speed in 0.125s
+    	System.out.println("Drive - set Ramp Rate = " + rampRate + " V/s");
     	fL_Motor.setVoltageRampRate(rampRate);
        	fR_Motor.setVoltageRampRate(rampRate);
     	rL_Motor.setVoltageRampRate(rampRate);
