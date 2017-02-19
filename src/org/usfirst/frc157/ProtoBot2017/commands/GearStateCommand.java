@@ -1,6 +1,7 @@
 package org.usfirst.frc157.ProtoBot2017.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.Timer;
 import org.usfirst.frc157.ProtoBot2017.Robot;
 import org.usfirst.frc157.ProtoBot2017.subsystems.Gear;
@@ -56,28 +57,36 @@ public class GearStateCommand extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        System.out.println("GearStateCommand: execute()");
+//        System.out.println("GearStateCommand: execute()");
         switch (currentState) {
             
             case OPENING: 
                 if (GEAR.isOpen()) {
                     setState(GearState.WAITING);
+                	System.out.println("GearStateCommand: Open Gear Holder");
+                	Robot.oi.driver.setRumble(RumbleType.kLeftRumble, 1.0);
+                	Robot.oi.driver.setRumble(RumbleType.kRightRumble, 1.0);
                 } else {
-                    GEAR.open();
+                	GEAR.open();
                 }
                 break;
                 
             case WAITING:
                 if (Timer.getFPGATimestamp() >= (timeStart + waitSeconds)) {
+                	System.out.println("GearStateCommand: Close Gear Holder");
                     setState(GearState.CLOSING);
                 } else {
                     GEAR.idle();
                 }
-                break;
+                
+               break;
                 
             case CLOSING:
                 if (GEAR.isClosed()) {
                     finished = true;
+                	System.out.println("GearStateCommand: Gear Holder CLOSED");
+                	Robot.oi.driver.setRumble(RumbleType.kLeftRumble, 0.0);
+                	Robot.oi.driver.setRumble(RumbleType.kRightRumble, 0.0);
                 } else {
                     GEAR.close();
                 }
@@ -88,7 +97,7 @@ public class GearStateCommand extends Command {
     // Make this return true when this Command no longer needs to run execute()
     @Override
     protected boolean isFinished() {
-        System.out.println("GearStateCommand: finished()");
+//        System.out.println("GearStateCommand: finished()");
         return  finished;
     }
 

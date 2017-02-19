@@ -1,6 +1,7 @@
 package org.usfirst.frc157.ProtoBot2017.commands;
 
 import org.usfirst.frc157.ProtoBot2017.Robot;
+import org.usfirst.frc157.ProtoBot2017.subsystems.Vision;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -9,6 +10,8 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class AutoMoveToGear extends Command {
 
+	private final static double  CROSSTRACK_TOLERANCE = 25.0;
+	
 	private enum State
 	{
 		MOVE_TO_DROPOFF,
@@ -32,6 +35,9 @@ public class AutoMoveToGear extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	// get the targeting information
+    	Vision.VisionTarget target = Robot.vision.getTarget();
+
     	// crab to eliminate crosstrack
     	// turn to align on gear dropoff
     	// move forward to gear dropoff (maintain alignment)
@@ -39,7 +45,10 @@ public class AutoMoveToGear extends Command {
     	switch(state)
     	{
     	case ELIMINATE_CROSSTRACK:
-    		state = State.ALIGN_ON_DROPOFF;       // if crosstrack error is lowered enough
+    		if(Math.abs(target.crossTrack) < CROSSTRACK_TOLERANCE)  // vision 0s crosstrack when it is small
+    		{
+    			state = State.ALIGN_ON_DROPOFF;       // if crosstrack error is lowered enough
+    		}
     		break;
     	case ALIGN_ON_DROPOFF:
     		state = State.MOVE_TO_DROPOFF;        // if Aligned well enough
