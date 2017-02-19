@@ -94,7 +94,8 @@ public class OI {
         driver = new XboxController(0);
         
         joystickButtonA = new JoystickButton(driver, 1);
-        joystickButtonA.whileHeld(new AlignForShot(Vision.BoilerRange.FAR));
+//        joystickButtonA.whileHeld(new AlignForShot(Vision.BoilerRange.FAR));
+        joystickButtonA.whileHeld(new ShootCommand(Shoot.ShootCommand.FAR));
 
         joystickButtonB = new JoystickButton(driver, 2);
         joystickButtonB.whenPressed(new SetCameraTarget());
