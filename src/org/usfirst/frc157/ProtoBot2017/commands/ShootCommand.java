@@ -227,15 +227,15 @@ public class ShootCommand extends Command {
     
     private void shootAtPowerLevel(Shoot.ShootCommand powerLevel)
     {
-        if (powerLevel == Shoot.ShootCommand.FAR )
+        if (powerLevel == Shoot.ShootCommand.FAR_POWER )
         {
             Robot.shoot.far();
         }
-        else if (powerLevel == Shoot.ShootCommand.NEAR)
+        else if (powerLevel == Shoot.ShootCommand.NEAR_POWER)
         {
             Robot.shoot.near();
         }
-        else if(powerLevel == Shoot.ShootCommand.IDLE)
+        else if(powerLevel == Shoot.ShootCommand.STOP)
         {
             Robot.shoot.idle();
         }

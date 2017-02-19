@@ -126,7 +126,7 @@ public class OI {
 
 		joystickButtonA = new JoystickButton(driver, 1);
 		//        joystickButtonA.whileHeld(new AlignForShot(Vision.BoilerRange.FAR));
-		joystickButtonA.whileHeld(new ShootCommand(Shoot.ShootCommand.FAR));
+		joystickButtonA.whileHeld(new ShootCommand(Shoot.ShootCommand.FAR_POWER));
 
 		joystickButtonB = new JoystickButton(driver, 2);
 		joystickButtonB.whenPressed(new SetCameraTarget());
@@ -139,7 +139,7 @@ public class OI {
 		joystickButtonY.whenPressed(new StoreImages());
 
 		joystickButton5 = new JoystickButton(driver, 5);
-		joystickButton5.whileHeld(new ShootCommand( Shoot.ShootCommand.FAR ));
+		joystickButton5.whileHeld(new ShootCommand( Shoot.ShootCommand.FAR_POWER ));
 
 		joystickButton6 = new JoystickButton(driver, 6);
 		joystickButton6.whenPressed(new GearStateCommand());
@@ -162,11 +162,11 @@ public class OI {
 //		operatorButton2.whileHeld(new ClimbCommand(ClimbCommand.ClimbCommandSpeed.SLOW));
 
 		operatorButton8 = new  JoystickButton(operatorJoystick, 8);
-		operatorButton8.whenPressed(new ShootCommand(Shoot.ShootCommand.FAR));
+		operatorButton8.whenPressed(new ShootCommand(Shoot.ShootCommand.FAR_POWER));
 		operatorButton10 = new  JoystickButton(operatorJoystick, 10);
-		operatorButton10.whenPressed(new ShootCommand(Shoot.ShootCommand.NEAR));
+		operatorButton10.whenPressed(new ShootCommand(Shoot.ShootCommand.NEAR_POWER));
 		operatorButton12 = new  JoystickButton(operatorJoystick, 12);
-		operatorButton12.whenPressed(new ShootCommand(Shoot.ShootCommand.IDLE));
+		operatorButton12.whenPressed(new ShootCommand(Shoot.ShootCommand.STOP));
 
 		operatorButton4 = new  JoystickButton(operatorJoystick, 4);
 		operatorButton4.whenPressed(new HelixCommand(Helix.helixCommand.LOADRIGHT));

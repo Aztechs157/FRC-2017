@@ -33,9 +33,9 @@ public class Shoot extends Subsystem {
 
     public enum ShootCommand
     {
-        IDLE,
-        NEAR,
-        FAR  
+        STOP,
+        NEAR_POWER,
+        FAR_POWER  
     }
     public Shoot()
     {

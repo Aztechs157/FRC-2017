@@ -79,24 +79,25 @@ public class Vision extends Subsystem {
 	int loopCount = 0;
 
 
-	public enum BoilerRange
-	{
-		NEAR,
-		FAR
-	}
-
-	public enum VisionMode
-	{
-		PASSTHROUGH,
-		FIND_BOILER,
-		FIND_GEAR
-	}
 
 	public enum TargetID
 	{
 		BOILER,
 		GEAR,
 		NONE
+	}
+	
+	public enum BoilerRange
+	{
+		NEAR,
+		FAR
+	}
+	
+	public enum VisionMode
+	{
+		PASSTHROUGH,
+		FIND_BOILER,
+		FIND_GEAR
 	}
 
 	public enum CameraSelection
@@ -158,10 +159,7 @@ public class Vision extends Subsystem {
 
 	public BoilerRange getBoilerTargetRange()
 	{
-		synchronized(VisionSetup)
-		{
 			return boilerRange;
-		}
 	}
 	
 	public VisionMode getVisionMode()

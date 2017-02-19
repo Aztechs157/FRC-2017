@@ -16,6 +16,11 @@ public class AlignForShot extends Command {
 
 	private final double PID_P = 0.05;  //note currently no I or D
 	
+	public enum ShotRangeCommand
+	{
+		
+	}
+	
 	public enum AcquisitionType
 	{
 		LEFT,
