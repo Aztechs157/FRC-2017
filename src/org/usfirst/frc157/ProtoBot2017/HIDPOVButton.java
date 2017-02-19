@@ -1,6 +1,6 @@
 package org.usfirst.frc157.ProtoBot2017;
 
-import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.buttons.Button;
 
 //
@@ -10,9 +10,9 @@ import edu.wpi.first.wpilibj.buttons.Button;
 //        corresponding to to the push directions around the POV hat button
 //
 
-public class JoystickPOVButton  extends Button{
+public class HIDPOVButton  extends Button{
 
-	private Joystick stick;
+	private GenericHID stick;
 	private int povAngle;
 	
 	  /**
@@ -21,15 +21,17 @@ public class JoystickPOVButton  extends Button{
 	   * @param stick - the stick with the axis to use as a button
 	   * @param angle - POV stick angle to treat as a button press (e.g. 0,45,90,135 etc...) 
 	   **/
-	JoystickPOVButton(Joystick stick, int povAngle)
+	HIDPOVButton(GenericHID stick, int povAngle)
 	{
 		this.stick = stick;
 		this.povAngle = povAngle; 				
 	}
 
+
+	
 	public boolean isPresent()
 	{
-		if((1 > stick.getButtonCount()) && (1 > stick.getAxisCount()))
+		if(0 < stick.getPOVCount())
 		{
 			return false;
 		}
