@@ -14,6 +14,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class AlignForShot extends Command {
 
+	private final double PID_P = 0.05;  //note currently no I or D
+	
 	public enum AcquisitionType
 	{
 		LEFT,
@@ -109,7 +111,7 @@ public class AlignForShot extends Command {
     		break;
     		}
 
-    		Robot.drive.driveBot(0, 0, cmdRot);
+    		Robot.drive.driveBot(0, 0, PID_P * cmdRot);
     	}
     	
     	// assuming we can see the target, line up on it
@@ -131,7 +133,7 @@ public class AlignForShot extends Command {
     		
     		// Apply Change to Drive
     		double cmdX = 0;
-    		Robot.drive.driveBot(cmdX, cmdY, cmdRot);
+    		Robot.drive.driveBot(PID_P * cmdX, PID_P * cmdY, PID_P * cmdRot);
     	}
     	else
     	{
