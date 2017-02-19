@@ -27,7 +27,7 @@ public class Gate extends Subsystem {
     /// gate uses a pwm signal on spike 
     /// command = on or off
 
-    private final Relay gateRelay = RobotMap.gateRelay;
+    private Relay gateRelay;
 
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
@@ -41,10 +41,10 @@ public class Gate extends Subsystem {
     }
 
         
-    public Gate()
+    public Gate(Relay gateRelay)
     {
         System.out.println("Gate:GATE()");
-        
+        this.gateRelay = gateRelay;
         gateRelay.set(Relay.Value.kOn);
     }        
    

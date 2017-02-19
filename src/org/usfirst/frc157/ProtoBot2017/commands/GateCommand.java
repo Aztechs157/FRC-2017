@@ -30,7 +30,7 @@ public class GateCommand extends Command {
     
     public GateCommand(Gate.gateCommand command) {
         gateCommand = command;
-        requires(Robot.gateLeft);
+        requires(Robot.leftGate);
         
     }
      
@@ -45,17 +45,17 @@ public class GateCommand extends Command {
         System.out.println("Gate: execute()" + gateCommand);
         if (gateCommand == Gate.gateCommand.OPEN);
         {
-            Robot.gateLeft.open();
+            Robot.leftGate.open();
             finished=false ;
         }
         if (gateCommand == Gate.gateCommand.CLOSED)
         {
-            Robot.gateLeft.close();
+            Robot.leftGate.close();
             finished=false; 
         }
         else if(gateCommand == Gate.gateCommand.OFF)
         {
-            Robot.gateLeft.off();
+            Robot.leftGate.off();
             finished=true; 
         }
         else

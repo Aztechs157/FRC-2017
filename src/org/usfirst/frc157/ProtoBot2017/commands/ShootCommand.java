@@ -69,6 +69,8 @@ public class ShootCommand extends Command {
         shootAtPowerLevel(shotPower);
 		Robot.helix.idleLeft();
 		Robot.helix.idleRight();
+		Robot.leftGate.close();
+		Robot.rightGate.close();
 		speedTimeoutTime = Timer.getFPGATimestamp() + INITIAL_SPINUP_TIMEOUT_SEC;
     }
 
@@ -85,7 +87,7 @@ public class ShootCommand extends Command {
     		{
     			System.out.println("ShootCommand.execute(" + shotPower + ") - " + Timer.getFPGATimestamp() + state);
     			// if we are at speed or if we have taken too long to spinup start shooting with Left Gate
-    			Robot.gateLeft.open();
+    			Robot.leftGate.open();
     			state = ShotCommandState.PULSING_LEFT_GATE;
     			pulseState = PulseState.WAIT_OPENED;
     			pulseStartTime = Timer.getFPGATimestamp();
@@ -103,7 +105,7 @@ public class ShootCommand extends Command {
     			{
         			System.out.println("ShootCommand.execute(" + shotPower + ") - " + Timer.getFPGATimestamp() + state + " " + pulseState);
     				// then open the gate and switch to the opened state
-    				Robot.gateLeft.close();
+    				Robot.leftGate.close();
     				pulseState = PulseState.WAIT_CLOSED;
     				pulseStartTime = Timer.getFPGATimestamp();
         			System.out.println("ShootCommand.execute(" + shotPower + ") - " + Timer.getFPGATimestamp() + state + " " + pulseState);
@@ -127,7 +129,7 @@ public class ShootCommand extends Command {
     			if(shooterAtSpeed() || (Timer.getFPGATimestamp() > speedTimeoutTime))
     			{
         			System.out.println("ShootCommand.execute(" + shotPower + ") - " + Timer.getFPGATimestamp() + state + " " + pulseState);
-    				Robot.gateRight.open();
+    				Robot.rightGate.open();
     				state = ShotCommandState.PULSING_RIGHT_GATE;
     				pulseState = PulseState.WAIT_OPENED;
     				pulseStartTime = Timer.getFPGATimestamp();
@@ -147,7 +149,7 @@ public class ShootCommand extends Command {
     			{
         			System.out.println("ShootCommand.execute(" + shotPower + ") - " + Timer.getFPGATimestamp() + state + " " + pulseState);
     				// then open the gate and switch to the opened state
-    				Robot.gateRight.close();
+    				Robot.rightGate.close();
     				pulseState = PulseState.WAIT_CLOSED;
     				pulseStartTime = Timer.getFPGATimestamp();
         			System.out.println("ShootCommand.execute(" + shotPower + ") - " + Timer.getFPGATimestamp() + state + " " + pulseState);
@@ -171,7 +173,7 @@ public class ShootCommand extends Command {
     			if(shooterAtSpeed() || (Timer.getFPGATimestamp() > speedTimeoutTime))
     			{
         			System.out.println("ShootCommand.execute(" + shotPower + ") - " + Timer.getFPGATimestamp() + state + " " + pulseState);
-    				Robot.gateLeft.open();
+    				Robot.leftGate.open();
     				state = ShotCommandState.PULSING_LEFT_GATE;
     				pulseState = PulseState.WAIT_OPENED;
     				pulseStartTime = Timer.getFPGATimestamp();
@@ -204,8 +206,8 @@ public class ShootCommand extends Command {
     	Robot.shoot.idle();
 		Robot.helix.idleLeft();
 		Robot.helix.idleRight();
-		Robot.gateLeft.close();
-		Robot.gateRight.close();
+		Robot.leftGate.close();
+		Robot.rightGate.close();
     }
     
     private void shootAtPowerLevel(Shoot.ShootCommand powerLevel)
