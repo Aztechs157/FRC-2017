@@ -10,33 +10,33 @@
 
 
 package org.usfirst.frc157.ProtoBot2017.commands;
-import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.Timer; 
 import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc157.ProtoBot2017.Robot;
 
 /**
  *
  */
-public class AutoDriveSpeedForTime extends Command
+public class AutoTurn extends Command
 {
     private boolean finished = false;
 
     
 	private double driveTime; // seconds
-	private double driveSpeed; // fraction of full speed
+	private double rotationSpeed; // fraction of full speed
 	
 	private double autoDriveStartTime; // seconds
 
-	public AutoDriveSpeedForTime(double driveTime, double driveSpeed) {
+	public AutoTurn(double driveTime, double rotationSpeed) {
 		this.driveTime = driveTime;
-		this.driveSpeed = driveSpeed;
+		this.rotationSpeed= rotationSpeed;
     }
 
     // Called just before this Command runs the first time
     protected void initialize()
     {
     	autoDriveStartTime = Timer.getFPGATimestamp();
-    	Robot.drive.driveBot(0, driveSpeed, 0);
+    	Robot.drive.driveBot(0,driveTime, rotationSpeed);
     	System.out.println("STARTING AUTO @" + autoDriveStartTime);
     }
 
