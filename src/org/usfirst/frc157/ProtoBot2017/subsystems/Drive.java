@@ -16,6 +16,7 @@ import org.usfirst.frc157.ProtoBot2017.RobotMap;
 import org.usfirst.frc157.ProtoBot2017.commands.*;
 import com.ctre.CANTalon;
 
+import edu.wpi.first.wpilibj.CANSpeedController;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Sendable;
@@ -103,33 +104,37 @@ public class Drive extends Subsystem {
     
     private void configureControllers()
     {
-    	fL_Motor.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
-    	fR_Motor.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
-    	rL_Motor.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
-    	rR_Motor.changeControlMode(CANTalon.TalonControlMode.PercentVbus);    	
-    	// TODO consider setting ramp rate
+    	// Set Drive Control Mode ...
+    	CANTalon.TalonControlMode controlMode = CANTalon.TalonControlMode.PercentVbus;
+    	fL_Motor.changeControlMode(controlMode);
+    	fR_Motor.changeControlMode(controlMode);
+    	rL_Motor.changeControlMode(controlMode);
+    	rR_Motor.changeControlMode(controlMode);    	
+    	
+    	// Set Break Mode ...
+    	boolean brakeMode = false;   // false is coast
+    	fL_Motor.enableBrakeMode(brakeMode);
+    	fR_Motor.enableBrakeMode(brakeMode);
+    	rL_Motor.enableBrakeMode(brakeMode);
+    	rR_Motor.enableBrakeMode(brakeMode);    	
+    	
+    	// Set ramp rate
+    	double rampRate = 48.0;  // V/s (note: greater than 12 implies will reach max voltage in less than 1 second) e.g.
+    	//  6.0 -> 0 to full speed in 2.0s
+    	// 12.0 -> 0 to full speed in 1.0s
+    	// 24.0 -> 0 to full speed in 0.5s
+    	// 48.0 -> 0 to full speed in 0.25s
+    	// 96.0 -> 0 to full speed in 0.125s
+    	fL_Motor.setVoltageRampRate(rampRate);
+       	fR_Motor.setVoltageRampRate(rampRate);
+    	rL_Motor.setVoltageRampRate(rampRate);
+    	rR_Motor.setVoltageRampRate(rampRate);   	
     }
     
     public void initDefaultCommand() {
          setDefaultCommand(new OperatorDrive());
     }
-    public void DriveForwardForTime(int t)
-    {
-        
-       for(int i=0;i<=t;i++)
-        {
-        fL_Motor.set(0.5); 
-        fR_Motor.set(0.5);
-        rL_Motor.set(0.5);
-        rR_Motor.set(0.5);
-        System.out.println("Driving for"+ i + "untill" +t);
-        } 
-       fL_Motor.set(0.0); 
-       fR_Motor.set(0.0);
-       rL_Motor.set(0.0);
-       rR_Motor.set(0.0);
-     }
-    
+
     public void resetZeroHeading()
     {
     	initialHeading = imu.getAngle(); 
