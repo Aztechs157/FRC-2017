@@ -49,7 +49,8 @@ public class ToggleCollection extends Command {
 			Robot.collect.load();
 			Robot.helix.loadLeft();
 			Robot.helix.loadRight();
-			Robot.gate.close();
+			Robot.leftGate.close();
+			Robot.rightGate.close();
 			System.out.println("ToggleCollection - Start Collection");
 		}
 		break;

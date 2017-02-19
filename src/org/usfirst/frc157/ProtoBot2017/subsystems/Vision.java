@@ -169,7 +169,7 @@ public class Vision extends Subsystem {
 		return visionMode;
 	}
 
-	public void StorePictures()
+	public void storePictures()
 	{
 		synchronized(pictureSync)
 		{
@@ -267,7 +267,7 @@ public class Vision extends Subsystem {
 		//		gearCamera.setResolution(CAM_WIDTH, CAM_HEIGHT);
 
 		InitializeVision();
-		System.out.println("Starting Vision");
+		System.out.println("Vision Started");
 	}
 
 
@@ -729,7 +729,7 @@ public class Vision extends Subsystem {
 			visionThread.setDaemon(true);
 			visionThread.start();
 		}
-		System.out.println("Vision Initialized & Started");
+		System.out.println("Vision Thread Initialized");
 	}
 
 

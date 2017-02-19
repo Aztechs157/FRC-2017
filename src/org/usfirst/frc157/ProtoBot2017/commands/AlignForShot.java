@@ -30,6 +30,7 @@ public class AlignForShot extends Command {
     	System.out.println("Starting AlignForShot(" + selectedRange.toString() + ")");
     	Robot.vision.setVisionMode(Vision.VisionMode.FIND_BOILER, selectedRange);
     	preCommandDriveMode = Robot.drive.getDriveMode();
+    	Robot.vision.storePictures();
     	Robot.drive.setDriveMode(DriveMode.ROBOT_RELATIVE);
     }
 

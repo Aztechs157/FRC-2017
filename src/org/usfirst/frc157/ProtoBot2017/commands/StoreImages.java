@@ -16,7 +16,7 @@ public class StoreImages extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	Robot.vision.StorePictures();
+    	Robot.vision.storePictures();
     }
 
     // Called repeatedly when this Command is scheduled to run
