@@ -15,6 +15,8 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc157.ProtoBot2017.Robot;
+import org.usfirst.frc157.ProtoBot2017.subsystems.Drive;
+import org.usfirst.frc157.ProtoBot2017.subsystems.Drive.XY;
 
 /**
  *
@@ -60,7 +62,8 @@ public class OperatorDrive extends Command {
     	// reverse direction of rotation to be consistent with operators expectation
     	rot = -rot; 	
     	
-        Robot.drive.driveBot(x, y, rot);
+    	
+        Robot.drive.stickDriveBot(x, y, rot);
     }
 
     // Make this return true when this Command no longer needs to run execute()
