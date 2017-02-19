@@ -148,7 +148,7 @@ public class OI {
         trigger.whileHeld(new CollectorCommand(Collect.collectorCommand.LOAD));
 
         operatorButton2 = new JoystickButton(operatorJoystick, 2);
-        operatorButton2.whileHeld(new ClimbCommand(Climb.ClimbCommand.MATCH));
+        operatorButton2.whileHeld(new ClimbCommand(ClimbCommand.ClimbCommandSpeed.SLOW));
         
         operatorButton8 = new  JoystickButton(operatorJoystick, 8);
         operatorButton8.whenPressed(new ShootCommand(Shoot.ShootCommand.FAR));

@@ -22,7 +22,9 @@ import edu.wpi.first.wpilibj.DigitalInput;
  *
  */ 
 public class Climb extends Subsystem {
-    
+    private final double SPEEDSLOW = 0.6;
+    private final double SPEEDFAST = 1.0;
+
     private final double TEST_MOD = -1; // set to 1 for all positive, -1 for all negative
  
     private final CANTalon climbMotor = RobotMap.climbMotor;
@@ -33,12 +35,6 @@ public class Climb extends Subsystem {
     // here. Call these from Commands.
 
 
-    public enum ClimbCommand
-    {
-        IDLE,
-        TEST,
-        MATCH  
-    }
     public Climb()
     {
         System.out.println("Climb: Climb()");
@@ -55,13 +51,13 @@ public class Climb extends Subsystem {
     {
         climbMotor.set(0.0);        
     }
-    public void test()
+    public void slow()
     {
-        climbMotor.set(0.5 * TEST_MOD);
+        climbMotor.set(SPEEDSLOW * TEST_MOD);
     }
-    public void match()
+    public void fast()
     {
-        climbMotor.set(0.8 * TEST_MOD);
+        climbMotor.set(SPEEDFAST * TEST_MOD);
     }
     
     @Override

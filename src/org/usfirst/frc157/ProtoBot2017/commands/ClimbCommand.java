@@ -21,12 +21,18 @@ import org.usfirst.frc157.ProtoBot2017.subsystems.Climb;
  *
  */
 public class ClimbCommand extends Command {
-    
-    private Climb.ClimbCommand climbCommand; 
+    public enum ClimbCommandSpeed
+    {
+        IDLE,
+        SLOW,
+        FAST  
+    }
+
+    private ClimbCommandSpeed climbCommand; 
 
     private boolean finished = false;
     
-    public ClimbCommand(Climb.ClimbCommand command) {
+    public ClimbCommand(ClimbCommandSpeed command) {
         climbCommand = command;
         requires(Robot.climb);
         
@@ -41,17 +47,17 @@ public class ClimbCommand extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
         System.out.println("Climb: execute(" + climbCommand + ") finihed = " + finished);
-        if (climbCommand == Climb.ClimbCommand.MATCH )
+        if (climbCommand == ClimbCommandSpeed.FAST )
         {
-            Robot.climb.match();
+            Robot.climb.fast();
             finished=false ;
         }
-        else if (climbCommand == Climb.ClimbCommand.TEST)
+        else if (climbCommand == ClimbCommandSpeed.SLOW)
         {
-            Robot.climb.test();
+            Robot.climb.slow();
             finished=false; 
         }
-        else if(climbCommand == Climb.ClimbCommand.IDLE)
+        else if(climbCommand == ClimbCommandSpeed.IDLE)
         {
             Robot.climb.idle();
             finished=true; 
