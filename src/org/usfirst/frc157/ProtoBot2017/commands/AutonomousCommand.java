@@ -28,8 +28,8 @@ public class AutonomousCommand extends Command {
     public AutonomousCommand() {
     	requires(Robot.drive);
 
-		SwitchPosition switchPosition = RobotMap.modeSelect.getPosition();
-
+		SwitchPosition switchPosition = SwitchPosition.POSITION_1;
+//		switchPosition  = RobotMap.modeSelect.getPosition();
 		System.out.println("Autonomous Switch: " + switchPosition);
 		switch(switchPosition)
 		{

@@ -18,7 +18,9 @@ public class AlignForShot extends Command {
 	
 	public enum ShotRangeCommand
 	{
-		
+		NEAR,
+		FAR,
+		AUTO
 	}
 	
 	public enum AcquisitionType
@@ -29,32 +31,49 @@ public class AlignForShot extends Command {
 		NONE
 	}
 	
-	Vision.BoilerRange selectedRange;
+	ShotRangeCommand selectedRange;
 	Point spot;
 	DriveMode preCommandDriveMode;
 
 	AcquisitionType acquisitionType;
 	
-    public AlignForShot(Vision.BoilerRange inSelectedRange) {
+    public AlignForShot(ShotRangeCommand inSelectedRange) {
     	selectedRange = inSelectedRange;
         // Use requires() here to declare subsystem dependencies
         requires(Robot.drive);
         acquisitionType = AcquisitionType.NONE;
-        spot = Robot.vision.getBoilerTargetCenter(selectedRange);
     }
 
-    public AlignForShot(Vision.BoilerRange inSelectedRange, AcquisitionType acquisitionType) {
+    public AlignForShot(ShotRangeCommand inSelectedRange, AcquisitionType acquisitionType) {
     	selectedRange = inSelectedRange;
         // Use requires() here to declare subsystem dependencies
         requires(Robot.drive);
         this.acquisitionType = acquisitionType;
-        spot = Robot.vision.getBoilerTargetCenter(selectedRange);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
     	System.out.println("Starting AlignForShot(" + selectedRange.toString() + ")");
-    	Robot.vision.setVisionMode(Vision.VisionMode.FIND_BOILER, selectedRange);
+    	
+    	switch(selectedRange)
+    	{
+    	case NEAR:
+    	{
+        	Robot.vision.setVisionMode(Vision.VisionMode.FIND_BOILER, Vision.BoilerRange.NEAR);
+        	spot = Robot.vision.getBoilerTargetCenter(Vision.BoilerRange.NEAR);   		
+    	} break;
+    	case FAR:
+    	{
+        	Robot.vision.setVisionMode(Vision.VisionMode.FIND_BOILER, Vision.BoilerRange.FAR);
+        	spot = Robot.vision.getBoilerTargetCenter(Vision.BoilerRange.FAR);   		    		
+    	} break;
+    	case AUTO:
+    	{
+        	Robot.vision.setVisionMode(Vision.VisionMode.FIND_BOILER, Robot.vision.getBoilerTargetRange());
+        	spot = Robot.vision.getBoilerTargetCenter(Robot.vision.getBoilerTargetRange());   		
+    	} break;
+    	}
+
     	preCommandDriveMode = Robot.drive.getDriveMode();
     	Robot.vision.storePictures();
     	Robot.drive.setDriveMode(DriveMode.ROBOT_RELATIVE);

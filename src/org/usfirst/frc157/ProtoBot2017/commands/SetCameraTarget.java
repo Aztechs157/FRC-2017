@@ -12,48 +12,30 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class SetCameraTarget extends Command {
 
-    public SetCameraTarget() {
+	private VisionMode mode;
+	private BoilerRange range;
+	
+    public SetCameraTarget(VisionMode mode) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
+    	this.mode = mode;
+    	this.range = BoilerRange.NEAR;
     }
 
+    public SetCameraTarget(VisionMode mode, BoilerRange range) {
+        // Use requires() here to declare subsystem dependencies
+        // eg. requires(chassis);
+    	this.mode = mode;
+    	this.range = range;
+    }
     // Called just before this Command runs the first time
     protected void initialize() {
-    }
+		Robot.vision.setVisionMode(mode, range);
+   }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Vision.VisionMode mode = Robot.vision.getVisionMode();
-    		
-    	// Walk through the vision modes (target types)
-    	switch(mode)
-    	{
-    	case FIND_BOILER:
-			System.out.println("Setting Target Gear");
-    		Robot.vision.setVisionMode(VisionMode.FIND_GEAR, Robot.vision.getBoilerTargetRange());
-    		break;
-    	case FIND_GEAR:
-			System.out.println("Setting Target Passthru");
-    		Robot.vision.setVisionMode(VisionMode.PASSTHROUGH, Robot.vision.getBoilerTargetRange());
-    		break;
-    	case PASSTHROUGH:
-    		if (Robot.vision.getBoilerTargetRange() == BoilerRange.NEAR)
-    		{
-    			System.out.println("Setting Target Boiler Far");
-    			Robot.vision.setVisionMode(VisionMode.FIND_BOILER, BoilerRange.FAR);
-    		}
-    		else
-    		{
-    			System.out.println("Setting Target Boiler Near");
-    			Robot.vision.setVisionMode(VisionMode.FIND_BOILER, BoilerRange.NEAR);    			
-    		}
-    		break;
-    	default:
-			System.out.println("Setting Target Passthru");
-    		Robot.vision.setVisionMode(VisionMode.PASSTHROUGH, Robot.vision.getBoilerTargetRange());
-    		break;
-    	}
-    }
+     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
