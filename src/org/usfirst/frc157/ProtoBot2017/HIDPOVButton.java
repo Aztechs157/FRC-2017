@@ -25,22 +25,7 @@ public class HIDPOVButton  extends Button{
 	{
 		this.stick = stick;
 		this.povAngle = povAngle; 				
-	}
-
-
-	
-	public boolean isPresent()
-	{
-		if(0 < stick.getPOVCount())
-		{
-			return false;
-		}
-		else
-		{			
-			return true;
-		}
-	}
-	
+	}	
 	
 	/**
 	 * Gets the value of the joystick button
@@ -49,14 +34,7 @@ public class HIDPOVButton  extends Button{
 	 */
 	@Override
 	public boolean get() {
-		if(isPresent())
-		{
 			return (stick.getPOV() == povAngle);
-		}
-		else
-		{
-			return false;
-		}
 	}
 }
 
