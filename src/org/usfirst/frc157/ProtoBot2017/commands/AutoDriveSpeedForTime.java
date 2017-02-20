@@ -23,20 +23,25 @@ public class AutoDriveSpeedForTime extends Command
 
     
 	private double driveTime; // seconds
-	private double driveSpeed; // fraction of full speed
+	private double driveSpeedX; // X fraction of full speed
+	private double driveSpeedY; // Y fraction of full speed
+	private double driveSpeedRot; // Rotation fraction of full speed
 	
 	private double autoDriveStartTime; // seconds
 
-	public AutoDriveSpeedForTime(double driveTime, double driveSpeed) {
-		this.driveTime = driveTime;
-		this.driveSpeed = driveSpeed;
+	public AutoDriveSpeedForTime(double driveTime, double driveSpeedX, double driveSpeedY, double driveSpeedRot) {
+		this.driveTime     = driveTime;
+		this.driveSpeedX   = driveSpeedX;
+		this.driveSpeedY   = driveSpeedY;
+		this.driveSpeedRot = driveSpeedRot;
     }
 
     // Called just before this Command runs the first time
     protected void initialize()
     {
+    	System.out.println("AutoDriveSpeedForTime.initialize() - Time = " + driveTime + " SpeedX = " + driveSpeedX+ " SpeedY = " + driveSpeedY+ " SpeedRot = " + driveSpeedRot);
     	autoDriveStartTime = Timer.getFPGATimestamp();
-    	Robot.drive.driveBot(0, driveSpeed, 0);
+    	Robot.drive.driveBot(driveSpeedX, driveSpeedY, driveSpeedRot);
     	System.out.println("STARTING AUTO @" + autoDriveStartTime);
     }
 

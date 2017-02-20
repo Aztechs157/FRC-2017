@@ -26,70 +26,7 @@ public class AutonomousCommand extends Command {
 
    
     public AutonomousCommand() {
-    	requires(Robot.drive);
-
-		SwitchPosition switchPosition = SwitchPosition.POSITION_1;
-//		switchPosition  = RobotMap.modeSelect.getPosition();
-		System.out.println("Autonomous Switch: " + switchPosition);
-		switch(switchPosition)
-		{
-		/*
-		 * Autonomuous commands 
-		 * drive forward 6ft(done)
-		 * drive forward 4 ft reverse 2ft 
-		 * drive forward 2-3 ft turn left camera shoot 
-		 * drive to deliver gear
-		 */
-    		case POSITION_0:
-    		{
-                System.out.println("\n*********************************\n");
-                System.out.println("Autonomous Position 0");
-                // do nothing case 
-                break;
-    		}
-    		case POSITION_1:
-    		{
-    			System.out.println("\n*********************************\n");
-    			System.out.println("Autonomous Position 1");
-    			// Drive forward 6 ft
-    			new AutoDriveSpeedForTime(0.5,5.0);
-    		}
-    		case POSITION_2:
-    		{
-    			System.out.println("\n*********************************\n");
-    			System.out.println("Autonomous Position 2");
-    			//drive forward 4 fft backup 2 
-    			new AutoDriveSpeedForTime(0.5,2.5);
-    			new AutoDriveSpeedForTime(0.5,1);
-    			break;
-    		}
-    		case POSITION_3:
-    		{
-    			System.out.println("\n*********************************\n");
-    			System.out.println("Autonomous Position 3");
-    			new AutoDriveSpeedForTime(0.5,2.5);
-    			new AutoTurn(0.5,.5);
-    			//new  AutoALigntoSHoo
-    			break;
-    		}
-    		case POSITION_4:
-            {
-                System.out.println("\n*********************************\n");
-                System.out.println("Autonomous Position 4");
-                //drive to gear
-                 
-                break;
-            }
-    		case POSITION_5:
-    		{
-    			System.out.println("\n*********************************\n");
-    			System.out.println("Autonomous Position 5");
-
-    			//addSequential(new PrintButton(">>> Autonomous Position 5"));
-    			//unimplemented
-    			break;
-    		}
-		}
+//    	requires(Robot.drive);
 
     }
 
@@ -106,7 +43,7 @@ public class AutonomousCommand extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        return true;
     }
 
     // Called once after isFinished returns true

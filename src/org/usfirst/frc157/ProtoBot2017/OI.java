@@ -233,7 +233,7 @@ public class OI {
 		// SmartDashboard Buttons
 		SmartDashboard.putData("AlignToField", new AlignToField());
 		SmartDashboard.putData("Store Camera Images", new StoreImages());
-		SmartDashboard.putData("Autonomous Command", new AutonomousCommand());
+//		SmartDashboard.putData("Autonomous Command", new AutonomousCommand());
 		SmartDashboard.putData("DebugButton", new DebugPrintInfo("ScreenButton", DebugSelection.NOPRINT));
 		SmartDashboard.putData("Align for Near Shot", new AlignForShot(AlignForShot.ShotRangeCommand.NEAR));
 		SmartDashboard.putData("Align for Far Shot", new AlignForShot(AlignForShot.ShotRangeCommand.FAR));
