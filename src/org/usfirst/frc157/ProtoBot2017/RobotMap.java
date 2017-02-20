@@ -35,7 +35,8 @@ public class RobotMap {
     public static CANTalon driveRL_Motor;
     public static CANTalon driveRR_Motor;
     public static RobotDrive driveMechDrive;
-    public static CANTalon gearMotor;
+    public static CANTalon gearMotorLeft;
+    public static CANTalon gearMotorRight;
     public static CANTalon collectMotor;
     public static CANTalon helixMotorRight;
     public static CANTalon helixMotorLeft;
@@ -73,8 +74,11 @@ public class RobotMap {
         driveMechDrive.setSensitivity(0.5);
         driveMechDrive.setMaxOutput(1.0);
 
-        gearMotor = new CANTalon(12);             // CAN ID 12
-        LiveWindow.addActuator("Gear", "gearMotor", gearMotor);
+        gearMotorRight = new CANTalon(14);             // CAN ID 14
+        LiveWindow.addActuator("Gear", "gearMotor", gearMotorRight);
+        
+        gearMotorLeft = new CANTalon(12);            
+        LiveWindow.addActuator("Gear", "gearMotor", gearMotorLeft);
         
         collectMotor = new CANTalon(13);          // CAN ID 13
         LiveWindow.addActuator("Collect", "collectMotor", collectMotor);
