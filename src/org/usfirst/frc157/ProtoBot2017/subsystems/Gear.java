@@ -29,7 +29,8 @@ import edu.wpi.first.wpilibj.DigitalInput;
  */
 public class Gear extends Subsystem {
 
-    private final double SPEED = 0.4;
+    private final double OPEN_SPEED  = 0.4;
+    private final double CLOSE_SPEED = 0.2;
     private final CANTalon gearMotor = RobotMap.gearMotor;
 
     // Put methods for controlling this subsystem
@@ -80,12 +81,12 @@ public class Gear extends Subsystem {
     
     public void close()
     {
-        gearMotor.set(-SPEED);
+        gearMotor.set(-CLOSE_SPEED);
     }
 
     public void open()
     {
-        gearMotor.set(SPEED);
+        gearMotor.set(OPEN_SPEED);
         
     }
 

@@ -23,54 +23,53 @@ import edu.wpi.first.wpilibj.Relay;
  *
  */
 public class Gate extends Subsystem {
-    
-    /// gate uses a pwm signal on spike 
-    /// command = on or off
 
-    private Relay gateRelay;
+	/// gate uses a pwm signal on spike 
+	/// command = on or off
 
-    // Put methods for controlling this subsystem
-    // here. Call these from Commands.
-    private final double Speed= 0.5; 
+	private Relay gateRelay;
 
-    public enum gateCommand
-    {
-        OPEN,
-        CLOSED,
-        OFF
-    }
+	// Put methods for controlling this subsystem
+	// here. Call these from Commands.
+	private final double Speed= 0.5; 
 
-        
-    public Gate(Relay gateRelay)
-    {
-        System.out.println("Gate:GATE(ch." + gateRelay.getChannel() + ")");
-        this.gateRelay = gateRelay;
-        gateRelay.set(Relay.Value.kOn);
-    }        
-   
-    
-    public void open()
-    {
-        gateRelay.set(Relay.Value.kForward);
-    }
+	public enum gateCommand
+	{
+		OPEN,
+		CLOSED,
+		OFF
+	}
 
-    public void close()
-    {
-        
-        gateRelay.set(Relay.Value.kReverse);
-    }
 
-    public void off ()
-    {
-              gateRelay.set(Relay.Value.kOff);
-    }
-    
-    
-    @Override
-    protected void initDefaultCommand()
-    {
-        // TODO Auto-generated method stub
-        
-    }
+	public Gate(Relay gateRelay)
+	{
+		System.out.println("Gate:GATE(ch." + gateRelay.getChannel() + ")");
+		this.gateRelay = gateRelay;
+		gateRelay.set(Relay.Value.kOn);
+	}        
+
+
+	public void open()
+	{
+		gateRelay.set(Relay.Value.kForward);
+	}
+
+	public void close()
+	{
+		gateRelay.set(Relay.Value.kOff);
+	}
+
+	public void off ()
+	{
+		gateRelay.set(Relay.Value.kOff);
+	}
+
+
+	@Override
+	protected void initDefaultCommand()
+	{
+		// TODO Auto-generated method stub
+
+	}
 }
-    
+

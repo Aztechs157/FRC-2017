@@ -27,7 +27,7 @@ public class Collect extends Subsystem {
 
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
-    private final double Speed= -0.5; 
+    private final double Speed= 1.0; 
 
     public enum collectorCommand
     {
@@ -47,12 +47,12 @@ public class Collect extends Subsystem {
     
     public void unload()
     {
-        collectMotor.set(-Speed);
+        collectMotor.set(Speed);
     }
 
     public void load()
     {
-        collectMotor.set(Speed);
+        collectMotor.set(-Speed);
         
     }
 

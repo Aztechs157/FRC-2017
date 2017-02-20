@@ -50,8 +50,27 @@ public class GearStateCommand extends Command {
     protected void initialize() {
         System.out.println("GearStateCommand: initialize()");
         finished = false;
-        currentState = GearState.OPENING;
-        setState(GearState.OPENING);
+
+        if(GEAR.isOpen())
+        {
+        	currentState = GearState.CLOSING;
+        	GEAR.close();
+        	setState(GearState.CLOSING);
+
+        }
+        else if(GEAR.isClosed())
+        {
+        	currentState = GearState.OPENING;
+        	GEAR.open();
+        	setState(GearState.OPENING);
+
+        }
+        else
+        {
+        	currentState = GearState.OPENING;
+        	GEAR.open();
+        	setState(GearState.OPENING);
+        }
     }
 
     // Called repeatedly when this Command is scheduled to run

@@ -160,18 +160,16 @@ public class OI {
 		//		operatorButton2 = new JoystickButton(operatorJoystick, 2);
 		//		operatorButton2.whileHeld(new ClimbCommand(ClimbCommand.ClimbCommandSpeed.SLOW));
 
-		operatorButton8 = new  JoystickButton(operatorJoystick, 8);
-		operatorButton8.whenPressed(new ShootCommand(ShootCommand.ShotRangeCommand.FAR));
-		operatorButton10 = new  JoystickButton(operatorJoystick, 10);
-		operatorButton10.whenPressed(new ShootCommand(ShootCommand.ShotRangeCommand.NEAR));
+//		operatorButton8 = new  JoystickButton(operatorJoystick, 8);
+//		operatorButton8.whenPressed(new ShootCommand(ShootCommand.ShotRangeCommand.FAR));
+//		operatorButton10 = new  JoystickButton(operatorJoystick, 10);
+//		operatorButton10.whenPressed(new ShootCommand(ShootCommand.ShotRangeCommand.NEAR));
 		//		operatorButton12 = new  JoystickButton(operatorJoystick, 12);
 		//		operatorButton12.whenPressed(new ShootCommand(ShootCommand.ShootCommand.STOP));
 
 		operatorButton2 = new JoystickButton(operatorJoystick, 2);
 		operatorButton2.whenPressed(new ToggleCollection());
 
-		//operatorButton8 = new  JoystickButton(operatorJoystick, 8);
-		//operatorButton8.whenPressed(new ShootCommand(Shoot.ShootCommand.FAR));
 
 		//operatorButton10 = new  JoystickButton(operatorJoystick, 10);
 		//operatorButton10.whenPressed(new ShootCommand(Shoot.ShootCommand.NEAR));
@@ -194,11 +192,14 @@ public class OI {
 		operatorButton6 = new  JoystickButton(operatorJoystick, 6);
 		operatorButton6.whenPressed(new SetCameraTarget(VisionMode.FIND_GEAR));
 
-		//operatorButton7 = new JoystickButton(operatorJoystick, 7);
-		//operatorButton7.whenPressed(new GateCommand(Gate.gateCommand.OPEN));
+		operatorButton7 = new JoystickButton(operatorJoystick, 7);
+		operatorButton7.whenPressed(new ClimbCommand( ClimbCommandSpeed.SLOW));
 
-		//operatorButton9 = new JoystickButton(operatorJoystick, 9);
-		//operatorButton9.whenPressed(new GateCommand(Gate.gateCommand.OFF));
+		operatorButton8 = new  JoystickButton(operatorJoystick, 8);
+		operatorButton8.whenPressed(new ClimbCommand( ClimbCommandSpeed.FAST));
+
+		operatorButton9 = new JoystickButton(operatorJoystick, 9);
+		operatorButton9.whenPressed(new  ClimbCommand( ClimbCommandSpeed.IDLE));
 
 		operatorButton11 = new JoystickButton(operatorJoystick, 11);
 		operatorButton11.whenPressed(new StoreImages());
