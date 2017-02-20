@@ -41,17 +41,24 @@ public class AutoDriveSpeedForTime extends Command
     {
     	System.out.println("AutoDriveSpeedForTime.initialize() - Time = " + driveTime + " SpeedX = " + driveSpeedX+ " SpeedY = " + driveSpeedY+ " SpeedRot = " + driveSpeedRot);
     	autoDriveStartTime = Timer.getFPGATimestamp();
-    	Robot.drive.driveBot(driveSpeedX, driveSpeedY, driveSpeedRot);
+    	//Robot.drive.driveBot(driveSpeedX, driveSpeedY, driveSpeedRot);
     	System.out.println("STARTING AUTO @" + autoDriveStartTime);
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() 
     {
+        
+         
     	// once robot has been driving for driveTime, declare finished
     	if(Timer.getFPGATimestamp() > (autoDriveStartTime + driveTime))
     	{
+    	    
     		finished=true;
+    	}
+    	else
+    	{
+    	    Robot.drive.driveBot(driveSpeedX, driveSpeedY, driveSpeedRot);
     	}
     }
    // Make this return true when this Command no longer needs to run execute()
