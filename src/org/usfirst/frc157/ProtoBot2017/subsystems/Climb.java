@@ -22,7 +22,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
  *
  */ 
 public class Climb extends Subsystem {
-    private final double SPEEDSLOW = 0.6;
+    private final double SPEEDSLOW = 0.4;
     private final double SPEEDFAST = 1.0;
 
     private final double TEST_MOD = -1; // set to 1 for all positive, -1 for all negative

@@ -9,26 +9,34 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class ToggleCollection extends Command {
 
-	public enum State{
+	public enum State
+	{
 		ACTIVE,
 		INACTIVE
 	}
 
-	private static State state;
 
-	public ToggleCollection() {
-		// Use requires() here to declare subsystem dependencies
-		// eg. requires(chassis);
+	private static State state= State.INACTIVE;
+	
+	
+
+	public ToggleCollection(State state) {
+	
+		 requires(Robot.collect);
+		 requires(Robot.helix);
+		 requires(Robot.leftGate);
+		 requires(Robot.rightGate);
+	
 
 		// This makes sure first use turns on collection (robot should be inactive at start)
-		state = State.INACTIVE;
+	
 	}
 
 	// Called just before this Command runs the first time
 	protected void initialize() {
 		switch(state)
 		{
-		case ACTIVE:
+		case INACTIVE:
 		{
 			// Set the next state
 			state = State.INACTIVE;
@@ -39,10 +47,10 @@ public class ToggleCollection extends Command {
 			Robot.helix.idleRight();    		    		
 			Robot.leftGate.open();
 			Robot.rightGate.open();
-			System.out.println("ToggleCollection - Stop Collection");
+			System.out.println("ToggleCollection - Stop Cllection");
 		}
 		break;
-		case INACTIVE:
+		case ACTIVE:
 		{
 			// Set the next state
 			state = State.ACTIVE;

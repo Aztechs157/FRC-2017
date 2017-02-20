@@ -29,16 +29,19 @@ import edu.wpi.first.wpilibj.DigitalInput;
  */
 public class Gear extends Subsystem {
 
-    private final double OPEN_SPEED  = 0.4;
-    private final double CLOSE_SPEED = 0.3;
-    private final CANTalon gearMotor = RobotMap.gearMotor;
+    private final double OPEN_SPEED  = 0.40;
+    private final double CLOSE_SPEED = 0.15;
+    private final CANTalon gearMotorLeft = RobotMap.gearMotorLeft;
+    private final CANTalon gearMotorRight = RobotMap.gearMotorRight;
 
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
 
     // Limit Switches
-    protected DigitalInput openLimitSwitch;
-    protected DigitalInput closeLimitSwitch;
+    protected DigitalInput openLimitSwitchLeft;
+    protected DigitalInput closeLimitSwitchLeft;
+    protected DigitalInput openLimitSwitchRight;
+    protected DigitalInput closeLimitSwitchRight;
 
     public enum GearCommand
     {
@@ -50,51 +53,128 @@ public class Gear extends Subsystem {
     public Gear()
     {
         System.out.println("Gear: Gear()");
-        openLimitSwitch = new DigitalInput(6);
-        closeLimitSwitch = new DigitalInput(7); 
+        openLimitSwitchLeft = new DigitalInput(4); 
+        closeLimitSwitchLeft = new DigitalInput(5); 
+        openLimitSwitchRight = new DigitalInput(6);
+        closeLimitSwitchRight = new DigitalInput(7);
         
-        gearMotor.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
+        gearMotorLeft.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
+        gearMotorRight.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
+
     }        
    
     
     public boolean isClosed()
     {
         //int test = 1 / 0;
-        boolean test;
+        boolean testLeft;
+        boolean testRight;
+        boolean answer;
         System.out.println("Gear: isClosed()");
-        test = closeLimitSwitch.get();
-        if (test == false)
+        testLeft = closeLimitSwitchLeft.get();
+        testRight = closeLimitSwitchRight.get();
+      
+        if (testLeft == true && testRight == true )
         {
-            System.out.println("is closed: false");
+           answer = true;
+           System.out.println("is closed: true");
         }
         else
         {
-            System.out.println("is closed: true");
+            answer = false;
+            System.out.println("is closed: false");
         }
-        return test;
+        return answer;
     }
 
-    public boolean isOpen()
+    public boolean isOpen() 
     {
-        return openLimitSwitch.get();
+        boolean testLeft;
+        boolean testRight;
+        boolean answer;
+        System.out.println("Gear: isopen()");
+        testLeft = openLimitSwitchLeft.get();
+        testRight = openLimitSwitchRight.get();
+      
+        if (testLeft == true && testRight == true )
+        {
+           answer = true;
+           System.out.println("is open: true");
+        }
+        else
+        {
+            answer = false;
+            System.out.println("is open: false");
+        }
+        return answer;
     }
     
     public void close()
     {
-        gearMotor.set(-CLOSE_SPEED);
-    }
+        boolean testLeft;
+        boolean testRight;
+        boolean answer;
+        testLeft = closeLimitSwitchLeft.get();
 
+         if (testLeft == true)
+         {
+             gearMotorLeft.set(0.0);         
+         }
+         else
+         {
+             gearMotorLeft.set(-CLOSE_SPEED);
+         }
+         
+     
+         testRight = closeLimitSwitchRight.get();
+     
+         if (testRight == true)
+         {
+             gearMotorRight.set(0.0);         
+         }
+         else
+         {
+             gearMotorRight.set(-CLOSE_SPEED);
+         }
+     
+     }
+    
+    
     public void open()
     {
-        gearMotor.set(OPEN_SPEED);
-        
-    }
+       boolean testLeft;
+       boolean testRight;
+       boolean answer;
+       testLeft = openLimitSwitchLeft.get();
 
+        if (testLeft == true)
+        {
+            gearMotorLeft.set(0.0);         
+        }
+        else
+        {
+            gearMotorLeft.set(OPEN_SPEED);
+        }
+        
+    
+        testRight = openLimitSwitchRight.get();
+    
+        if (testRight == true)
+        {
+            gearMotorRight.set(0.0);         
+        }
+        else
+        {
+            gearMotorRight.set(OPEN_SPEED);
+        }
+    
+    }
+    
     public void idle()
     {
-        gearMotor.set(0.0);        
+        gearMotorLeft.set(0.0);   
+        gearMotorRight.set(0.0); 
     }
-
     
     @Override
     protected void initDefaultCommand()
