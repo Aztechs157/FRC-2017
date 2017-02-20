@@ -29,7 +29,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
  */
 public class Gear extends Subsystem {
 
-    private final double OPEN_SPEED  = 0.2;
+    private final double OPEN_SPEED  = 0.40;
     private final double CLOSE_SPEED = 0.15;
     private final CANTalon gearMotorLeft = RobotMap.gearMotorLeft;
     private final CANTalon gearMotorRight = RobotMap.gearMotorRight;
