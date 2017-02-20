@@ -15,6 +15,7 @@ import org.usfirst.frc157.ProtoBot2017.HIDPOVButton;
 import org.usfirst.frc157.ProtoBot2017.commands.*;
 import org.usfirst.frc157.ProtoBot2017.commands.ClimbCommand.ClimbCommandSpeed;
 import org.usfirst.frc157.ProtoBot2017.commands.DebugPrintInfo.DebugSelection;
+import org.usfirst.frc157.ProtoBot2017.commands.ToggleCollection.State;
 import org.usfirst.frc157.ProtoBot2017.subsystems.Climb;
 import org.usfirst.frc157.ProtoBot2017.subsystems.Collect;
 import org.usfirst.frc157.ProtoBot2017.subsystems.Gate;
@@ -129,7 +130,8 @@ public class OI {
 		//joystickButtonB.whenPressed(new SetCameraTarget());
 
 		joystickButtonX = new JoystickButton(driver, 3);
-		joystickButtonX.whenPressed(new ToggleCollection());
+		joystickButtonX.whenPressed(new ToggleCollection(State.ACTIVE));
+		joystickButtonX.whenPressed(new ToggleCollection(State.INACTIVE));
 
 		joystickButtonY = new JoystickButton(driver, 4);
 		joystickButtonY.whileHeld(new AlignForShot(AlignForShot.ShotRangeCommand.FAR));
@@ -168,7 +170,7 @@ public class OI {
 		//		operatorButton12.whenPressed(new ShootCommand(ShootCommand.ShootCommand.STOP));
 
 		operatorButton2 = new JoystickButton(operatorJoystick, 2);
-		operatorButton2.whenPressed(new ToggleCollection());
+		operatorButton2.whileHeld(new ToggleCollection(State.ACTIVE));
 
 
 		//operatorButton10 = new  JoystickButton(operatorJoystick, 10);
@@ -206,7 +208,7 @@ public class OI {
 
 		// using lefts and rights for mitigating operator eror during compotitions 
 
-		operatorStickHatFore = new HIDPOVButton(operatorJoystick, 0);
+		operatorStickHatFore = new HIDPOVButton(operatorJoystick,0 );
 		operatorStickHatFore.whileHeld(new ClimbCommand( ClimbCommandSpeed.FAST));
 
 		operatorStickHatForeRight = new HIDPOVButton(operatorJoystick, 45);
