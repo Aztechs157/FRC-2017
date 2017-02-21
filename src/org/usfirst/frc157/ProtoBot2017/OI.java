@@ -218,8 +218,10 @@ public class OI {
 		operatorStickHatForeLeft = new HIDPOVButton(operatorJoystick, 315);
 		operatorStickHatForeLeft.whileHeld(new ClimbCommand( ClimbCommandSpeed.FAST));
 
-		//        operatorStickHatRight = new JoystickPOVButton(operatorJoystick, 90);
-		//        operatorStickHatRight.whenPressed(new PrintButton("O  Hat Right"));
+//		        operatorStickHatRight = new HIDPOVButton(operatorJoystick, 90);
+//		        operatorStickHatRight.whenPressed(new DebugPrintInfo("Rumble On", DebugSelection.RUMBLE_ON));
+//		        operatorStickHatRight = new HIDPOVButton(operatorJoystick, 270);
+//		        operatorStickHatRight.whenPressed(new DebugPrintInfo("Rumble Off", DebugSelection.RUMBLE_OFF));
 
 		operatorStickHatAftRight = new HIDPOVButton(operatorJoystick, 135);
 		operatorStickHatAftRight.whileHeld(new ClimbCommand( ClimbCommandSpeed.SLOW));
