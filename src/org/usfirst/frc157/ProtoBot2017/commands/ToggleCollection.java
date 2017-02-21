@@ -45,8 +45,8 @@ public class ToggleCollection extends Command {
 			Robot.collect.idle();
 			Robot.helix.idleLeft();
 			Robot.helix.idleRight();    		    		
-			Robot.leftGate.open();
-			Robot.rightGate.open();
+		//	Robot.leftGate.open();
+			//Robot.rightGate.open();
 			System.out.println("ToggleCollection - Stop Cllection");
 		}
 		break;
@@ -87,6 +87,8 @@ public class ToggleCollection extends Command {
 
 	// Called when another command which requires one or more of the same
 	// subsystems is scheduled to run
-	protected void interrupted() {
+	protected void interrupted()
+	{
+	    
 	}
 }

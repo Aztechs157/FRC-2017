@@ -170,7 +170,8 @@ public class OI {
 		//		operatorButton12.whenPressed(new ShootCommand(ShootCommand.ShootCommand.STOP));
 
 		operatorButton2 = new JoystickButton(operatorJoystick, 2);
-		operatorButton2.whileHeld(new ToggleCollection(State.ACTIVE));
+		operatorButton2.whenPressed(new ToggleCollection(State.ACTIVE));
+		operatorButton2.whenPressed(new ToggleCollection(State.INACTIVE));
 
 
 		//operatorButton10 = new  JoystickButton(operatorJoystick, 10);
