@@ -151,9 +151,9 @@ public class Robot extends IterativeRobot {
 			System.out.println("\n*********************************\n");
 			System.out.println("Autonomous Position 3");
 			CommandGroup autoCommand = new CommandGroup();
-			autoCommand.addSequential(new AutoDriveSpeedForTime(0.5, 0, 2.5, 0));
-			autoCommand.addSequential(new AutoDriveSpeedForTime(0.5, 0, 0.5, 0));
-            autoCommand.addSequential(new AutoDriveSpeedForTime(0.5,.5,.5,0.5));// turn left 
+			autoCommand.addSequential(new AutoDriveSpeedForTime(2.5, 0, -0.5, 0));
+			//autoCommand.addSequential(new AutoDriveSpeedForTime(1.0, 0, 0.5, 0));
+            autoCommand.addSequential(new AutoDriveSpeedForTime(1.0,0,0,0.5));// turn left 
             autoCommand.addSequential(new AlignForShot(AlignForShot.ShotRangeCommand.NEAR)); 
             autoCommand.addSequential(new ShootCommand(ShootCommand.ShotRangeCommand.NEAR));// parameter =? 
 		} break;
@@ -163,10 +163,10 @@ public class Robot extends IterativeRobot {
 			System.out.println("\n*********************************\n");
 			System.out.println("Autonomous Position 4");
 			CommandGroup autoCommand = new CommandGroup();
-			   autoCommand.addSequential(new AutoDriveSpeedForTime(0.5, 0, -0.5, 0));// move forward
-	            autoCommand.addSequential(new AutoDriveSpeedForTime(0.5,.5,.5,0.5));// turn 60 deg
+			   autoCommand.addSequential(new AutoDriveSpeedForTime(3.0, 0, -0.5, 0));// move forward
+	            autoCommand.addSequential(new AutoDriveSpeedForTime(2.0,0,0,0.5));// turn 60 deg
 	            autoCommand.addSequential(new GearStateCommand());// drop gear  
-	            autoCommand.addSequential(new AutoDriveSpeedForTime(0.5,0,0.5,0));// move backward
+	            autoCommand.addSequential(new AutoDriveSpeedForTime(2.0 ,0,0.5,0));// move backward
 	            System.out.println("ran autonomous command");
 		} break;
 		case POSITION_5:

@@ -131,7 +131,7 @@ public class OI {
 
 		joystickButtonX = new JoystickButton(driver, 3);
 		joystickButtonX.whenPressed(new ToggleCollection(State.ACTIVE));
-		joystickButtonX.whenPressed(new ToggleCollection(State.INACTIVE));
+	//	joystickButtonX.whenPressed(new ToggleCollection(State.INACTIVE));
 
 		joystickButtonY = new JoystickButton(driver, 4);
 		joystickButtonY.whileHeld(new AlignForShot(AlignForShot.ShotRangeCommand.FAR));
@@ -171,7 +171,7 @@ public class OI {
 
 		operatorButton2 = new JoystickButton(operatorJoystick, 2);
 		operatorButton2.whenPressed(new ToggleCollection(State.ACTIVE));
-		operatorButton2.whenPressed(new ToggleCollection(State.INACTIVE));
+		//operatorButton2.whenPressed(new ToggleCollection(State.INACTIVE));
 
 
 		//operatorButton10 = new  JoystickButton(operatorJoystick, 10);
