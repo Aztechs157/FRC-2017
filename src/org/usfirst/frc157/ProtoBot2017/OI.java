@@ -232,6 +232,42 @@ public class OI {
 		//        operatorStickHatLeft = new JoystickPOVButton(operatorJoystick, 270);
 		//        operatorStickHatLeft.whenPressed(new ClimbCommand("O  Hat Left"));
 
+		
+//		  joyStickHatFore = new HIDPOVButton(driver, 0);
+//		  joyStickHatForeRight = new HIDPOVButton(driver, 45);
+//		  joyStickHatRight = new HIDPOVButton(driver, 90);
+//		  joyStickHatAftRight = new HIDPOVButton(driver, 135);
+//		  joyStickHatAft = new HIDPOVButton(driver, 180);
+//		  joyStickHatAftLeft = new HIDPOVButton(driver, 225);
+//		  joyStickHatLeft = new HIDPOVButton(driver, 270);
+//		  joyStickHatForeLeft = new HIDPOVButton(driver, 315);
+//
+//		  joyStickHatFore.whenPressed(new DebugPrintInfo("joyStickHatFore", DebugSelection.NOPRINT));      // Hat Button Forward
+//		  joyStickHatForeRight.whenPressed(new DebugPrintInfo("joyStickHatForeRight", DebugSelection.NOPRINT)); // Hat Button Forward Right
+//		  joyStickHatRight.whenPressed(new DebugPrintInfo("joyStickHatRight", DebugSelection.NOPRINT));     // Hat Button Right
+//		  joyStickHatAftRight.whenPressed(new DebugPrintInfo("joyStickHatAftRight", DebugSelection.NOPRINT));  // Hat Button Aft Right
+//		  joyStickHatAft.whenPressed(new DebugPrintInfo("joyStickHatAft", DebugSelection.NOPRINT));       // Hat Button Aft
+//		  joyStickHatAftLeft.whenPressed(new DebugPrintInfo("joyStickHatAftLeft", DebugSelection.NOPRINT));   // Hat Button Aft Left
+//		  joyStickHatLeft.whenPressed(new DebugPrintInfo("joyStickHatLeft", DebugSelection.NOPRINT));      // Hat Button Left
+//		  joyStickHatForeLeft.whenPressed(new DebugPrintInfo("joyStickHatForeLeft", DebugSelection.NOPRINT));  // Hat Button Forward Left
+//
+//		  operatorStickHatFore = new HIDPOVButton(operatorJoystick, 0);
+//		  operatorStickHatForeRight = new HIDPOVButton(operatorJoystick, 45);
+//		  operatorStickHatRight = new HIDPOVButton(operatorJoystick, 90);
+//		  operatorStickHatAftRight = new HIDPOVButton(operatorJoystick, 135);
+//		  operatorStickHatAft = new HIDPOVButton(operatorJoystick, 180);
+//		  operatorStickHatAftLeft = new HIDPOVButton(operatorJoystick, 225);
+//		  operatorStickHatLeft = new HIDPOVButton(operatorJoystick, 270);
+//		  operatorStickHatForeLeft = new HIDPOVButton(operatorJoystick, 315);
+//
+//		  operatorStickHatFore.whenPressed(new DebugPrintInfo("operatorStickHatFore", DebugSelection.NOPRINT));      // Hat Button Forward
+//		  operatorStickHatForeRight.whenPressed(new DebugPrintInfo("operatorStickHatForeRight", DebugSelection.NOPRINT)); // Hat Button Forward Right
+//		  operatorStickHatRight.whenPressed(new DebugPrintInfo("operatorStickHatRight", DebugSelection.NOPRINT));     // Hat Button Right
+//		  operatorStickHatAftRight.whenPressed(new DebugPrintInfo("operatorStickHatAftRight", DebugSelection.NOPRINT));  // Hat Button Aft Right
+//		  operatorStickHatAft.whenPressed(new DebugPrintInfo("operatorStickHatAft", DebugSelection.NOPRINT));       // Hat Button Aft
+//		  operatorStickHatAftLeft.whenPressed(new DebugPrintInfo("operatorStickHatAftLeft", DebugSelection.NOPRINT));   // Hat Button Aft Left
+//		  operatorStickHatLeft.whenPressed(new DebugPrintInfo("operatorStickHatLeft", DebugSelection.NOPRINT));      // Hat Button Left
+//		  operatorStickHatForeLeft.whenPressed(new DebugPrintInfo("operatorStickHatForeLeft", DebugSelection.NOPRINT));  // Hat Button Forward Left
 
 		// SmartDashboard Buttons
 		SmartDashboard.putData("AlignToField", new AlignToField());

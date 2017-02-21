@@ -11,7 +11,7 @@ public class DebugPrintInfo extends Command {
 
 	public enum DebugSelection
 	{
-		DATE_TEME,
+		DATE_TIME,
 		NOPRINT
 	}
 	
@@ -35,9 +35,9 @@ public class DebugPrintInfo extends Command {
     	switch(toPrint)
     	{
     	case NOPRINT:
-    		System.out.println("Nothing is Printed Here");
+    		// Nothing is printed here!
     		break;
-    	case DATE_TEME:
+    	case DATE_TIME:
     		System.out.println("Now is " + LocalDateTime.now());
     		break;
     	default:
