@@ -13,6 +13,7 @@ package org.usfirst.frc157.ProtoBot2017.subsystems;
 
 import org.usfirst.frc157.ProtoBot2017.RobotMap; 
 import com.ctre.CANTalon;
+import com.ctre.CANTalon.FeedbackDevice;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -23,52 +24,158 @@ import edu.wpi.first.wpilibj.DigitalInput;
  */
 public class Shoot extends Subsystem {
 
-    private final CANTalon shootMotor = RobotMap.shootMotor;
-    private final double HIGH_SHOT_POWER = 1.0;
-    private final double LOW_SHOT_POWER = 0.8;
-//    private double shootSpeed = -0.5;
-    
-
-    // Put methods for controlling this subsystem
-    // here. Call these from Commands.
+	private final CANTalon shootMotor = RobotMap.shootMotor;
 
 
-    public enum ShootCommand
-    {
-        STOP,
-        NEAR_POWER,
-        FAR_POWER  
-    }
-    public Shoot()
-    {
-        System.out.println("Shoot: Shoot()");
-        
-        shootMotor.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
-    }        
+	private final double PERCENT_V_BUS_HIGH_SHOT_POWER = 1.0;  // Fraction of Max
+	private final double PERCENT_V_BUS_LOW_SHOT_POWER = 0.8;   // Fraction of Max
+	private final double PERCENT_V_BUS_NO_SHOT_POWER = 0.0;    // Fraction of Max
 
-//    public void setShootSpeed()
-//    {
-//        shootMotor.set(shootSpeed);
-//    }
- 
-    public void idle()
-    {
-        shootMotor.set(0.0);        
-    }
-    public void near()
-    {
-        shootMotor.set(-LOW_SHOT_POWER);
-    }
-    public void far()
-    {
-        shootMotor.set(-HIGH_SHOT_POWER);
-    }
-    
-    @Override
-    protected void initDefaultCommand()
-    {
-        // TODO Auto-generated method stub
-        
-    }
+	private final double ABS_VOLT_HIGH_SHOT_POWER = 11.0;      // Controlled Output Voltage
+	private final double ABS_VOLT_LOW_SHOT_POWER = 9.0;        // Controlled Output Voltage
+	private final double ABS_VOLT_NO_SHOT_POWER = 0.0;         // Controlled Output Voltage
+
+	private final double SPEED_CTRL_HIGH_SHOT_POWER = 100;     // RPM?
+	private final double SPEED_CTRL_LOW_SHOT_POWER = 80;       // RPM?
+	private final double SPEED_CTRL_NO_SHOT_POWER = 0;         // RPM?
+	//    private double shootSpeed = -0.5;
+
+	public enum ShooterControlMode
+	{
+		PERCENT_V_BUS,
+		SPEED_CONTROL,
+		ABSOLUTE_VOLTAGE
+	}
+	private ShooterControlMode shooterControlMode = ShooterControlMode.ABSOLUTE_VOLTAGE;
+
+	// Put methods for controlling this subsystem
+	// here. Call these from Commands.
+
+
+	public enum ShootCommand
+	{
+		STOP,
+		NEAR_POWER,
+		FAR_POWER  
+	}
+	public Shoot()
+	{
+		System.out.println("Shoot: Shoot()");
+		setShooterMode(ShooterControlMode.ABSOLUTE_VOLTAGE);
+	}        
+
+	//    public void setShootSpeed()
+	//    {
+	//        shootMotor.set(shootSpeed);
+	//    }
+
+	public void idle()
+	{
+		switch(shooterControlMode)
+		{
+		case PERCENT_V_BUS:
+		{
+			// Output is set as a fraction of the full bus voltage (-1.0 to 1.0 of the bus (battery) voltage
+			shootMotor.set(PERCENT_V_BUS_NO_SHOT_POWER);
+		} break;
+		case SPEED_CONTROL:
+		{
+			// Output is set in RPM
+			shootMotor.set(SPEED_CTRL_NO_SHOT_POWER);
+		} break;
+		case ABSOLUTE_VOLTAGE:
+		{
+			// Output is set in Volts in this mode (-12 to 12V nominal)
+			shootMotor.set(ABS_VOLT_NO_SHOT_POWER);
+		} break;	
+		}
+	}
+
+	public void near()
+	{
+		switch(shooterControlMode)
+		{
+		case PERCENT_V_BUS:
+		{
+			// Output is set as a fraction of the full bus voltage (-1.0 to 1.0 of the bus (battery) voltage
+			shootMotor.set(PERCENT_V_BUS_LOW_SHOT_POWER);
+		} break;
+		case SPEED_CONTROL:
+		{
+			// Output is set in RPM
+			shootMotor.set(SPEED_CTRL_LOW_SHOT_POWER);
+		} break;
+		case ABSOLUTE_VOLTAGE:
+		{
+			// Output is set in Volts in this mode (-12 to 12V nominal)
+			shootMotor.set(ABS_VOLT_LOW_SHOT_POWER);
+		} break;	
+		}
+	}
+
+	public void far()
+	{
+		switch(shooterControlMode)
+		{
+		case PERCENT_V_BUS:
+		{
+			// Output is set as a fraction of the full bus voltage (-1.0 to 1.0 of the bus (battery) voltage
+			shootMotor.set(PERCENT_V_BUS_HIGH_SHOT_POWER);
+		} break;
+		case SPEED_CONTROL:
+		{
+			// Output is set in RPM
+			shootMotor.set(SPEED_CTRL_HIGH_SHOT_POWER);
+		} break;
+		case ABSOLUTE_VOLTAGE:
+		{
+			// Output is set in Volts in this mode (-12 to 12V nominal)
+			shootMotor.set(ABS_VOLT_HIGH_SHOT_POWER);
+		} break;	
+		}
+	}
+
+	@Override
+	protected void initDefaultCommand()
+	{
+		// TODO Auto-generated method stub
+
+	}
+
+	public void setShooterMode(ShooterControlMode mode)
+	{
+		shooterControlMode = mode;
+		switch(shooterControlMode)
+		{
+		case PERCENT_V_BUS:
+		{
+			// Output is set as a fraction of the full bus voltage (-1.0 to 1.0 of the bus (battery) voltage
+			shootMotor.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
+		} break;
+		case SPEED_CONTROL:
+		{
+			// Output is set in RPM
+			shootMotor.changeControlMode(CANTalon.TalonControlMode.Speed);
+			shootMotor.setFeedbackDevice(FeedbackDevice.QuadEncoder);
+			shootMotor.reverseSensor(false);  // set to true if encoder is "backwards"
+			shootMotor.configNominalOutputVoltage(0.0, 0.0);
+			shootMotor.configPeakOutputVoltage(12.0, 0.0); // Only allow positive voltage so we can only spin forward
+
+			shootMotor.setProfile(0);  // storage slot for these constants
+			shootMotor.setF(0);
+			shootMotor.setP(0);
+			shootMotor.setI(0);
+			shootMotor.setD(0);
+
+		} break;
+		case ABSOLUTE_VOLTAGE:
+		{
+			// Output is set in Volts in this mode (-12 to 12V nominal)
+			shootMotor.changeControlMode(CANTalon.TalonControlMode.Voltage);
+			shootMotor.setVoltageCompensationRampRate(96.0);
+		} break;
+		}
+	}
+
 }
-    
+
