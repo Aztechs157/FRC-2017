@@ -16,6 +16,7 @@ import com.ctre.CANTalon;
 import com.ctre.CANTalon.FeedbackDevice;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DigitalInput;
 
 
@@ -175,6 +176,35 @@ public class Shoot extends Subsystem {
 			shootMotor.setVoltageCompensationRampRate(96.0);
 		} break;
 		}
+	}
+	
+	public void showShooterControlInfo()
+	{
+		SmartDashboard.putString("Shooter Contorl Mode", shooterControlMode.toString());
+		SmartDashboard.putNumber("Bus Voltage", shootMotor.getBusVoltage());
+		SmartDashboard.putNumber("Motor Drive", shootMotor.getOutputVoltage()/ shootMotor.getBusVoltage());
+		SmartDashboard.putNumber("Motor Voltage", shootMotor.getOutputVoltage());
+		SmartDashboard.putNumber("Motor Current", shootMotor.getOutputCurrent());
+		
+		switch(shooterControlMode)
+		{
+		case PERCENT_V_BUS:
+		{			
+			// Output is set as a fraction of the full bus voltage (-1.0 to 1.0 of the bus (battery) voltage
+		} break;
+		case SPEED_CONTROL:
+		{
+			// Output is set in RPM
+			SmartDashboard.putNumber("Error", shootMotor.getClosedLoopError());
+			SmartDashboard.putNumber("Speed", shootMotor.getSpeed());
+			SmartDashboard.putNumber("Setpoint", shootMotor.getSetpoint());
+		} break;
+		case ABSOLUTE_VOLTAGE:
+		{
+			// Output is set in Volts in this mode (-12 to 12V nominal)
+		} break;
+		}
+
 	}
 
 }

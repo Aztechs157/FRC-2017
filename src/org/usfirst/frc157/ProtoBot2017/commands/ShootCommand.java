@@ -127,7 +127,7 @@ public class ShootCommand extends Command {
 	protected void execute() {
 		//    	System.out.println("shooter: execute(" + shotPower + ") state = " + finished);
 		//		System.out.print("ShootCommand - " + state);
-
+		Robot.shoot.showShooterControlInfo();
 		switch(state)
 		{
 		case SPINNING_UP:
