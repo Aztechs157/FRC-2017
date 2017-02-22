@@ -11,17 +11,28 @@
 
 package org.usfirst.frc157.ProtoBot2017;
 
-import edu.wpi.first.wpilibj.IterativeRobot; 
+import org.usfirst.frc157.ProtoBot2017.AnalogSelectSwitch.SwitchPosition;
+import org.usfirst.frc157.ProtoBot2017.commands.AlignForShot;
+import org.usfirst.frc157.ProtoBot2017.commands.AlignForShot.AcquisitionType;
+import org.usfirst.frc157.ProtoBot2017.commands.AlignForShot.ShotRangeCommand;
+import org.usfirst.frc157.ProtoBot2017.commands.AutoDriveSpeedForTime;
+import org.usfirst.frc157.ProtoBot2017.commands.AutonomousCommand;
+import org.usfirst.frc157.ProtoBot2017.commands.GearStateCommand;
+import org.usfirst.frc157.ProtoBot2017.commands.ShootCommand;
+import org.usfirst.frc157.ProtoBot2017.subsystems.Climb;
+import org.usfirst.frc157.ProtoBot2017.subsystems.Collect;
+import org.usfirst.frc157.ProtoBot2017.subsystems.Drive;
+import org.usfirst.frc157.ProtoBot2017.subsystems.Gate;
+import org.usfirst.frc157.ProtoBot2017.subsystems.Gear;
+import org.usfirst.frc157.ProtoBot2017.subsystems.Helix;
+import org.usfirst.frc157.ProtoBot2017.subsystems.Shoot;
+import org.usfirst.frc157.ProtoBot2017.subsystems.Vision;
+
+import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-
-import org.usfirst.frc157.ProtoBot2017.AnalogSelectSwitch.SwitchPosition;
-import org.usfirst.frc157.ProtoBot2017.commands.*;
-import org.usfirst.frc157.ProtoBot2017.commands.AlignForShot.ShotRangeCommand;
-import org.usfirst.frc157.ProtoBot2017.commands.GearStateCommand.GearState;
-import org.usfirst.frc157.ProtoBot2017.subsystems.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -141,11 +152,12 @@ public class Robot extends IterativeRobot {
 			System.out.println("\n*********************************\n");
 			System.out.println("Autonomous Position 3");
 			CommandGroup autoCommand = new CommandGroup();
-			autoCommand.addSequential(new AutoDriveSpeedForTime(0.5, 0, 2.5, 0));
-			autoCommand.addSequential(new AutoDriveSpeedForTime(0.5, 0, 0.5, 0));
-            autoCommand.addSequential(new AutoDriveSpeedForTime(0.5,.5,.5,0.5));// turn left 
-            autoCommand.addSequential(new AlignForShot(ShotRangeCommand.AUTO)); 
-            autoCommand.addSequential(new ShootCommand(null));// parameter =? 
+			autoCommand.addSequential(new AutoDriveSpeedForTime(5.0, 0, -0.5, 0));
+			//autoCommand.addSequential(new AutoDriveSpeedForTime(1.0, 0, 0.5, 0));
+            autoCommand.addSequential(new AutoDriveSpeedForTime(2.0,0,0,-0.5));// turn right 
+            autoCommand.addSequential(new AlignForShot(AlignForShot.ShotRangeCommand.NEAR,AcquisitionType.RIGHT)); //align for shot
+            autoCommand.addSequential(new ShootCommand(ShootCommand.ShotRangeCommand.NEAR));// parameter =? 
+            if (autoCommand != null) autoCommand.start();
 		} break;
 
 		case POSITION_4:
@@ -153,11 +165,11 @@ public class Robot extends IterativeRobot {
 			System.out.println("\n*********************************\n");
 			System.out.println("Autonomous Position 4");
 			CommandGroup autoCommand = new CommandGroup();
-			   autoCommand.addSequential(new AutoDriveSpeedForTime(0.5, 0, -0.5, 0));// move forward
-	            autoCommand.addSequential(new AutoDriveSpeedForTime(0.5,.5,.5,0.5));// turn 60 deg
+			   autoCommand.addSequential(new AutoDriveSpeedForTime(3.0, 0, -0.5, 0));// move forward
+	            autoCommand.addSequential(new AutoDriveSpeedForTime(2.0,0,0,0.5));// turn 60 deg
 	            autoCommand.addSequential(new GearStateCommand());// drop gear  
-	            autoCommand.addSequential(new AutoDriveSpeedForTime(0.5,0,0.5,0));// move backward
-	            System.out.println("ran autonomous command");
+	            autoCommand.addSequential(new AutoDriveSpeedForTime(2.0 ,0,0.5,0));// move backward
+	            if (autoCommand != null) autoCommand.start();
 		} break;
 		case POSITION_5:
 		{
