@@ -25,6 +25,9 @@ import edu.wpi.first.wpilibj.DigitalInput;
  */
 public class Shoot extends Subsystem {
 
+	private static final int ERROR_TOLERANCE_FOR_AT_SPEED = 25; // FIXME - need correct value!
+
+
 	private final CANTalon shootMotor = RobotMap.shootMotor;
 
 
@@ -185,6 +188,7 @@ public class Shoot extends Subsystem {
 		SmartDashboard.putNumber("Motor Drive", shootMotor.getOutputVoltage()/ shootMotor.getBusVoltage());
 		SmartDashboard.putNumber("Motor Voltage", shootMotor.getOutputVoltage());
 		SmartDashboard.putNumber("Motor Current", shootMotor.getOutputCurrent());
+		SmartDashboard.putNumber("Speed", shootMotor.getSpeed());
 		
 		switch(shooterControlMode)
 		{
@@ -206,6 +210,34 @@ public class Shoot extends Subsystem {
 		}
 
 	}
-
+	
+	public boolean isShooterAtSpeed()
+	{
+		boolean atSpeed = false;
+		switch(shooterControlMode)
+		{
+		case PERCENT_V_BUS:
+		{			
+			// Output is set as a fraction of the full bus voltage (-1.0 to 1.0 of the bus (battery) voltage
+			// speed feedback not available? so just claim success
+			atSpeed = true;
+		} break;
+		case SPEED_CONTROL:
+		{
+			// Output is set in RPM
+			SmartDashboard.putNumber("Error", shootMotor.getClosedLoopError());
+			SmartDashboard.putNumber("Speed", shootMotor.getSpeed());
+			SmartDashboard.putNumber("Setpoint", shootMotor.getSetpoint());
+			atSpeed = (shootMotor.getClosedLoopError() < ERROR_TOLERANCE_FOR_AT_SPEED);
+		} break;
+		case ABSOLUTE_VOLTAGE:
+		{
+			// Output is set in Volts in this mode (-12 to 12V nominal)
+			// speed feedback not available? so just claim success
+			atSpeed = true;
+		} break;
+		}
+		return atSpeed;
+	}
 }
 

@@ -287,8 +287,7 @@ public class ShootCommand extends Command {
 
 	private boolean shooterAtSpeed()
 	{
-		System.out.println("FIXME FIXME FIXME - Not using Robot.shoot.atSpeed()");
-		return true;
+		return Robot.shoot.isShooterAtSpeed();
 	}
 
 }
