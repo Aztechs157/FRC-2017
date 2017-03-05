@@ -35,8 +35,8 @@ public class ToggleCollection extends Command {
 	    {
 	        state = State.ACTIVE;
             Robot.collect.load();
-            Robot.helix.loadLeft();
-            Robot.helix.loadRight();
+            Robot.leftHelix.load();
+            Robot.rightHelix.load();
             Robot.leftGate.close();
             Robot.rightGate.close();
             System.out.println("ToggleCollection - Start Collection");
@@ -46,8 +46,8 @@ public class ToggleCollection extends Command {
 	        state = state.INACTIVE;
             // if we were active - turn things off and go inactive
 	        Robot.collect.idle();
-	        Robot.helix.idleLeft();
-	        Robot.helix.idleRight();                        
+	        Robot.leftHelix.idle();
+	        Robot.rightHelix.idle();                        
 	        Robot.leftGate.close();
 	        Robot.rightGate.close();
             System.out.println("ToggleCollection - Stop Cllection");
@@ -56,8 +56,6 @@ public class ToggleCollection extends Command {
         //requires(Robot.helix);
         //requires(Robot.leftGate);
         //requires(Robot.rightGate);
-   
-
 	}
 
 	// Called repeatedly when this Command is scheduled to run

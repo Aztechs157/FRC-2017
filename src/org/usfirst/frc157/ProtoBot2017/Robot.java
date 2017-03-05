@@ -27,6 +27,7 @@ import org.usfirst.frc157.ProtoBot2017.subsystems.Gear;
 import org.usfirst.frc157.ProtoBot2017.subsystems.Helix;
 import org.usfirst.frc157.ProtoBot2017.subsystems.Shoot;
 import org.usfirst.frc157.ProtoBot2017.subsystems.Vision;
+import org.usfirst.frc157.ProtoBot2017.subsystems.Helix.MotorSense;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -50,10 +51,11 @@ public class Robot extends IterativeRobot {
 	public static Drive drive;
 	public static Gear gear;
 	public static Vision vision;
-	public static Helix helix ;
 	public static Shoot shoot;
 	public static Collect collect;
 	public static Climb climb;
+	public static Helix leftHelix;
+	public static Helix rightHelix;
 	public static Gate leftGate;
 	public static Gate rightGate;
 
@@ -71,9 +73,10 @@ public class Robot extends IterativeRobot {
 		gear = new Gear();
 		vision = new Vision();
 		shoot = new Shoot();
-		helix = new Helix();
 		collect = new Collect(); 
 		climb = new Climb();
+		leftHelix = new Helix("Left", RobotMap.helixMotorLeft, MotorSense.NORMAL);
+		rightHelix = new Helix("Left", RobotMap.helixMotorRight, MotorSense.NORMAL);
 		leftGate = new Gate(RobotMap.leftGateRelay);
 		rightGate = new Gate(RobotMap.rightGateRelay);
 

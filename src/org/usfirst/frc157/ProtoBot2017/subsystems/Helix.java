@@ -23,59 +23,133 @@ import edu.wpi.first.wpilibj.DigitalInput;
  */
 public class Helix extends Subsystem {
 
-    private final CANTalon helixMotorRight = RobotMap.helixMotorRight;
-    private final CANTalon helixMotorLeft = RobotMap.helixMotorLeft;
-    private final double motorSpeed = 0.5;
+//    private final CANTalon helixMotorRight = RobotMap.helixMotorRight;
+//    private final CANTalon helixMotorLeft = RobotMap.helixMotorLeft;
+    private double motorSpeed = 0.5;
 
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
 
-
+    private String name;
+    private CANTalon motor;
+    private MotorSense motorInverted;
+    
+    public enum MotorSense
+    {
+    	NORMAL,
+    	INVERTED
+    }
+    
     public enum helixCommand
     {
-        LOADRIGHT,
-        LOADLEFT,
-        IDLERIGHT,
-        IDLELEFT
+        LOAD,
+        IDLE,
+        UNLOAD
     }
-        
-    public Helix()
+       
+
+//    public enum helixCommand
+//    {
+//        LOADRIGHT,
+//        LOADLEFT,
+//        IDLERIGHT,
+//        IDLELEFT
+//    }
+
+    public Helix(String name, CANTalon motor)
     {
-        System.out.println("helix");
+    	this(name, motor, MotorSense.NORMAL);
+    }
+
+    public Helix(String name, CANTalon motor, MotorSense motorInverted)
+    {
+    	this.name = name;
+    	this.motor = motor;
+    	this.motorInverted = motorInverted;
+    	if(this.motorInverted == MotorSense.INVERTED)
+    	{
+    		motorSpeed = -1.0 * motorSpeed; // if inverted flip motor speed
+    	}
+        System.out.println(name + " helix created");
         
-        helixMotorRight.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
-        helixMotorLeft.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
-        
-        
+        motor.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
     }        
-   // Right Motor+
+
+    public String getName()
+    {
+    	return name;
+    }
     
-    public void loadRight()
+//    public Helix()
+//    {
+//        System.out.println(name + "helix");
+//        
+//        helixMotorRight.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
+//        helixMotorLeft.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
+//     }        
+
+    public void load()
     {
-        System.out.println("going up right");
-        
-        helixMotorRight.set(motorSpeed);
+    	System.out.println("Load " + name + " helix");
+    	motor.set(motorSpeed);
     }
-    public void loadLeft()
+
+    public void unload()
     {
-        helixMotorLeft.set(-motorSpeed);
+    	System.out.println("Unoad " + name + " helix");
+    	motor.set(-motorSpeed);
     }
-    public void unloadRight()
+
+    public void idle()
     {
-        helixMotorRight.set(-motorSpeed);
+    	System.out.println("Idle " + name + " helix");
+    	motor.set(0.0);
     }
-    public void unloadLeft()
+
+    public void operation(helixCommand operation)
     {
-        helixMotorLeft.set(motorSpeed);
+    	switch(operation)
+    	{
+    	case LOAD:
+    		load();
+    		break;
+    	case UNLOAD:
+    		unload();
+    		break;
+    	case IDLE:
+    		idle();
+    		break;
+    	}
     }
-    public void idleRight()
-    {
-        helixMotorRight.set(0.0);        
-    }
-    public void idleLeft()
-    {
-        helixMotorLeft.set(0.0);
-    }
+    
+    // Right Motor+
+    
+//    public void loadRight()
+//    {
+//        System.out.println("going up right");
+//        
+//        helixMotorRight.set(motorSpeed);
+//    }
+//    public void loadLeft()
+//    {
+//        helixMotorLeft.set(-motorSpeed);
+//    }
+//    public void unloadRight()
+//    {
+//        helixMotorRight.set(-motorSpeed);
+//    }
+//    public void unloadLeft()
+//    {
+//        helixMotorLeft.set(motorSpeed);
+//    }
+//    public void idleRight()
+//    {
+//        helixMotorRight.set(0.0);        
+//    }
+//    public void idleLeft()
+//    {
+//        helixMotorLeft.set(0.0);
+//    }
     
     
     @Override

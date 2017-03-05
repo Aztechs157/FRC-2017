@@ -113,8 +113,8 @@ public class ShootCommand extends Command {
 
 		// Start the shooter & helixes (helii?)
 		shootAtPowerLevel(shotPower);
-		Robot.helix.idleLeft();
-		Robot.helix.idleRight();
+		Robot.leftHelix.idle();
+		Robot.rightHelix.idle();
 		Robot.leftGate.close();
 		Robot.rightGate.close();
 		speedTimeoutTime = Timer.getFPGATimestamp() + INITIAL_SPINUP_TIMEOUT_SEC;
@@ -263,8 +263,8 @@ public class ShootCommand extends Command {
 	private void stopShooter()
 	{
 		Robot.shoot.idle();
-		Robot.helix.idleLeft();
-		Robot.helix.idleRight();
+		Robot.leftHelix.idle();
+		Robot.rightHelix.idle();
 		Robot.leftGate.close();
 		Robot.rightGate.close();
 	}

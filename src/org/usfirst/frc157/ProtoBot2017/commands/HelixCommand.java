@@ -24,70 +24,45 @@ import org.usfirst.frc157.ProtoBot2017.subsystems.Shoot;
 public class HelixCommand extends Command {
     
     private Helix.helixCommand helixCommand; 
+    private Helix theHelix;
 
     private boolean finished = false;
     
-    public HelixCommand(Helix.helixCommand command) {
+    public HelixCommand(Helix helix, Helix.helixCommand command) {
+    	this.theHelix = helix;
         helixCommand = command;
-        requires(Robot.helix);
-        
+        requires(Robot.leftHelix);
+        requires(Robot.rightHelix);        
     }
     
     // Called just before this Command runs the first time
     protected void initialize() {
-        System.out.println("Helix: initialize()");
-        finished = false;
+        System.out.println(theHelix.getName() + " Helix: execute()" + helixCommand + "finihed = " + finished);
+        theHelix.operation(helixCommand);
+        finished=true;
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        System.out.println("Helix: execute()" + helixCommand + "finihed = " + finished);
-        if (helixCommand == Helix.helixCommand.LOADRIGHT )
-        {
-            Robot.helix.loadRight();
-            finished=false ;
-        }
- 
-        else if(helixCommand == Helix.helixCommand.IDLERIGHT)
-        {
-            Robot.helix.idleRight();
-            finished=true;
-        }
-        
-        else if (helixCommand == Helix.helixCommand.LOADLEFT)
-        {
-            Robot.helix.loadLeft();
-            finished=false ;
-        }
- 
-        else if(helixCommand == Helix.helixCommand.IDLELEFT)
-        {
-            Robot.helix.idleLeft();
-            finished=true;
-        }
-        
-        
-        System.out.println(finished);
-  
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        System.out.println("Helix: isfinished()"+finished);
-        return  finished;
+        System.out.println(theHelix.getName() + " Helix: isfinished()"+finished);
+        return finished;
     }
 
     // Called once after isFinished returns true
     protected void end() {
-        System.out.println("Helix: end()");
-        Robot.helix.idleRight();
+        System.out.println(theHelix.getName() + " Helix: end()");
+        theHelix.idle();
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
-        System.out.println("Helix: interrupted()");
-        Robot.helix.idleRight();
+        System.out.println(theHelix.getName() + " Helix: interrupted()");
+        theHelix.idle();
     }
 }
 
