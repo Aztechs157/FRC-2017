@@ -37,7 +37,8 @@ public class Helix extends Subsystem {
     public enum MotorSense
     {
     	NORMAL,
-    	INVERTED
+    	INVERTED,
+    	OFF
     }
     
     public enum helixCommand
@@ -69,6 +70,10 @@ public class Helix extends Subsystem {
     	if(this.motorInverted == MotorSense.INVERTED)
     	{
     		motorSpeed = -1.0 * motorSpeed; // if inverted flip motor speed
+    	}
+    	else if (this.motorInverted == MotorSense.INVERTED)
+    	{
+    		motorSpeed = 0.0;
     	}
         System.out.println(name + " helix created");
         
