@@ -143,6 +143,7 @@ public class AlignForShot extends Command {
     	   		state = TargettingState.STOP;    		
     		    stateChangeTime = Timer.getFPGATimestamp();
     		}
+    		lastTarget = target;
     	}
     	else if(target.inRange == false)
     	{
