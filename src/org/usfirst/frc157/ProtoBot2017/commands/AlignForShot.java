@@ -6,6 +6,7 @@ import org.usfirst.frc157.ProtoBot2017.subsystems.Drive.DriveMode;
 import org.usfirst.frc157.ProtoBot2017.subsystems.Vision;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -31,13 +32,23 @@ public class AlignForShot extends Command {
 		NONE
 	}
 	
+	private enum TargettingState
+	{
+		ROTATE,
+		RANGE,
+		ACQUIRE,
+		STOP
+	}
+	
 	ShotRangeCommand selectedRange;
 	Point spot;
 	DriveMode preCommandDriveMode;
 
 	AcquisitionType acquisitionType;
 	
-    public AlignForShot(ShotRangeCommand inSelectedRange) {
+	Vision.VisionTarget lastTarget;
+
+	public AlignForShot(ShotRangeCommand inSelectedRange) {
     	selectedRange = inSelectedRange;
         // Use requires() here to declare subsystem dependencies
         requires(Robot.drive);
@@ -77,20 +88,103 @@ public class AlignForShot extends Command {
     	preCommandDriveMode = Robot.drive.getDriveMode();
     	Robot.vision.storePictures();
     	Robot.drive.setDriveMode(DriveMode.ROBOT_RELATIVE);
+    	
+    	lastTarget = Robot.vision.getTarget();
     }
 
+    private static double ROTATION_TOLERANCE = 10;
+    private static double ROT_FRACTION = 0.05;
+    private static double ROT_SPEED = 0.125;
 
+    private static double DISTANCE_TOLERANCE = 10;
+    private static double DIST_FRACTION = 0.05;
+    private static double DIST_SPEED = 0.125;
 
+    private static double ACQ_SPEED = 0.125;
+    
+    private double dRot;
+    private double rotTime;
+    
+    private double dDist;
+    private double distTime;
+    
+    private double acquireTime;
+    
+    private TargettingState state;
+    double stateChangeTime;
+    
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	Vision.VisionTarget target = Robot.vision.getTarget();
     	
-    	// if the target isn't visible and acquisition is desired, start turning
-    	if((target.inRange == false) &&
-    			(acquisitionType != AcquisitionType.NONE))
+    	if((target.loopCount != lastTarget.loopCount) && (target.inRange == true))
     	{
-    		double cmdRot = 0.125;
-    		switch(acquisitionType)
+    		// Got new target update
+    		
+    		// sort out how far to move this time
+    		dRot = target.x - spot.x;
+    		dDist = target.y - spot.y;
+    		
+    		if(Math.abs(dRot) >= ROTATION_TOLERANCE)
+    		{
+    			state = TargettingState.ROTATE;
+    			rotTime = dRot * ROT_FRACTION;
+    		    stateChangeTime = Timer.getFPGATimestamp();
+    		}
+    		else if(Math.abs(dDist) > DISTANCE_TOLERANCE)
+    		{
+    			state = TargettingState.RANGE;
+    			distTime = dDist * DIST_FRACTION;
+    		    stateChangeTime = Timer.getFPGATimestamp();
+    		}
+    		else
+    		{
+    	   		state = TargettingState.STOP;    		
+    		    stateChangeTime = Timer.getFPGATimestamp();
+    		}
+    	}
+    	else if(target.inRange == false)
+    	{
+    		// new target is not found
+    		state = TargettingState.ACQUIRE;
+		    stateChangeTime = Timer.getFPGATimestamp();
+    	}
+    	else
+    	{
+    		// work with old target
+    		//   so no changes to anything
+     	}
+    	
+    	switch(state)
+    	{
+    	case ROTATE:
+    	{
+    		if(Timer.getFPGATimestamp() > stateChangeTime + rotTime)
+    		{
+    			Robot.drive.driveBot(0, 0, ROT_SPEED * Math.signum(dRot));
+    		}
+    		else
+    		{
+    	   		state = TargettingState.STOP;    		
+    		    stateChangeTime = Timer.getFPGATimestamp();    			
+    		}
+    	} break;
+    	case RANGE:
+    	{
+    		if(Timer.getFPGATimestamp() > stateChangeTime + distTime)
+    		{
+    			Robot.drive.driveBot(0, DIST_SPEED * Math.signum(dDist), 0);    			
+    		}
+    		else
+    		{
+    	   		state = TargettingState.STOP;    		
+    		    stateChangeTime = Timer.getFPGATimestamp();    			
+    		}
+    	} break;
+    	case ACQUIRE:
+    	{
+    		double cmdRot = ROT_SPEED;
+       		switch(acquisitionType)
     		{
     		case LEFT:
     		{
@@ -134,35 +228,14 @@ public class AlignForShot extends Command {
     		}
     		break;
     		}
-
-    		Robot.drive.driveBot(0, 0, PID_P * cmdRot);
+   			Robot.drive.driveBot(0, 0, cmdRot);
+    	} break;
+    	case STOP:
+    	{
+    		Robot.drive.driveBot(0, 0, 0);  // stop - consider setting brake mode on for this    		
+    	} break;
     	}
     	
-    	// assuming we can see the target, line up on it
-    	if((target.target == Vision.TargetID.BOILER) &&
-    			(target.recentTarget == true))
-    	{
-    		// Figure out Angle Change (X ~ Angle)
-    		double dx = target.x - spot.x;    	
-    		double cmdRot = (dx/Vision.CAM_WIDTH) * 60;
-
-    		SmartDashboard.putNumber("dx", dx);
-    		SmartDashboard.putNumber("cmdRot", cmdRot);
-    		// Figure out Range Change (Y ~ Range)
-    		double dy = target.y - spot.y;
-    		double cmdY = dy/Vision.CAM_HEIGHT;
-
-    		SmartDashboard.putNumber("dy", dy);
-    		SmartDashboard.putNumber("cmdY", cmdY);
-    		
-    		// Apply Change to Drive
-    		double cmdX = 0;
-    		Robot.drive.driveBot(PID_P * cmdX, PID_P * cmdY, PID_P * cmdRot);
-    	}
-    	else
-    	{
-    		Robot.drive.driveBot(0, 0, 0);  // if not good stop    		
-    	}
      }
 
     // Make this return true when this Command no longer needs to run execute()
