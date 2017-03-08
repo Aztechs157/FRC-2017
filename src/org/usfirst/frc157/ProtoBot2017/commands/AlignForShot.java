@@ -88,6 +88,7 @@ public class AlignForShot extends Command {
     	preCommandDriveMode = Robot.drive.getDriveMode();
     	Robot.vision.storePictures();
     	Robot.drive.setDriveMode(DriveMode.ROBOT_RELATIVE);
+    	state = TargettingState.STOP;
     	
     	lastTarget = Robot.vision.getTarget();
     }
@@ -117,7 +118,7 @@ public class AlignForShot extends Command {
     protected void execute() {
     	Vision.VisionTarget target = Robot.vision.getTarget();
     	
-    	if((target.loopCount != lastTarget.loopCount) && (target.inRange == true))
+    	if((target.loopCount != lastTarget.loopCount) && (target.inRange == true) && (state == TargettingState.STOP))
     	{
     		// Got new target update
     		
@@ -183,7 +184,7 @@ public class AlignForShot extends Command {
     	} break;
     	case ACQUIRE:
     	{
-    		double cmdRot = ROT_SPEED;
+    		double cmdRot = ACQ_SPEED;
        		switch(acquisitionType)
     		{
     		case LEFT:
@@ -229,6 +230,11 @@ public class AlignForShot extends Command {
     		break;
     		}
    			Robot.drive.driveBot(0, 0, cmdRot);
+   			if(target.inRange == true)
+   			{
+   	   	   		state = TargettingState.STOP;    		
+    		    stateChangeTime = Timer.getFPGATimestamp();    			   				
+   			}
     	} break;
     	case STOP:
     	{
