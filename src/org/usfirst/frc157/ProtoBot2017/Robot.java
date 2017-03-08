@@ -76,7 +76,7 @@ public class Robot extends IterativeRobot {
 		collect = new Collect(); 
 		climb = new Climb();
 		leftHelix = new Helix("Left", RobotMap.helixMotorLeft, MotorSense.NORMAL);
-		rightHelix = new Helix("Left", RobotMap.helixMotorRight, MotorSense.NORMAL);
+		rightHelix = new Helix("Right", RobotMap.helixMotorRight, MotorSense.NORMAL);
 		leftGate = new Gate(RobotMap.leftGateRelay);
 		rightGate = new Gate(RobotMap.rightGateRelay);
 
