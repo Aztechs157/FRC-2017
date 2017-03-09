@@ -134,7 +134,7 @@ public class OI {
 	//	joystickButtonX.whenPressed(new ToggleCollection(State.INACTIVE));
 
 		joystickButtonY = new JoystickButton(driver, 4);
-		joystickButtonY.whileHeld(new AlignForShot(AlignForShot.ShotRangeCommand.FAR));
+		joystickButtonY.whileHeld(new AlignForShot(AlignForShot.ShotRangeCommand.NEAR));
 
 		joystickButton5 = new JoystickButton(driver, 5);
 		joystickButton5.whileHeld(new AutoMoveToGear());

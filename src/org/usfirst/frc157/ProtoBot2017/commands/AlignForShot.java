@@ -91,17 +91,19 @@ public class AlignForShot extends Command {
     	state = TargettingState.STOP;
     	
     	lastTarget = Robot.vision.getTarget();
+		SmartDashboard.putString("state", state.toString());
+
     }
 
-    private static double ROTATION_TOLERANCE = 10;
-    private static double ROT_FRACTION = 0.05;
+    private static double ROTATION_TOLERANCE = 3;
+    private static double ROT_FRACTION = 0.0015;
     private static double ROT_SPEED = 0.125;
 
-    private static double DISTANCE_TOLERANCE = 10;
-    private static double DIST_FRACTION = 0.05;
-    private static double DIST_SPEED = 0.125;
+    private static double DISTANCE_TOLERANCE = 3;
+    private static double DIST_FRACTION = 0.015;
+    private static double DIST_SPEED = 0.15;
 
-    private static double ACQ_SPEED = 0.125;
+    private static double ACQ_SPEED = 0.2;
     
     private double dRot;
     private double rotTime;
@@ -117,25 +119,29 @@ public class AlignForShot extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	Vision.VisionTarget target = Robot.vision.getTarget();
-    	
-    	if((target.loopCount != lastTarget.loopCount) && (target.inRange == true) && (state == TargettingState.STOP))
+
+    	if((target.loopCount != lastTarget.loopCount) && 
+    			(target.inRange == true) && 
+    			((state == TargettingState.STOP) || (state == TargettingState.ACQUIRE)))
     	{
     		// Got new target update
     		
     		// sort out how far to move this time
-    		dRot = target.x - spot.x;
-    		dDist = target.y - spot.y;
+    		dRot = spot.x - target.x;
+    		dDist = spot.y - target.y;
+    		    		
+//    		dRot = -dRot;
     		
     		if(Math.abs(dRot) >= ROTATION_TOLERANCE)
     		{
     			state = TargettingState.ROTATE;
-    			rotTime = dRot * ROT_FRACTION;
+    			rotTime = Math.abs(dRot * ROT_FRACTION);
     		    stateChangeTime = Timer.getFPGATimestamp();
     		}
     		else if(Math.abs(dDist) > DISTANCE_TOLERANCE)
     		{
     			state = TargettingState.RANGE;
-    			distTime = dDist * DIST_FRACTION;
+    			distTime = Math.abs(dDist * DIST_FRACTION);
     		    stateChangeTime = Timer.getFPGATimestamp();
     		}
     		else
@@ -143,6 +149,7 @@ public class AlignForShot extends Command {
     	   		state = TargettingState.STOP;    		
     		    stateChangeTime = Timer.getFPGATimestamp();
     		}
+    		
     		lastTarget = target;
     	}
     	else if(target.inRange == false)
@@ -156,12 +163,24 @@ public class AlignForShot extends Command {
     		// work with old target
     		//   so no changes to anything
      	}
+
+		SmartDashboard.putDouble("dRot", dRot);
+		SmartDashboard.putDouble("dDist", dDist);
+		SmartDashboard.putDouble("distTime", distTime);
+		SmartDashboard.putDouble("rotTime", rotTime);
+		SmartDashboard.putString("state", state.toString());
+		
+		SmartDashboard.putDouble("stateChangeTime", stateChangeTime);
+		SmartDashboard.putDouble("rotTime+stateChangeTime", stateChangeTime+rotTime);
+		SmartDashboard.putDouble("NOW", Timer.getFPGATimestamp());
+		
+
     	
     	switch(state)
     	{
     	case ROTATE:
     	{
-    		if(Timer.getFPGATimestamp() > stateChangeTime + rotTime)
+    		if(Timer.getFPGATimestamp() < (stateChangeTime + rotTime))
     		{
     			Robot.drive.driveBot(0, 0, ROT_SPEED * Math.signum(dRot));
     		}
@@ -173,7 +192,7 @@ public class AlignForShot extends Command {
     	} break;
     	case RANGE:
     	{
-    		if(Timer.getFPGATimestamp() > stateChangeTime + distTime)
+    		if(Timer.getFPGATimestamp() < (stateChangeTime + distTime))
     		{
     			Robot.drive.driveBot(0, DIST_SPEED * Math.signum(dDist), 0);    			
     		}
@@ -233,8 +252,8 @@ public class AlignForShot extends Command {
    			Robot.drive.driveBot(0, 0, cmdRot);
    			if(target.inRange == true)
    			{
-   	   	   		state = TargettingState.STOP;    		
-    		    stateChangeTime = Timer.getFPGATimestamp();    			   				
+//   	   	   		state = TargettingState.STOP;    		
+//    		    stateChangeTime = Timer.getFPGATimestamp();    			   				
    			}
     	} break;
     	case STOP:
@@ -252,14 +271,18 @@ public class AlignForShot extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
-    	Robot.drive.setDriveMode(preCommandDriveMode);
-    	System.out.println("AlignForShot.end()");
+//    	state = TargettingState.STOP;    		
+//    	Robot.drive.driveBot(0, 0, 0);  // stop - consider setting brake mode on for this    		
+//    	Robot.drive.setDriveMode(preCommandDriveMode);
+//    	System.out.println("AlignForShot.end()");
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
-    	Robot.drive.setDriveMode(preCommandDriveMode);
-    	System.out.println("AlignForShot.interrupted()");
+//    	state = TargettingState.STOP;    		
+//    	Robot.drive.driveBot(0, 0, 0);  // stop - consider setting brake mode on for this    		
+//    	Robot.drive.setDriveMode(preCommandDriveMode);
+//    	System.out.println("AlignForShot.interrupted()");
     }
 }

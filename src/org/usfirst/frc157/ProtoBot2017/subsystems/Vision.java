@@ -33,6 +33,20 @@ public class Vision extends Subsystem {
 	// Put methods for controlling this subsystem
 	// here. Call these from Commands.
 
+	// Target Centers for desired target locations
+	///////////////////////////////////////////////////////////
+	// Use the smart dashboard target locations to set the target.
+	private static final int BOILER_NEAR_TARGET_CENTER_X = 320;
+	private static final int BOILER_NEAR_TARGET_CENTER_Y = 120;
+
+	private static final int BOILER_FAR_TARGET_CENTER_X = 320;
+	private static final int BOILER_FAR_TARGET_CENTER_Y = 60;
+
+	private static final int GEAR_TARGET_CENTER_X = 440;
+	private static final int GEAR_TARGET_CENTER_Y = 440;
+	///////////////////////////////////////////////////////////
+
+	
 	public static final int CAM_WIDTH = 640;
 	public static final int CAM_HEIGHT = 480;
 
@@ -53,17 +67,8 @@ public class Vision extends Subsystem {
 
 	private static final double ANGLE_TOLERANCE = 20;
 
-	private static final int BOILER_NEAR_TARGET_CENTER_X = 320;
-	private static final int BOILER_NEAR_TARGET_CENTER_Y = 120;
-
-	private static final int BOILER_FAR_TARGET_CENTER_X = 320;
-	private static final int BOILER_FAR_TARGET_CENTER_Y = 60;
-
 	private static final int BOILER_TARGET_WIDTH = 120;
 	private static final int BOILER_TARGET_HEIGHT = 40;
-
-	private static final int GEAR_TARGET_CENTER_X = 440;
-	private static final int GEAR_TARGET_CENTER_Y = 440;
 
 	private static final int GEAR_TARGET_WIDTH = 80;
 	private static final int GEAR_TARGET_HEIGHT = 80;
@@ -260,7 +265,7 @@ public class Vision extends Subsystem {
 	public Vision()
 	{
 		setCamera(CameraSelection.SHOT_CAMERA);
-		setVisionMode(VisionMode.FIND_GEAR, BoilerRange.NEAR);
+		setVisionMode(VisionMode.FIND_BOILER, BoilerRange.NEAR);
 		shotCamera.setResolution(CAM_WIDTH, CAM_HEIGHT);
 		//		gearCamera.setResolution(CAM_WIDTH, CAM_HEIGHT);
 
