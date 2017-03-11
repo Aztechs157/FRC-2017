@@ -99,6 +99,9 @@ public class AlignForShot extends Command {
     private static double ROT_FRACTION = 0.0015;
     private static double ROT_SPEED = 0.125;
 
+    private static double SHORT_ROT_LIMIT = 0.05; // rotation times less than this get more oomph
+    private static double SHORT_ROT_BOOST = 2.0;  // how much more oomph...
+    
     private static double DISTANCE_TOLERANCE = 3;
     private static double DIST_FRACTION = 0.015;
     private static double DIST_SPEED = 0.15;
@@ -182,7 +185,12 @@ public class AlignForShot extends Command {
     	{
     		if(Timer.getFPGATimestamp() < (stateChangeTime + rotTime))
     		{
-    			Robot.drive.driveBot(0, 0, ROT_SPEED * Math.signum(dRot));
+    			double rotSpeed = ROT_SPEED;
+    			if(rotTime < SHORT_ROT_LIMIT)
+    			{
+    				rotSpeed = SHORT_ROT_BOOST * ROT_SPEED;
+    			}
+ 				Robot.drive.driveBot(0, 0, ROT_SPEED * Math.signum(dRot));
     		}
     		else
     		{
