@@ -11,7 +11,7 @@
 
 package org.usfirst.frc157.ProtoBot2017.subsystems;
 
-import org.usfirst.frc157.ProtoBot2017.RobotMap;
+import org.usfirst.frc157.ProtoBot2017.RobotMap; 
 import org.usfirst.frc157.ProtoBot2017.commands.*;
 import com.ctre.CANTalon;
 
@@ -70,19 +70,19 @@ public class Gear extends Subsystem {
         boolean testLeft;
         boolean testRight;
         boolean answer;
-        System.out.println("Gear: isClosed()");
+       // System.out.println("Gear: isClosed()");
         testLeft = closeLimitSwitchLeft.get();
         testRight = closeLimitSwitchRight.get();
       
         if (testLeft == true && testRight == true )
         {
            answer = true;
-           System.out.println("is closed: true");
+        //   System.out.println("is closed: true");
         }
         else
         {
             answer = false;
-            System.out.println("is closed: false");
+      //      System.out.println("is closed: false");
         }
         return answer;
     }
@@ -92,19 +92,19 @@ public class Gear extends Subsystem {
         boolean testLeft;
         boolean testRight;
         boolean answer;
-        System.out.println("Gear: isopen()");
+     //   System.out.println("Gear: isopen()");
         testLeft = openLimitSwitchLeft.get();
         testRight = openLimitSwitchRight.get();
       
         if (testLeft == true && testRight == true )
         {
            answer = true;
-           System.out.println("is open: true");
+          // System.out.println("is open: true");
         }
         else
         {
             answer = false;
-            System.out.println("is open: false");
+            //System.out.println("is open: false");
         }
         return answer;
     }
@@ -115,7 +115,7 @@ public class Gear extends Subsystem {
         boolean testRight;
         boolean answer;
         testLeft = closeLimitSwitchLeft.get();
-
+        
          if (testLeft == true)
          {
              gearMotorLeft.set(0.0);         
@@ -127,7 +127,7 @@ public class Gear extends Subsystem {
          
      
          testRight = closeLimitSwitchRight.get();
-     
+         
          if (testRight == true)
          {
              gearMotorRight.set(0.0);         
@@ -177,9 +177,9 @@ public class Gear extends Subsystem {
     }
     
     @Override
-    protected void initDefaultCommand()
-    {
-        // TODO Auto-generated method stub
+    public void initDefaultCommand()
+    { 
+        setDefaultCommand(new GearCloseCommand());
         
     }
 }

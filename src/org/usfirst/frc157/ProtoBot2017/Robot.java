@@ -16,7 +16,7 @@ import org.usfirst.frc157.ProtoBot2017.commands.AlignForShot;
 import org.usfirst.frc157.ProtoBot2017.commands.AlignForShot.AcquisitionType;
 import org.usfirst.frc157.ProtoBot2017.commands.AlignForShot.ShotRangeCommand;
 import org.usfirst.frc157.ProtoBot2017.commands.AutoDriveSpeedForTime;
-import org.usfirst.frc157.ProtoBot2017.commands.AutonomousCommand;
+import org.usfirst.frc157.ProtoBot2017.commands.AutonomousCommand2;
 import org.usfirst.frc157.ProtoBot2017.commands.GearStateCommand;
 import org.usfirst.frc157.ProtoBot2017.commands.ShootCommand;
 import org.usfirst.frc157.ProtoBot2017.subsystems.Climb;
@@ -133,7 +133,7 @@ public class Robot extends IterativeRobot {
 			System.out.println("Autonomous Position 1");
 			// Drive forward 6 ft
 			CommandGroup autoCommand = new CommandGroup();
-			autoCommand.addSequential(new AutoDriveSpeedForTime(5.0, 0,- 0.5, 0));
+			autoCommand.addSequential(new AutoDriveSpeedForTime(1.5, 0,- 0.5, 0));
 			// schedule the autonomous command 
 			if (autoCommand != null) autoCommand.start();
 			
@@ -144,9 +144,7 @@ public class Robot extends IterativeRobot {
 			System.out.println("Autonomous Position 2");
 			//drive forward 4 ft backup 2 
 			CommandGroup autoCommand = new CommandGroup();
-			autoCommand.addSequential(new AutoDriveSpeedForTime(2.5, 0,- 0.5, 0));
-			autoCommand.addSequential(new AutoDriveSpeedForTime(0.75,0, 0.5, 0));
-			// schedule the autonomous command 
+			autoCommand.addSequential(new AutonomousCommand2());
 			if (autoCommand != null) autoCommand.start();
 		} break;
 
@@ -184,7 +182,7 @@ public class Robot extends IterativeRobot {
 		} break;
 
 		}
-		autonomousCommand = new AutonomousCommand();
+		autonomousCommand = new AutonomousCommand2();
 
 		// At the start of autonomous define the robot orientation as the 0 heading
 		Robot.drive.resetZeroHeading();

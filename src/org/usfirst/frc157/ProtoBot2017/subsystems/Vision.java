@@ -50,7 +50,8 @@ public class Vision extends Subsystem {
 	public static final int CAM_WIDTH = 640;
 	public static final int CAM_HEIGHT = 480;
 
-	private static final int CAM_EXPOSURE = 25;
+	//private static final int CAM_EXPOSURE = 25;
+	private static final int CAM_EXPOSURE = 50;
 	// B,   G,   R
 	private static final Scalar RED = new Scalar(new double[]     {0,   0,   255});
 	private static final Scalar YELLOW = new Scalar(new double[]  {0,   255, 255});

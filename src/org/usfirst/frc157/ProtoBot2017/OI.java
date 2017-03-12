@@ -145,8 +145,8 @@ public class OI {
 		//joystickButton7 = new JoystickButton(driver, 7);
 		//joystickButton7.whenPressed(new OperatorGear(Gear.GearCommand.CLOSE));
 
-		//joystickButton8 = new JoystickButton(driver, 8);
-		//joystickButton8.whenPressed(new OperatorGear(Gear.GearCommand.CLOSE));
+		joystickButton8 = new JoystickButton(driver, 8);
+		joystickButton8.whenPressed(new OperatorGear(Gear.GearCommand.CLOSE));
 
 
 		//joystickButtonRightStickPress = new JoystickButton(driver, 10);

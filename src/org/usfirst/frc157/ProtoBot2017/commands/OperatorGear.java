@@ -78,7 +78,7 @@ public class OperatorGear extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        System.out.println("OperatorGear: finished()");
+        System.out.println("OperatorGear: isFinished()");
         return  finished;
     }
 
