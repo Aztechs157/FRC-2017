@@ -1,4 +1,4 @@
-package org.usfirst.frc157.ProtoBot2017.commands;
+/*package org.usfirst.frc157.ProtoBot2017.commands;
 
 import org.opencv.core.Point;
 import org.usfirst.frc157.ProtoBot2017.Robot;
@@ -10,9 +10,9 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-/**
+/+*
  *
- */
+ /+
 public class AlignForShot extends Command {
 
 	private final double PID_P = 0.05;  //note currently no I or D
@@ -294,3 +294,4 @@ public class AlignForShot extends Command {
 //    	System.out.println("AlignForShot.interrupted()");
     }
 }
+*/

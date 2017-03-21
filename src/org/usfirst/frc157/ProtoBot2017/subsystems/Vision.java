@@ -1,4 +1,4 @@
-package org.usfirst.frc157.ProtoBot2017.subsystems;
+/*package org.usfirst.frc157.ProtoBot2017.subsystems;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -25,9 +25,9 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc157.ProtoBot2017.visionPipeLines.*;
-/**
+/+*
  *
- */
+ -/
 public class Vision extends Subsystem {
 
 	// Put methods for controlling this subsystem
@@ -947,3 +947,4 @@ public class Vision extends Subsystem {
 	}
 
 }
+*/

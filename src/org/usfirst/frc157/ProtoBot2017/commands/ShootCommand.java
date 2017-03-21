@@ -8,7 +8,7 @@
 // update. Deleting the comments indicating the section will prevent
 // it from being updated in the future.
 
-
+/*
 package org.usfirst.frc157.ProtoBot2017.commands;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Timer;
@@ -21,9 +21,9 @@ import org.usfirst.frc157.ProtoBot2017.subsystems.Shoot;
 import org.usfirst.frc157.ProtoBot2017.subsystems.Vision;
 import org.usfirst.frc157.ProtoBot2017.subsystems.Vision.VisionMode;
 
-/**
+/+*
  *
- */
+ /-
 public class ShootCommand extends Command {
 
 	public enum ShotRangeCommand
@@ -291,4 +291,5 @@ public class ShootCommand extends Command {
 	}
 
 }
+*/
 

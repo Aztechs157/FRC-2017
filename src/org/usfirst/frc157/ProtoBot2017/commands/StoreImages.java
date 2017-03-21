@@ -1,12 +1,12 @@
-package org.usfirst.frc157.ProtoBot2017.commands;
+/*package org.usfirst.frc157.ProtoBot2017.commands;
 
 import org.usfirst.frc157.ProtoBot2017.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-/**
+/+*
  *
- */
+ -/
 public class StoreImages extends Command {
 
     public StoreImages() {
@@ -37,3 +37,4 @@ public class StoreImages extends Command {
     protected void interrupted() {
     }
 }
+*/

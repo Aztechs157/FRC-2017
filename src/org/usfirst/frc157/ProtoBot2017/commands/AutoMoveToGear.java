@@ -1,4 +1,4 @@
-package org.usfirst.frc157.ProtoBot2017.commands;
+/*package org.usfirst.frc157.ProtoBot2017.commands;
 
 import org.opencv.core.Point;
 import org.usfirst.frc157.ProtoBot2017.Robot;
@@ -6,9 +6,9 @@ import org.usfirst.frc157.ProtoBot2017.subsystems.Vision;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-/**
+/+*
  *
- */
+ -/
 public class AutoMoveToGear extends Command {
 
 	private final static double  CROSSTRACK_TOLERANCE = 25.0;
@@ -111,3 +111,4 @@ public class AutoMoveToGear extends Command {
     	Robot.drive.driveBot(0, 0, 0);
     }
 }
+*/

@@ -11,7 +11,7 @@
 
 package org.usfirst.frc157.ProtoBot2017;
 
-import org.usfirst.frc157.ProtoBot2017.HIDPOVButton;
+import org.usfirst.frc157.ProtoBot2017.HIDPOVButton; 
 import org.usfirst.frc157.ProtoBot2017.commands.*;
 import org.usfirst.frc157.ProtoBot2017.commands.ClimbCommand.ClimbCommandSpeed;
 import org.usfirst.frc157.ProtoBot2017.commands.DebugPrintInfo.DebugSelection;
@@ -22,10 +22,10 @@ import org.usfirst.frc157.ProtoBot2017.subsystems.Gate;
 import org.usfirst.frc157.ProtoBot2017.subsystems.Gear;
 import org.usfirst.frc157.ProtoBot2017.subsystems.Helix;
 import org.usfirst.frc157.ProtoBot2017.subsystems.Shoot;
-import org.usfirst.frc157.ProtoBot2017.subsystems.Vision;
-import org.usfirst.frc157.ProtoBot2017.subsystems.Vision.BoilerRange;
-import org.usfirst.frc157.ProtoBot2017.subsystems.Vision.TargetID;
-import org.usfirst.frc157.ProtoBot2017.subsystems.Vision.VisionMode;
+//import org.usfirst.frc157.ProtoBot2017.subsystems.Vision;
+//import org.usfirst.frc157.ProtoBot2017.subsystems.Vision.BoilerRange;
+//import org.usfirst.frc157.ProtoBot2017.subsystems.Vision.TargetID;
+//import org.usfirst.frc157.ProtoBot2017.subsystems.Vision.VisionMode;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -125,7 +125,7 @@ public class OI {
 
 		joystickButtonA = new JoystickButton(driver, 1);
 		//        joystickButtonA.whileHeld(new AlignForShot(Vision.BoilerRange.FAR));
-		joystickButtonA.whileHeld(new ShootCommand(ShootCommand.ShotRangeCommand.AUTO));
+	//	joystickButtonA.whileHeld(new ShootCommand(ShootCommand.ShotRangeCommand.AUTO));
 		//joystickButtonB = new JoystickButton(driver, 2);
 		//joystickButtonB.whenPressed(new SetCameraTarget());
 
@@ -134,10 +134,10 @@ public class OI {
 	//	joystickButtonX.whenPressed(new ToggleCollection(State.INACTIVE));
 
 		joystickButtonY = new JoystickButton(driver, 4);
-		joystickButtonY.whileHeld(new AlignForShot(AlignForShot.ShotRangeCommand.NEAR));
+		//joystickButtonY.whileHeld(new AlignForShot(AlignForShot.ShotRangeCommand.NEAR));
 
 		joystickButton5 = new JoystickButton(driver, 5);
-		joystickButton5.whileHeld(new AutoMoveToGear());
+	//	joystickButton5.whileHeld(new AutoMoveToGear());
 
 		joystickButton6 = new JoystickButton(driver, 6);
 		joystickButton6.whenPressed(new GearStateCommand());
@@ -153,10 +153,10 @@ public class OI {
 		//joystickButtonRightStickPress.whenPressed(new AlignToField());
 
 		joyStickHatFore = new HIDPOVButton(driver, 0);
-		joyStickHatFore.whenPressed(new StoreImages());
+		//joyStickHatFore.whenPressed(new StoreImages());
 
 		joyStickHatAft = new HIDPOVButton(driver, 180);
-		joyStickHatAft.whenPressed(new SetCamera());
+		//joyStickHatAft.whenPressed(new SetCamera());
 
 
 		//		operatorButton2 = new JoystickButton(operatorJoystick, 2);
@@ -181,19 +181,19 @@ public class OI {
 		//operatorButton12.whenPressed(new ShootCommand(Shoot.ShootCommand.IDLE));
 
 		trigger = new  JoystickButton(operatorJoystick, 1);
-		trigger.whileHeld(new ShootCommand(ShootCommand.ShotRangeCommand.AUTO));
+		//trigger.whileHeld(new ShootCommand(ShootCommand.ShotRangeCommand.AUTO));
 		
 		operatorButton3 = new  JoystickButton(operatorJoystick, 3);
-		operatorButton3.whenPressed(new SetCameraTarget(VisionMode.FIND_BOILER, BoilerRange.NEAR));
+//		operatorButton3.whenPressed(new SetCameraTarget(VisionMode.FIND_BOILER, BoilerRange.NEAR));
 
 		operatorButton4 = new  JoystickButton(operatorJoystick, 4);
-		operatorButton4.whenPressed(new SetCameraTarget(VisionMode.FIND_BOILER, BoilerRange.FAR));
+		//operatorButton4.whenPressed(new SetCameraTarget(VisionMode.FIND_BOILER, BoilerRange.FAR));
 
 		operatorButton5 = new  JoystickButton(operatorJoystick, 5);
-		operatorButton5.whenPressed(new StoreImages());
+		//operatorButton5.whenPressed(new StoreImages());
 
 		operatorButton6 = new  JoystickButton(operatorJoystick, 6);
-		operatorButton6.whenPressed(new SetCameraTarget(VisionMode.FIND_GEAR));
+		//operatorButton6.whenPressed(new SetCameraTarget(VisionMode.FIND_GEAR));
 
 		operatorButton7 = new JoystickButton(operatorJoystick, 7);
 		operatorButton7.whenPressed(new ClimbCommand( ClimbCommandSpeed.SLOW));
@@ -205,7 +205,7 @@ public class OI {
 		operatorButton9.whenPressed(new  ClimbCommand( ClimbCommandSpeed.IDLE));
 
 		operatorButton11 = new JoystickButton(operatorJoystick, 11);
-		operatorButton11.whenPressed(new StoreImages());
+		//operatorButton11.whenPressed(new StoreImages());
 
 		// using lefts and rights for mitigating operator eror during compotitions 
 
@@ -274,11 +274,11 @@ public class OI {
 
 		// SmartDashboard Buttons
 		SmartDashboard.putData("AlignToField", new AlignToField());
-		SmartDashboard.putData("Store Camera Images", new StoreImages());
+		//SmartDashboard.putData("Store Camera Images", new StoreImages());
 //		SmartDashboard.putData("Autonomous Command", new AutonomousCommand());
 		SmartDashboard.putData("DebugButton", new DebugPrintInfo("ScreenButton", DebugSelection.NOPRINT));
-		SmartDashboard.putData("Align for Near Shot", new AlignForShot(AlignForShot.ShotRangeCommand.NEAR));
-		SmartDashboard.putData("Align for Far Shot", new AlignForShot(AlignForShot.ShotRangeCommand.FAR));
+		//SmartDashboard.putData("Align for Near Shot", new AlignForShot(AlignForShot.ShotRangeCommand.NEAR));
+		//SmartDashboard.putData("Align for Far Shot", new AlignForShot(AlignForShot.ShotRangeCommand.FAR));
 
 		// END AUTOGENERATED CODE, SOURCE=ROBOTBUILDER ID=CONSTRUCTORS
 	}

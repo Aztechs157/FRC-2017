@@ -1,4 +1,4 @@
-package org.usfirst.frc157.ProtoBot2017.commands;
+/*package org.usfirst.frc157.ProtoBot2017.commands;
 
 import org.usfirst.frc157.ProtoBot2017.Robot;
 import org.usfirst.frc157.ProtoBot2017.subsystems.Vision;
@@ -7,9 +7,9 @@ import org.usfirst.frc157.ProtoBot2017.subsystems.Vision.VisionMode;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-/**
+/+*
  *
- */
+ /-
 public class SetCameraTarget extends Command {
 
 	private VisionMode mode;
@@ -51,3 +51,4 @@ public class SetCameraTarget extends Command {
     protected void interrupted() {
     }
 }
+*/
