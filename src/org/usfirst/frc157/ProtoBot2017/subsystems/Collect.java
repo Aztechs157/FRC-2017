@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
  */
 public class Collect extends Subsystem {
 
-    private final CANTalon collectMotor = RobotMap.collectMotor;
+    private final CANTalon collectMotor = RobotMap.gearPickupMotor;
 
     // Put methods for controlling this subsystem
     // here. Call these from Commands.

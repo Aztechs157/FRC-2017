@@ -37,9 +37,9 @@ public class RobotMap {
     public static RobotDrive driveMechDrive;
     public static CANTalon gearMotorLeft;
     public static CANTalon gearMotorRight;
-    public static CANTalon collectMotor;
-    public static CANTalon helixMotorRight;
-    public static CANTalon helixMotorLeft;
+    public static CANTalon gearPickupMotor;
+    public static CANTalon GearBridgeMotorRght;
+    public static CANTalon GearBridgeMotorLeft;
     public static CANTalon shootMotor;
     public static CANTalon climbMotor;
     public static Relay leftGateRelay;
@@ -80,11 +80,11 @@ public class RobotMap {
         gearMotorLeft = new CANTalon(12);            
         LiveWindow.addActuator("Gear", "gearMotor", gearMotorLeft);
         
-        collectMotor = new CANTalon(13);          // CAN ID 13
-        LiveWindow.addActuator("Collect", "collectMotor", collectMotor);
+        gearPickupMotor = new CANTalon(13);          // CAN ID 13
+        LiveWindow.addActuator("Collect", "collectMotor", gearPickupMotor);
         
-        helixMotorRight = new CANTalon(9);        // CAN ID 9
-        helixMotorLeft = new CANTalon(8);         // CAN ID 8
+        GearBridgeMotorRght = new CANTalon(9);        // CAN ID 9
+        GearBridgeMotorLeft = new CANTalon(8);         // CAN ID 8
         shootMotor = new CANTalon(11);            // CAN ID 11
         climbMotor = new CANTalon(10);            // CAN ID 10
         rightGateRelay = new Relay(0);            // Relay Port 0

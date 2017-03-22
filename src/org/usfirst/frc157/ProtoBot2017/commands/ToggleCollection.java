@@ -34,23 +34,23 @@ public class ToggleCollection extends Command {
 	    if(state == State.INACTIVE)
 	    {
 	        state = State.ACTIVE;
-            Robot.collect.load();
+         /*   Robot.collect.load();
             Robot.leftHelix.load();
             Robot.rightHelix.load();
             Robot.leftGate.close();
             Robot.rightGate.close();
-            System.out.println("ToggleCollection - Start Collection");
+           */ System.out.println("ToggleCollection - Start Collection");
 	    }
 	    else
 	    {
 	        state = state.INACTIVE;
             // if we were active - turn things off and go inactive
-	        Robot.collect.idle();
+	        /*Robot.collect.idle();
 	        Robot.leftHelix.idle();
 	        Robot.rightHelix.idle();                        
 	        Robot.leftGate.close();
 	        Robot.rightGate.close();
-            System.out.println("ToggleCollection - Stop Cllection");
+            */System.out.println("ToggleCollection - Stop Cllection");
 	    }
        // requires(Robot.collect);
         //requires(Robot.helix);
