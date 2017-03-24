@@ -20,6 +20,7 @@ import org.usfirst.frc157.ProtoBot2017.subsystems.Climb;
 import org.usfirst.frc157.ProtoBot2017.subsystems.Collect;
 import org.usfirst.frc157.ProtoBot2017.subsystems.Gate;
 import org.usfirst.frc157.ProtoBot2017.subsystems.Gear;
+import org.usfirst.frc157.ProtoBot2017.subsystems.GearPickup;
 import org.usfirst.frc157.ProtoBot2017.subsystems.Helix;
 import org.usfirst.frc157.ProtoBot2017.subsystems.Shoot;
 //import org.usfirst.frc157.ProtoBot2017.subsystems.Vision;
@@ -190,7 +191,7 @@ public class OI {
 		//operatorButton4.whenPressed(new SetCameraTarget(VisionMode.FIND_BOILER, BoilerRange.FAR));
 
 		operatorButton5 = new  JoystickButton(operatorJoystick, 5);
-		//operatorButton5.whenPressed(new StoreImages());
+		operatorButton5.whenPressed(new GearBridgeStateCommand());
 
 		operatorButton6 = new  JoystickButton(operatorJoystick, 6);
 		//operatorButton6.whenPressed(new SetCameraTarget(VisionMode.FIND_GEAR));
@@ -218,10 +219,10 @@ public class OI {
 		operatorStickHatForeLeft = new HIDPOVButton(operatorJoystick, 315);
 		operatorStickHatForeLeft.whileHeld(new ClimbCommand( ClimbCommandSpeed.FAST));
 
-//		        operatorStickHatRight = new HIDPOVButton(operatorJoystick, 90);
-//		        operatorStickHatRight.whenPressed(new DebugPrintInfo("Rumble On", DebugSelection.RUMBLE_ON));
-//		        operatorStickHatRight = new HIDPOVButton(operatorJoystick, 270);
-//		        operatorStickHatRight.whenPressed(new DebugPrintInfo("Rumble Off", DebugSelection.RUMBLE_OFF));
+        operatorStickHatRight = new HIDPOVButton(operatorJoystick, 90);
+        operatorStickHatRight.whenPressed(new GearPickupCommand(GearPickup.GearPickupCommand.UP));
+        operatorStickHatLeft = new HIDPOVButton(operatorJoystick, 270);
+        operatorStickHatLeft.whenPressed(new GearPickupCommand(GearPickup.GearPickupCommand.DOWN));
 
 		operatorStickHatAftRight = new HIDPOVButton(operatorJoystick, 135);
 		operatorStickHatAftRight.whileHeld(new ClimbCommand( ClimbCommandSpeed.SLOW));

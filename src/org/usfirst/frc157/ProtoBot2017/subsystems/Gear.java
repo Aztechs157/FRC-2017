@@ -180,7 +180,6 @@ public class Gear extends Subsystem {
     public void initDefaultCommand()
     { 
         setDefaultCommand(new GearCloseCommand());
-        
     }
 }
     

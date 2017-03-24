@@ -11,6 +11,7 @@
 
 package org.usfirst.frc157.ProtoBot2017.subsystems;
 
+import org.usfirst.frc157.ProtoBot2017.Robot;
 import org.usfirst.frc157.ProtoBot2017.RobotMap;  
 import org.usfirst.frc157.ProtoBot2017.commands.*;
 import com.ctre.CANTalon;
@@ -29,8 +30,8 @@ import edu.wpi.first.wpilibj.DigitalInput;
  */
 public class GearBridge extends Subsystem {
 
-    private final double OPEN_SPEED  = 0.40;
-    private final double CLOSE_SPEED = 0.15;
+    private final double UP_SPEED  = 0.40;
+    private final double DOWN_SPEED = 0.15;
     private final CANTalon GearBridgeMotorLeft = RobotMap.GearBridgeMotorLeft;
     private final CANTalon GearBridgeMotorRght = RobotMap.GearBridgeMotorRght;
 
@@ -38,25 +39,25 @@ public class GearBridge extends Subsystem {
     // here. Call these from Commands.
 
     // Limit Switches
-    protected DigitalInput openLimitSwitchLeft;
-    protected DigitalInput closeLimitSwitchLeft;
-    protected DigitalInput openLimitSwitchRight;
-    protected DigitalInput closeLimitSwitchRight;
+    protected DigitalInput upLimitSwitchLeft;
+    protected DigitalInput downLimitSwitchLeft;
+    protected DigitalInput upLimitSwitchRight;
+    protected DigitalInput downLimitSwitchRight;
 
     public enum GearBridgeCommand
     {
-        OPEN,
-        CLOSE,
+        RAISE,
+        LOWER,
         IDLE
     }
         
     public GearBridge()
     {
         System.out.println("Gear: Gear()");
-        openLimitSwitchLeft = new DigitalInput(0); 
-        closeLimitSwitchLeft = new DigitalInput(1); 
-        openLimitSwitchRight = new DigitalInput(2);
-        closeLimitSwitchRight = new DigitalInput(3);
+        upLimitSwitchLeft = new DigitalInput(0);
+        downLimitSwitchLeft = new DigitalInput(1);
+        upLimitSwitchRight = new DigitalInput(2);
+        downLimitSwitchRight = new DigitalInput(3);
         
         GearBridgeMotorLeft.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
         GearBridgeMotorRght.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
@@ -64,57 +65,57 @@ public class GearBridge extends Subsystem {
     }        
    
     
-    public boolean isClosed()
+    public boolean isDown()
     {
         //int test = 1 / 0;
         boolean testLeft;
         boolean testRight;
         boolean answer;
-       // System.out.println("Gear: isClosed()");
-        testLeft = closeLimitSwitchLeft.get();
-        testRight = closeLimitSwitchRight.get();
+       // System.out.println("GearBridge: isDown()");
+        testLeft = downLimitSwitchLeft.get();
+        testRight = downLimitSwitchRight.get();
       
         if (testLeft == true && testRight == true )
         {
            answer = true;
-        //   System.out.println("is closed: true");
+        //   System.out.println("isDown: true");
         }
         else
         {
             answer = false;
-      //      System.out.println("is closed: false");
+      //      System.out.println("isDown: false");
         }
         return answer;
     }
 
-    public boolean isOpen() 
+    public boolean isUp() 
     {
         boolean testLeft;
         boolean testRight;
         boolean answer;
-     //   System.out.println("Gear: isopen()");
-        testLeft = openLimitSwitchLeft.get();
-        testRight = openLimitSwitchRight.get();
+     //   System.out.println("GearBridge: isUp()");
+        testLeft = upLimitSwitchLeft.get();
+        testRight = upLimitSwitchRight.get();
       
         if (testLeft == true && testRight == true )
         {
            answer = true;
-          // System.out.println("is open: true");
+          // System.out.println("isUp: true");
         }
         else
         {
             answer = false;
-            //System.out.println("is open: false");
+            //System.out.println("isUp: false");
         }
         return answer;
     }
     
-    public void close()
+    public void lower()
     {
         boolean testLeft;
         boolean testRight;
         boolean answer;
-        testLeft = closeLimitSwitchLeft.get();
+        testLeft = downLimitSwitchLeft.get();
         
          if (testLeft == true)
          {
@@ -122,11 +123,11 @@ public class GearBridge extends Subsystem {
          }
          else
          {
-             GearBridgeMotorLeft.set(-CLOSE_SPEED);
+             GearBridgeMotorLeft.set(-DOWN_SPEED);
          }
          
      
-         testRight = closeLimitSwitchRight.get();
+         testRight = downLimitSwitchRight.get();
          
          if (testRight == true)
          {
@@ -134,18 +135,18 @@ public class GearBridge extends Subsystem {
          }
          else
          {
-             GearBridgeMotorRght.set(-CLOSE_SPEED);
+             GearBridgeMotorRght.set(-DOWN_SPEED);
          }
      
      }
     
     
-    public void open()
+    public void raise()
     {
        boolean testLeft;
        boolean testRight;
        boolean answer;
-       testLeft = openLimitSwitchLeft.get();
+       testLeft = upLimitSwitchLeft.get();
 
         if (testLeft == true)
         {
@@ -153,11 +154,11 @@ public class GearBridge extends Subsystem {
         }
         else
         {
-            GearBridgeMotorLeft.set(OPEN_SPEED);
+            GearBridgeMotorLeft.set(UP_SPEED);
         }
         
     
-        testRight = openLimitSwitchRight.get();
+        testRight = upLimitSwitchRight.get();
     
         if (testRight == true)
         {
@@ -165,7 +166,7 @@ public class GearBridge extends Subsystem {
         }
         else
         {
-            GearBridgeMotorRght.set(OPEN_SPEED);
+            GearBridgeMotorRght.set(UP_SPEED);
         }
     
     }
@@ -179,8 +180,7 @@ public class GearBridge extends Subsystem {
     @Override
     public void initDefaultCommand()
     { 
-    
-        
+        setDefaultCommand(new GearBridgeLowerCommand());
     }
 }
     

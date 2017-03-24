@@ -33,6 +33,12 @@ public class GearPickup extends Subsystem {
     private final double downSPEED  = 0.5;
     private final CANTalon gearPickupMotor = RobotMap.gearPickupMotor;
  
+    public enum GearPickupCommand
+    {
+        UP,
+        DOWN,
+        IDLE
+    }
 
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
@@ -122,7 +128,11 @@ public class GearPickup extends Subsystem {
         {
             gearPickupMotor.set(downSPEED);
         }
+    }
         
+    public void idle()
+    {
+        gearPickupMotor.set(0);
     }
 
 
