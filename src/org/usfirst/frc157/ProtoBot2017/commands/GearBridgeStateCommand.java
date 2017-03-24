@@ -84,8 +84,8 @@ public class GearBridgeStateCommand extends Command {
                 if (GEARBRIDGE.isDown()) {
                     finished = true;
                 	System.out.println("GearBridgeStateCommand: Down");
-                	Robot.oi.driver.setRumble(RumbleType.kLeftRumble, 0.0);
-                	Robot.oi.driver.setRumble(RumbleType.kRightRumble, 0.0);
+                //	Robot.oi.driver.setRumble(RumbleType.kLeftRumble, 0.0);
+                //	Robot.oi.driver.setRumble(RumbleType.kRightRumble, 0.0);
                 } else {
                     GEARBRIDGE.lower();
                 }

@@ -10,7 +10,7 @@
 
 
 package org.usfirst.frc157.ProtoBot2017.commands;
-import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.GenericHID; 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -28,7 +28,7 @@ public class GearPickupCommand extends Command {
     
     public GearPickupCommand(GearPickup.GearPickupCommand command) {
         gearPickupCommand = command;
-        requires(Robot.gear);
+        requires(Robot.gearPickup);
     }
     
     // Called just before this Command runs the first time
@@ -54,7 +54,7 @@ public class GearPickupCommand extends Command {
         }
         else
         {
-            Robot.gear.idle();
+            Robot.gearPickup.idle();
             finished = true;
             System.out.println("GearCommand undefined!");
         }
@@ -69,14 +69,14 @@ public class GearPickupCommand extends Command {
     // Called once after isFinished returns true
     protected void end() {
         System.out.println("OperatorGear: end()");
-        Robot.gear.idle();
+        Robot.gearPickup.idle();
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
         System.out.println("OperatorGear: interrupted()");
-        Robot.gear.idle();
+        Robot.gearPickup.idle();
     }
 }
 

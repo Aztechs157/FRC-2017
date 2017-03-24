@@ -130,15 +130,15 @@ public class OI {
 		//joystickButtonB = new JoystickButton(driver, 2);
 		//joystickButtonB.whenPressed(new SetCameraTarget());
 
-		joystickButtonX = new JoystickButton(driver, 3);
-		joystickButtonX.whenPressed(new ToggleCollection(State.ACTIVE));
+		//joystickButtonX = new JoystickButton(driver, 3);
+		//joystickButtonX.whenPressed(new ToggleCollection(State.ACTIVE));
 	//	joystickButtonX.whenPressed(new ToggleCollection(State.INACTIVE));
 
-		joystickButtonY = new JoystickButton(driver, 4);
+	//	joystickButtonY = new JoystickButton(driver, 4);
 		//joystickButtonY.whileHeld(new AlignForShot(AlignForShot.ShotRangeCommand.NEAR));
 
-		joystickButton5 = new JoystickButton(driver, 5);
-	//	joystickButton5.whileHeld(new AutoMoveToGear());
+		//joystickButton5 = new JoystickButton(driver, 5);
+	//	joystickButton5.whenPressed(new GearPickupCommand(GearPickup.GearPickupCommand.UP));
 
 		joystickButton6 = new JoystickButton(driver, 6);
 		joystickButton6.whenPressed(new GearStateCommand());
@@ -158,6 +158,8 @@ public class OI {
 
 		joyStickHatAft = new HIDPOVButton(driver, 180);
 		//joyStickHatAft.whenPressed(new SetCamera());
+		
+		joyStickHatFore = new HIDPOVButton(driver, 0);
 
 
 		//		operatorButton2 = new JoystickButton(operatorJoystick, 2);
@@ -171,7 +173,7 @@ public class OI {
 		//		operatorButton12.whenPressed(new ShootCommand(ShootCommand.ShootCommand.STOP));
 
 		operatorButton2 = new JoystickButton(operatorJoystick, 2);
-		operatorButton2.whenPressed(new ToggleCollection(State.ACTIVE));
+		//operatorButton2.whenPressed(new ToggleCollection(State.ACTIVE));
 		//operatorButton2.whenPressed(new ToggleCollection(State.INACTIVE));
 
 
@@ -274,10 +276,10 @@ public class OI {
 //		  operatorStickHatForeLeft.whenPressed(new DebugPrintInfo("operatorStickHatForeLeft", DebugSelection.NOPRINT));  // Hat Button Forward Left
 
 		// SmartDashboard Buttons
-		SmartDashboard.putData("AlignToField", new AlignToField());
+	//	SmartDashboard.putData("AlignToField", new AlignToField());
 		//SmartDashboard.putData("Store Camera Images", new StoreImages());
 //		SmartDashboard.putData("Autonomous Command", new AutonomousCommand());
-		SmartDashboard.putData("DebugButton", new DebugPrintInfo("ScreenButton", DebugSelection.NOPRINT));
+	//	SmartDashboard.putData("DebugButton", new DebugPrintInfo("ScreenButton", DebugSelection.NOPRINT));
 		//SmartDashboard.putData("Align for Near Shot", new AlignForShot(AlignForShot.ShotRangeCommand.NEAR));
 		//SmartDashboard.putData("Align for Far Shot", new AlignForShot(AlignForShot.ShotRangeCommand.FAR));
 
