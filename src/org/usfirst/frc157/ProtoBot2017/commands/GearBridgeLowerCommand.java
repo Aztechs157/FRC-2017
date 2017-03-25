@@ -61,6 +61,6 @@ public class GearBridgeLowerCommand extends Command {
     // subsystems is scheduled to run
     protected void interrupted() {
         System.out.println("GearBriderLowerCommand: interrupted()");
-        Robot.gear.idle();
+        Robot.gearBridge.idle();
     }
 }

@@ -33,13 +33,13 @@ public class GearPickupCommand extends Command {
     
     // Called just before this Command runs the first time
     protected void initialize() {
-        System.out.println("OperatorGear: initialize()");
+        System.out.println("GearPickup initialize()");
         finished = false;
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        System.out.println("OperatorGear: execute(), Command: " + gearPickupCommand);
+        System.out.println("GearPickup: execute(), Command: " + gearPickupCommand);
         if (gearPickupCommand == GearPickup.GearPickupCommand.UP) {
             Robot.gearPickup.moveUp();
         }
@@ -62,20 +62,20 @@ public class GearPickupCommand extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        System.out.println("OperatorGear: isFinished()");
+        System.out.println("GearPickup: isFinished()");
         return  finished;
     }
 
     // Called once after isFinished returns true
     protected void end() {
-        System.out.println("OperatorGear: end()");
+        System.out.println("GearPickup: end()");
         Robot.gearPickup.idle();
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
-        System.out.println("OperatorGear: interrupted()");
+        System.out.println("GearPickup: interrupted()");
         Robot.gearPickup.idle();
     }
 }

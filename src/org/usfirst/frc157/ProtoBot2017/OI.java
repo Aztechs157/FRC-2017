@@ -222,9 +222,9 @@ public class OI {
 		operatorStickHatForeLeft.whileHeld(new ClimbCommand( ClimbCommandSpeed.FAST));
 
         operatorStickHatRight = new HIDPOVButton(operatorJoystick, 90);
-        operatorStickHatRight.whenPressed(new GearPickupCommand(GearPickup.GearPickupCommand.UP));
+        operatorStickHatRight.whileHeld(new GearPickupCommand(GearPickup.GearPickupCommand.UP));
         operatorStickHatLeft = new HIDPOVButton(operatorJoystick, 270);
-        operatorStickHatLeft.whenPressed(new GearPickupCommand(GearPickup.GearPickupCommand.DOWN));
+        operatorStickHatLeft.whileHeld(new GearPickupCommand(GearPickup.GearPickupCommand.DOWN));
 
 		operatorStickHatAftRight = new HIDPOVButton(operatorJoystick, 135);
 		operatorStickHatAftRight.whileHeld(new ClimbCommand( ClimbCommandSpeed.SLOW));
