@@ -179,7 +179,7 @@ public class Gear extends Subsystem {
     @Override
     public void initDefaultCommand()
     { 
-        setDefaultCommand(new GearCloseCommand());
+        setDefaultCommand(new GearOpenCommand());
     }
 }
     

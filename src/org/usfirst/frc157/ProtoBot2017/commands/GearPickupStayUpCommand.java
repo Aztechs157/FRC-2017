@@ -15,53 +15,55 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc157.ProtoBot2017.Robot;
-import org.usfirst.frc157.ProtoBot2017.subsystems.Gear;
+import org.usfirst.frc157.ProtoBot2017.subsystems.GearPickup;
 
 /**
  *
  */
-public class GearBridgeLowerCommand extends Command {
+public class GearPickupStayUpCommand extends Command {
+    
+  
+
     private boolean finished = false;
-    private boolean executeprint = false;
-    public GearBridgeLowerCommand() {
-        requires(Robot.gearBridge);
+    
+    public GearPickupStayUpCommand() {
+ 
+        requires(Robot.gearPickup);
     }
     
     // Called just before this Command runs the first time
     protected void initialize() {
-        System.out.println("GearBridgeCloseCommand: initialize()");
+        System.out.println("GearPickupStayUp initialize()");
         finished = false;
-        executeprint = false;
     }
 
     // Called repeatedly when this Command is scheduled to run
-    protected void execute() 
-    {
-        if ( executeprint == false)
-        {
-            System.out.println("GearBriderLowerCommand: Eexecute();");
-            executeprint = true; 
-        }
-        Robot.gearBridge.lower();
-   
+    protected void execute() {
+        System.out.println("GearPickupStayUp: execute()");
+        Robot.gearPickup.moveUp();
+        // command never finishes because the idea is to keep the gear pickup in 
+        // the up position until another command interrupts it.
+
     }
-    
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-//        System.out.println("GearBriderLowerCommand: finished()");
+        System.out.println("GearPickupStayUp: isFinished()");
         return  finished;
     }
 
     // Called once after isFinished returns true
     protected void end() {
-        System.out.println("GearBridgeLowerCommand: end()");
+        System.out.println("GearPickupStayUp: end()");
+        Robot.gearPickup.idle();
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
-        System.out.println("GearBriderLowerCommand: interrupted()");
-        Robot.gearBridge.idle();
+        System.out.println("GearPickupStayUp: interrupted()");
+        Robot.gearPickup.idle();
     }
 }
+
+;

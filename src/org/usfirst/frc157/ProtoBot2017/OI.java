@@ -77,6 +77,7 @@ public class OI {
 	public JoystickButton joystickButton7;
 	public JoystickButton joystickButton8;
 	public JoystickButton joystickButton12;
+	//public JoystickButton 
 
 	public JoystickButton joystickButton5;// left bumper
 	public JoystickButton joystickButton6;// right bumper
@@ -103,7 +104,8 @@ public class OI {
 
 	public XboxController driver;
 	public Joystick operatorJoystick = new Joystick(1);// instantiates thye operator joystick
-	public Button trigger ;
+	public Button lefttrigger ;
+	public Button righttrigger; 
 	public Button operatorButton2;    
 	public Button operatorButton8;
 	public Button operatorButton10;
@@ -111,7 +113,9 @@ public class OI {
 	public Button operatorButton5;
 	public Button operatorButton3;
 	public Button operatorButton4;    
-	public Button operatorButton6;    
+	public Button operatorButton6;
+	public HIDPOVButton DPadLeft;
+	public HIDPOVButton DPadRight;
 
 	// for gate
 	public Button operatorButton7;
@@ -139,9 +143,14 @@ public class OI {
 
 		//joystickButton5 = new JoystickButton(driver, 5);
 	//	joystickButton5.whenPressed(new GearPickupCommand(GearPickup.GearPickupCommand.UP));
+		DPadRight = new HIDPOVButton(driver,180);
+		DPadRight.whenPressed(new GearBridgeRaiseCommand());
+		
+		DPadLeft=  new HIDPOVButton(driver,0);
+		DPadLeft.whenPressed(new GearBridgeLowerCommand());
 
-		joystickButton6 = new JoystickButton(driver, 6);
-		joystickButton6.whenPressed(new GearStateCommand());
+		//joystickButton6 = new JoystickButton(driver, 6);
+		//joystickButton6.whenPressed(new GearStateCommand());
 
 		//joystickButton7 = new JoystickButton(driver, 7);
 		//joystickButton7.whenPressed(new OperatorGear(Gear.GearCommand.CLOSE));
@@ -183,7 +192,7 @@ public class OI {
 		//operatorButton12 = new  JoystickButton(operatorJoystick, 12);
 		//operatorButton12.whenPressed(new ShootCommand(Shoot.ShootCommand.IDLE));
 
-		trigger = new  JoystickButton(operatorJoystick, 1);
+		//trigger = new  JoystickButton(operatorJoystick, 1);
 		//trigger.whileHeld(new ShootCommand(ShootCommand.ShotRangeCommand.AUTO));
 		
 		operatorButton3 = new  JoystickButton(operatorJoystick, 3);
@@ -193,12 +202,12 @@ public class OI {
 		//operatorButton4.whenPressed(new SetCameraTarget(VisionMode.FIND_BOILER, BoilerRange.FAR));
 
 		operatorButton5 = new  JoystickButton(operatorJoystick, 5);
-		operatorButton5.whenPressed(new GearBridgeStateCommand());
+	//	operatorButton5.whenPressed(new GearBridgeStateCommand());
 
 		operatorButton6 = new  JoystickButton(operatorJoystick, 6);
-		//operatorButton6.whenPressed(new SetCameraTarget(VisionMode.FIND_GEAR));
+		operatorButton6.whenPressed(new GearPickupStayUpCommand());
 
-		operatorButton7 = new JoystickButton(operatorJoystick, 7);
+	/*	operatorButton7 = new JoystickButton(operatorJoystick, 7);
 		operatorButton7.whenPressed(new ClimbCommand( ClimbCommandSpeed.SLOW));
 
 		operatorButton8 = new  JoystickButton(operatorJoystick, 8);
@@ -206,7 +215,7 @@ public class OI {
 
 		operatorButton9 = new JoystickButton(operatorJoystick, 9);
 		operatorButton9.whenPressed(new  ClimbCommand( ClimbCommandSpeed.IDLE));
-
+	 */
 		operatorButton11 = new JoystickButton(operatorJoystick, 11);
 		//operatorButton11.whenPressed(new StoreImages());
 

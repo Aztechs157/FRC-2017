@@ -20,10 +20,10 @@ import org.usfirst.frc157.ProtoBot2017.subsystems.Gear;
 /**
  *
  */
-public class GearBridgeLowerCommand extends Command {
+public class GearBridgeRaiseCommand extends Command {
     private boolean finished = false;
     private boolean executeprint = false;
-    public GearBridgeLowerCommand() {
+    public GearBridgeRaiseCommand() {
         requires(Robot.gearBridge);
     }
     
@@ -39,11 +39,11 @@ public class GearBridgeLowerCommand extends Command {
     {
         if ( executeprint == false)
         {
-            System.out.println("GearBriderLowerCommand: Eexecute();");
+            System.out.println("GearBridgeRaiseCommand: Eexecute();");
             executeprint = true; 
         }
-        Robot.gearBridge.lower();
-   
+        Robot.gearBridge.raise();
+        
     }
     
 
@@ -55,13 +55,13 @@ public class GearBridgeLowerCommand extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
-        System.out.println("GearBridgeLowerCommand: end()");
+        System.out.println("GearBridgeRaiseCommand: end()");
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
-        System.out.println("GearBriderLowerCommand: interrupted()");
+        System.out.println("GearBridgeRaiseCommand: interrupted()");
         Robot.gearBridge.idle();
     }
 }

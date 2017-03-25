@@ -20,48 +20,55 @@ import org.usfirst.frc157.ProtoBot2017.subsystems.Gear;
 /**
  *
  */
-public class GearBridgeLowerCommand extends Command {
+public class GearOpenCommand extends Command {
+    
+
+
     private boolean finished = false;
-    private boolean executeprint = false;
-    public GearBridgeLowerCommand() {
-        requires(Robot.gearBridge);
+    private boolean executeprint=false;
+    public GearOpenCommand() {
+       
+        requires(Robot.gear);
     }
     
     // Called just before this Command runs the first time
     protected void initialize() {
-        System.out.println("GearBridgeCloseCommand: initialize()");
+        System.out.println("GearOpen: initialize()");
         finished = false;
-        executeprint = false;
+        executeprint=false;
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() 
     {
-        if ( executeprint == false)
+        if ( executeprint==false)
         {
-            System.out.println("GearBriderLowerCommand: Eexecute();");
-            executeprint = true; 
+            System.out.println("GearOpen: Eexecute();");
+            executeprint=true; 
         }
-        Robot.gearBridge.lower();
-   
+        
+        Robot.gear.open();
     }
     
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-//        System.out.println("GearBriderLowerCommand: finished()");
+//        System.out.println("GearCLose: finished()");
         return  finished;
     }
 
     // Called once after isFinished returns true
     protected void end() {
-        System.out.println("GearBridgeLowerCommand: end()");
+        System.out.println("OpnGear: end()");
+  
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
-        System.out.println("GearBriderLowerCommand: interrupted()");
-        Robot.gearBridge.idle();
+        System.out.println("OpenGear: interrupted()");
+        Robot.gear.idle();
     }
 }
+
+;
