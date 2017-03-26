@@ -31,7 +31,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 public class GearBridge extends Subsystem {
 
     private final double UP_SPEED  = 0.40;
-    private final double DOWN_SPEED = 0.15;
+    private final double DOWN_SPEED = 0.45;
     private final CANTalon GearBridgeMotorLeft = RobotMap.GearBridgeMotorLeft;
     private final CANTalon GearBridgeMotorRght = RobotMap.GearBridgeMotorRght;
 
@@ -74,16 +74,17 @@ public class GearBridge extends Subsystem {
        // System.out.println("GearBridge: isDown()");
         testLeft = downLimitSwitchLeft.get();
         testRight = downLimitSwitchRight.get();
+        
       
         if (testLeft == true && testRight == true )
         {
            answer = true;
-        //   System.out.println("isDown: true");
+        // System.out.println("isDown: true");
         }
         else
         {
             answer = false;
-      //      System.out.println("isDown: false");
+         //System.out.println("isDown: false");
         }
         return answer;
     }
@@ -100,12 +101,12 @@ public class GearBridge extends Subsystem {
         if (testLeft == true && testRight == true )
         {
            answer = true;
-          // System.out.println("isUp: true");
+      //    System.out.println("isUp: true");
         }
         else
         {
             answer = false;
-            //System.out.println("isUp: false");
+        //    System.out.println("isUp: false");
         }
         return answer;
     }

@@ -11,6 +11,7 @@
 
 package org.usfirst.frc157.ProtoBot2017;
 
+//import org.usfirst.frc157.JoystickAxisButton; 
 import org.usfirst.frc157.ProtoBot2017.HIDPOVButton; 
 import org.usfirst.frc157.ProtoBot2017.commands.*;
 import org.usfirst.frc157.ProtoBot2017.commands.ClimbCommand.ClimbCommandSpeed;
@@ -143,14 +144,13 @@ public class OI {
 
 		//joystickButton5 = new JoystickButton(driver, 5);
 	//	joystickButton5.whenPressed(new GearPickupCommand(GearPickup.GearPickupCommand.UP));
-		DPadRight = new HIDPOVButton(driver,180);
-		DPadRight.whenPressed(new GearBridgeRaiseCommand());
-		
-		DPadLeft=  new HIDPOVButton(driver,0);
-		DPadLeft.whenPressed(new GearBridgeLowerCommand());
-
-		//joystickButton6 = new JoystickButton(driver, 6);
-		//joystickButton6.whenPressed(new GearStateCommand());
+	
+			
+	
+	    joystickButton5= new JoystickButton(driver,5);
+	    joystickButton5.whenPressed(new GearBridgeRaiseCommand());
+		joystickButton6 = new JoystickButton(driver, 6);
+		joystickButton6.whenPressed(new GearBridgeLowerCommand());
 
 		//joystickButton7 = new JoystickButton(driver, 7);
 		//joystickButton7.whenPressed(new OperatorGear(Gear.GearCommand.CLOSE));

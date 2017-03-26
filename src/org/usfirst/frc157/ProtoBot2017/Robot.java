@@ -17,6 +17,7 @@ import org.usfirst.frc157.ProtoBot2017.AnalogSelectSwitch.SwitchPosition;
 //import org.usfirst.frc157.ProtoBot2017.commands.AlignForShot.ShotRangeCommand;
 import org.usfirst.frc157.ProtoBot2017.commands.AutoDriveSpeedForTime;
 import org.usfirst.frc157.ProtoBot2017.commands.AutonomousCommand2;
+import org.usfirst.frc157.ProtoBot2017.commands.GearPickupStayUpCommand;
 import org.usfirst.frc157.ProtoBot2017.commands.GearStateCommand;
 //import org.usfirst.frc157.ProtoBot2017.commands.ShootCommand;
 import org.usfirst.frc157.ProtoBot2017.subsystems.Climb;
@@ -133,7 +134,9 @@ public class Robot extends IterativeRobot {
 			System.out.println("Autonomous Position 1");
 			// Drive forward 6 ft
 			CommandGroup autoCommand = new CommandGroup();
-			autoCommand.addSequential(new AutoDriveSpeedForTime(1.5, 0,- 0.5, 0));
+			autoCommand.addParallel(new GearPickupStayUpCommand());
+			autoCommand.addParallel(new AutoDriveSpeedForTime(1.5, 0,- 0.5, 0));
+			
 			// schedule the autonomous command 
 			if (autoCommand != null) autoCommand.start();
 			

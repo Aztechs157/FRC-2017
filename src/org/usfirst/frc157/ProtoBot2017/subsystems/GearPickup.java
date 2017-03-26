@@ -30,7 +30,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
  */
 public class GearPickup extends Subsystem {
 
-    private final double upSPEED  = 0.25;
+    private final double upSPEED  = 0.35;
     private final double downSPEED  = -0.25;
     private final CANTalon gearPickupMotor = RobotMap.gearPickupMotor;
  
